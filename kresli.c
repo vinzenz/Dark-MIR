@@ -1,11 +1,14 @@
 #include "program.h"
+#include "vesmir.h"
 #include "images.h"
 #include "zbrane.h"
 #include "lod.h"
 
 SDL_Rect rect2;
 
+//==============================================================================
 int Kresli_lod(int i){
+//==============================================================================
 
 	if(i == 0){
 		rect.x = (WIDTH/2) - (lode[i].lod->w/2);
@@ -43,7 +46,9 @@ return OK;
 
 
 // -----------------------------------------------
+//==============================================================================
 int Kresli_pristroje(){
+//==============================================================================
 
 	// Radar
 	
@@ -73,7 +78,42 @@ int Kresli_pristroje(){
 	
 	SDL_BlitSurface(speed, &rect2, screen, &rect);	
 	
+
+	// Ukazatel polohy X
+	// -------------------------------------------------------------------
+		
+	rect.x = WIDTH/2 - position_x->w/2; 
+	rect.y = 20;
 	
+	//rect2.w = ((float)X / (float)MAX_X) * 100;
+	rect2.w = position_x->w;
+	rect2.h = position_x->h;
+	
+	SDL_BlitSurface(position_x, &rect2, screen, &rect);	
+
+	rect.x = WIDTH/2 - position_x->w/2 + (((float)X / (float)MAX_X) * (position_x->w )); 
+	rect.y = 20;
+	
+	SDL_BlitSurface(position_ptr_x, &rect2, screen, &rect);	
+
+	// Ukazatel polohy Y
+	// -------------------------------------------------------------------
+		
+	rect.y = HEIGHT/2 - position_y->h/2; 
+	rect.x = WIDTH - position_y->w - 20;
+	
+	rect2.w = position_y->w;
+	rect2.h = position_y->h;
+	
+	SDL_BlitSurface(position_y, &rect2, screen, &rect);	
+
+	rect.y = HEIGHT/2 - position_y->h/2 + (((float)Y / (float)MAX_Y) * (position_y->h ));  
+	rect.x = WIDTH - position_y->w - 20;
+	
+	SDL_BlitSurface(position_ptr_y, &rect2, screen, &rect);	
+
+	// raficka polohy
+
 return OK;
 }
 
@@ -81,7 +121,9 @@ return OK;
 
 
 // -----------------------------------------------
+//==============================================================================
 int Kresli_strely(){
+//==============================================================================
   int i;
 	
 	// Lasery(plasma)
@@ -117,12 +159,11 @@ return OK;
 
 
 
+//==============================================================================
 int FPS(){		// Frames Per Secund
+//==============================================================================
 	
 	int fps = 0;	
-	
-	
-	
 	
  return fps;
 }

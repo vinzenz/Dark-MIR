@@ -32,9 +32,19 @@ int Init();
 
 // -------------------------------------------------------------------------------------------
 
+#define HELP_MSG "\
+GROZA RTS v 0.1\n\
+2008 copyright by (c) Alexej alexej.x@mail.ru GNU GPL-3 \n\
+    	-h		show this help    \n\
+    	-f		fullscreen    \n\
+    	-r NUM		resolution(default 1) 0 = 800x600; 1 = 1024x768; 2 = 1280x1024;\n\
+    	-l LANG		language (LANG: cs,sk,ru,en ) \n\
+    	-e		map editor    \n\
+"
 
-
+//==============================================================================
 int main(int argc,char *argv[])
+//==============================================================================
 {
   char *p_lang;
 	
@@ -51,6 +61,8 @@ int main(int argc,char *argv[])
 	    } else
      switch (c) {
 	  case 'h':
+		printf("%s\n", HELP_MSG);
+	/*	  
 	    printf("GROZA RTS v %s \n", VERSION);
 	    printf("GNU GPL-3 \n");
 	    printf("2008 copyright by\n");
@@ -62,6 +74,7 @@ int main(int argc,char *argv[])
 	    printf("	-l LANG	language (LANG: cs,sk,ru,en ) \n");  	  
 	    printf("	-e		map editor    \n");
 	  	printf("\n");
+		*/
 	    return OK;
         break;
 	  
@@ -120,7 +133,9 @@ int main(int argc,char *argv[])
 
 
 
+//==============================================================================
 int	Init(int w, int h, int bits, int full)
+//==============================================================================
 {
 	if (SDL_Init(SDL_SUBSYSTEMS)==-1){
 		

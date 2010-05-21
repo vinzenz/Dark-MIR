@@ -41,6 +41,10 @@ SDL_Surface *raketa;
 SDL_Surface *radar;
 SDL_Surface *damage;
 SDL_Surface *speed;
+SDL_Surface *position_x;
+SDL_Surface *position_y;
+SDL_Surface *position_ptr_x;
+SDL_Surface *position_ptr_y;
 
 SDL_Surface *space;			// vesmirne pozadi
 

@@ -13,4 +13,7 @@
  - Grafika
  	Lode, zbrane, zakladny, asteroidy .....
 
-
+  - Vlakna
+	Implementovat udalosti pomoci casovacu v minimalne 2 vlaknech
+	-> dosazeni presneho casovani
+	-> efektivnejsi bech na viceprocesorovych systemech

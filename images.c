@@ -37,7 +37,9 @@ SDL_Surface *LoadImage(const char *filename, int alpha)
 
 
 
+//==============================================================================
 int Nacti_obrazky_vesmir()
+//==============================================================================
 {
 	space  	= LoadImage(ROOT"images/space.png", 1); 
 	
@@ -50,6 +52,10 @@ int Nacti_obrazky_vesmir()
 	radar = LoadImage(ROOT"images/system/mapa.png", 1); 
 	damage = LoadImage(ROOT"images/system/poskozeni.png", 1); 
 	speed = LoadImage(ROOT"images/system/rychlost.png", 1); 
+	position_x = LoadImage(ROOT"images/system/poloha_x.png", 1); 
+	position_y = LoadImage(ROOT"images/system/poloha_y.png", 1); 
+	position_ptr_x = LoadImage(ROOT"images/system/ptr.png", 1); 
+	position_ptr_y = LoadImage(ROOT"images/system/ptr_y.png", 1); 
 	
 	if (space 		!= NULL && 
 		lode[0].lod	!= NULL &&
@@ -57,6 +63,10 @@ int Nacti_obrazky_vesmir()
 		laser 		!= NULL	&&
 		radar 		!= NULL	&&
 		damage 		!= NULL	&&
+		position_x 	!= NULL	&&
+		position_y 	!= NULL	&&
+		position_ptr_x 	!= NULL	&&
+		position_ptr_y 	!= NULL	&&
 		speed 		!= NULL	
 		)
 		return OK;
@@ -69,7 +79,9 @@ int Nacti_obrazky_vesmir()
 
 
 
+//==============================================================================
 int Nacti_obrazky_menu()
+//==============================================================================
 {
 	bg_img   	= LoadImage(ROOT"images/bg.png", 1); 
 	bg_nastaveni	= LoadImage(ROOT"images/bg_nastaveni.jpg", 1); 
@@ -86,7 +98,9 @@ int Nacti_obrazky_menu()
 
 
 
+//==============================================================================
 int Uklid_obrazky_menu()
+//==============================================================================
 {
 	if(bg_img!=NULL) SDL_FreeSurface(bg_img);
 	if(bg_nastaveni!=NULL) SDL_FreeSurface(bg_nastaveni);
@@ -98,12 +112,18 @@ int Uklid_obrazky_menu()
 }
 
 
+//==============================================================================
 int Uklid_obrazky_vesmir()
+//==============================================================================
 {
 	if(lod!=NULL) SDL_FreeSurface(lod);
 	if(space!=NULL) SDL_FreeSurface(space);
 	if(laser!=NULL) SDL_FreeSurface(laser);
 	if(radar!=NULL) SDL_FreeSurface(radar);	
+	if(position_x!=NULL) SDL_FreeSurface(position_x);	
+	if(position_y!=NULL) SDL_FreeSurface(position_y);	
+	if(position_ptr_x!=NULL) SDL_FreeSurface(position_ptr_x);	
+	if(position_ptr_y!=NULL) SDL_FreeSurface(position_ptr_y);	
 	
 	return OK;
 }
@@ -113,7 +133,9 @@ int Uklid_obrazky_vesmir()
 
 
 
+//==============================================================================
 int Nastav_rozliseni(){
+//==============================================================================
 	
 	rozliseni[VYCHOZI_ROZLISENI].X = 1;
 	
@@ -133,11 +155,13 @@ return OK;
 
 
 
+//==============================================================================
 int Zmena_rozliseni(char X){
+//==============================================================================
 
 	nastavene_rozliseni = X;	
 	
-	SDL_Quit();
+	SDL_Quit();		// restart graphic layer
 	
 	Init(rozliseni[nastavene_rozliseni].W, rozliseni[nastavene_rozliseni].H, COLOR, 0);
 	

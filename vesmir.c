@@ -9,7 +9,9 @@ int Prekresli_vesmir();
 
 
 
+//==============================================================================
 int Vesmir(){
+//==============================================================================
  
  int i;
  int ukonci=0;
@@ -50,7 +52,7 @@ int Vesmir(){
 	lode[0].MAX_poskozeni = 70;
 	lode[0].poskozeni = 1;
 	
-	lode[0].MAX_rychlost = 13;
+	lode[0].MAX_rychlost = 10;
 	lode[0].rychlost = 0;
 	lode[0].MAX_uhyb = 5;
 	lode[0].uhyb = 0;
@@ -291,8 +293,9 @@ int Vesmir(){
 
 
 
-
+//==============================================================================
 int Prekresli_vesmir(){
+//==============================================================================
   
   int x,y;
   
@@ -313,7 +316,7 @@ int Prekresli_vesmir(){
 	
 	// Lod
 	
-	//Kresli_lod(1); // Cizi lod
+	Kresli_lod(1); // Cizi lod
 	Kresli_lod(0); // Moje lod
 	
 	// Pristroje
