@@ -14,10 +14,10 @@
 
 // Function prototypes
 //==============================================================================
-int Prekresli_vesmir();
 int Pohybuj_objekty();
 int Detekuj_kolize();
-int Collision_detect(T_ship *ship, T_weapon *weapon );
+ int Collision_detect(T_ship *ship, T_weapon *weapon );
+int Prekresli_vesmir();
 
 
 
@@ -43,25 +43,27 @@ int Vesmir(){
 	
 	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 
 	
+	X = 3000;
+	Y = 3000;
+	// Specifika vlastni lodi	
+	// ====================
 	
+	lode[0] = SHIP_RED_RX;
 	
+	my_ship = &lode[0];	
 	
-	my_ship = &SHIP_RED_RX;	
-	
+	my_ship->img = IMG_RED_RX;
+	my_ship->strana = RED;
 	my_ship->angle = 0; // angle ve stupnich
 	my_ship->angle2 = 1; // predchozi angle ve stupnich
 
-	X = 3000;
-	Y = 3000;
-
-	my_ship->img = IMG_RED_RX;
-
-	my_ship->strana = RED;
 	
 	// Specifika cizi lodi
+	// ====================
 	lode[1] = SHIP_BLUE_RX;
 	lode[1].img = IMG_BLUE_RX;
 	lode[1].strana= BLUE;
+	lode[1].angle = 45; // angle ve stupnich
 	
 	lode[1].X = 3450;
 	lode[1].Y = 3450;
@@ -323,9 +325,6 @@ int Pohybuj_objekty(){
 int Detekuj_kolize(){
 //==============================================================================
 
-	// === Collision detect ===
-
-		//
   for(int x=1; x <= pocet_lodi; x++){		
   	if(! lode[x].alive) continue;
 
@@ -371,13 +370,13 @@ int Detekuj_kolize(){
 
 return OK;
 }
+
 //==============================================================================
 int Collision_detect(T_ship *ship, T_weapon *weapon ){
 //==============================================================================
-int c = 0;
 
-  c = 	(fabs(ship->X - weapon->X) < (ship->img->w  >> 1)) &&
-  	(fabs(ship->Y - weapon->Y) < (ship->img->h >> 1));
+  int c = (fabs(ship->X - weapon->X) < (ship->img->w  >> 1)) &&
+  	  (fabs(ship->Y - weapon->Y) < (ship->img->h >> 1));
 
   //if(c)	printf("COLLISION: X: %d Y: %d\n",(int)(ship->X), (int)(ship->Y));
 
