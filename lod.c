@@ -11,10 +11,10 @@ Uint32 Ovladani(Uint32 interval, void *param){
 //==============================================================================
 
 	my_ship->angle += manevr;
-	my_ship->rychlost += zrychleni;	
+	my_ship->speed += zrychleni;	
 	
-	if(strilej[LASER] != 0) Vystrel(LASER, my_ship);
-	if(strilej[ROCKET] != 0) Vystrel(ROCKET, my_ship);
+//	if(strilej[LASER] != 0) Vystrel(LASER, my_ship);
+//	if(strilej[ROCKET] != 0) Vystrel(ROCKET, my_ship);
 	
 return interval;	
 }
@@ -52,7 +52,7 @@ int Vystrel(int zbran, T_ship *ship){
 				
 				fprintf(stderr,"MAX: VYSTRELU(laseru) \n");
 				//fprintf(stderr,"poskozeni: %d \n",ship->poskozeni);
-				//fprintf(stderr,"rychlost: %G \n",ship->rychlost);
+				//fprintf(stderr,"speed: %G \n",ship->speed);
 				
 			#endif				
 				

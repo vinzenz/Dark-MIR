@@ -8,7 +8,7 @@
 
  - Sit
 	Aneb hlavni prvek hry
-
+    Naimplementovat herni server pres SDL network
 
  - Grafika
  	Lode, zbrane, zakladny, asteroidy .....

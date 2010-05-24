@@ -16,11 +16,13 @@
 
   typedef struct str_ship {
 	SDL_Surface *img;		// img of ship
+	SDL_Surface *img_m;		// img of ship on move
+	SDL_Surface *img_c;		// img of ship crap
 	SDL_Surface *rot_img;		// img ->angle rotated 
 	char strana;
 	
-	float rychlost;
-	int MAX_rychlost;
+	float speed;
+	int MAX_speed;
 	float zrychleni;
 
 	int manevr;
@@ -35,7 +37,7 @@
 	int angle;
 	int angle2;
 
-	char alive;	
+	int alive;	
 		
   } T_ship;
 /*
@@ -86,8 +88,8 @@
   int uhel;
   int uhel2;
 
-  float rychlost;
-  int MAX_rychlost;
+  //float speed;
+  int MAX_speed;
   float zrychleni;
 
   int manevr;

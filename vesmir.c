@@ -14,6 +14,7 @@
 
 // Function prototypes
 //==============================================================================
+int Inicializuj_objekty();
 int Pohybuj_objekty();
 int Detekuj_kolize();
  int Collision_detect(T_ship *ship, T_weapon *weapon );
@@ -45,35 +46,11 @@ int Vesmir(){
 	
 	X = 3000;
 	Y = 3000;
-	// Specifika vlastni lodi	
-	// ====================
-	
-	lode[0] = SHIP_RED_RX;
-	
-	my_ship = &lode[0];	
-	
-	my_ship->img = IMG_RED_RX;
-	my_ship->strana = RED;
-	my_ship->angle = 0; // angle ve stupnich
-	my_ship->angle2 = 1; // predchozi angle ve stupnich
 
+
+	Inicializuj_objekty();
 	
-	// Specifika cizi lodi
-	// ====================
-	lode[1] = SHIP_BLUE_RX;
-	lode[1].img = IMG_BLUE_RX;
-	lode[1].strana= BLUE;
-	lode[1].angle = 45; // angle ve stupnich
-	
-	lode[1].X = 3450;
-	lode[1].Y = 3450;
-	
-	pocet_lodi   = 1;
-	pocet_laseru = 0;
-	pocet_raket  = 0;
-	
-	
-	// --------------------- Hlavni smycka -------------------
+	// ============================== GAME LOOP ==============================
 	while(!ukonci){
 
 
@@ -96,7 +73,6 @@ int Vesmir(){
 					else pauza = 0;
 					fprintf(stderr, "pauza = %i\n", pauza);	
 					break;
-
 					
 				 case SDLK_LEFT:
 				 	manevr =  + my_ship->manevr;
@@ -124,8 +100,10 @@ int Vesmir(){
 
 
 				 
+				 case SDLK_LALT:			// MODIFIKATOR = FIRE 1
 				 case SDLK_SPACE:
-					strilej[LASER] = 1;		// HOLD and FIRE
+				 	Vystrel(LASER, my_ship);	
+					//strilej[LASER] = 1;		// HOLD and FIRE
 				 	
 					break;
 				 
@@ -138,21 +116,7 @@ int Vesmir(){
 				  default:break;
 									
 				}
-		//my_ship->angle = 0; // angle ve stupnich
-
 	
-		/*case SDL_KEYUP: 	
-				switch(event.key.keysym.sym){
-					
-				case SDLK_d:  
-				case SDLK_a:
-					
-				  	
-					break;
-				default: break;
-
-				}
-		*/
 				
 		}
 	}
@@ -178,12 +142,12 @@ int Vesmir(){
 		zrychleni = 0;
 		//printf("SIPKY NAHORU/DOLU released\n");
 	}
-
+/*
 	if(keys[SDLK_SPACE] == SDL_RELEASED){
 		strilej[LASER] = 0;
 		//printf("SPACE released\n");
 	}
-
+*/
 	//printf("---------\n");
 	
 	
@@ -202,8 +166,8 @@ int Vesmir(){
 	if(my_ship->angle >= 360) my_ship->angle -= 360;		// < 0 ; 360 ) degrees
 	if(my_ship->uhyb >= my_ship->MAX_uhyb ) my_ship->uhyb = my_ship->MAX_uhyb ;	
 	if(my_ship->uhyb <= -my_ship->MAX_uhyb ) my_ship->uhyb = -my_ship->MAX_uhyb ;		
-	if(my_ship->rychlost <= 0) my_ship->rychlost = 0 ;
-	if(my_ship->rychlost >= my_ship->MAX_rychlost) my_ship->rychlost = my_ship->MAX_rychlost ;
+	if(my_ship->speed <= 0) my_ship->speed = 0 ;
+	if(my_ship->speed >= my_ship->MAX_speed) my_ship->speed = my_ship->MAX_speed ;
 
 	
 	Pohybuj_objekty();
@@ -294,28 +258,72 @@ return OK;
 
 
 //==============================================================================
+int Inicializuj_objekty(){
+//==============================================================================
+	// Specifika vlastni lodi	
+	// ====================
+	SHIP_RED_RX.img = IMG_RED_RX;
+	SHIP_RED_RX.img_m = IMG_RED_RX_move;
+	SHIP_RED_RX.img_c = IMG_RED_RX_crap;
+	SHIP_RED_RX.strana = RED;
+
+
+	SHIP_BLUE_RX.img = IMG_BLUE_RX;
+	SHIP_BLUE_RX.img_m = IMG_BLUE_RX_move;
+	SHIP_BLUE_RX.img_c = IMG_BLUE_RX_crap;
+	SHIP_BLUE_RX.strana = BLUE;
+
+	lode[0] = SHIP_RED_RX;
+	//lode[0] = SHIP_BLUE_RX;
+	
+	my_ship = &lode[0];	
+	
+	// Specifika cizi lodi
+	// ====================
+	lode[1] = SHIP_BLUE_RX;
+	lode[1].speed = 1; // angle ve stupnich
+	lode[1].angle = 45; // angle ve stupnich
+	
+	lode[1].X = 3450;
+	lode[1].Y = 3450;
+	
+	pocet_lodi   = 1;
+	pocet_laseru = 0;
+	pocet_raket  = 0;
+
+ return OK;
+}
+
+//==============================================================================
 int Pohybuj_objekty(){
 //==============================================================================
 	//  === Pohyb lodi ===
 	
-	X += my_ship->rychlost * cos(((float)my_ship->angle/180)*M_PI)
+	X += my_ship->speed * cos(((float)my_ship->angle/180)*M_PI)
 	       	+ my_ship->uhyb * cos(((float)(my_ship->angle+90)/180)*M_PI);
 
-	Y -= my_ship->rychlost * sin(((float)my_ship->angle/180)*M_PI)
+	Y -= my_ship->speed * sin(((float)my_ship->angle/180)*M_PI)
 	       	+ my_ship->uhyb * sin(((float)(my_ship->angle+90)/180)*M_PI);	
 
-	// === Pohyb projektilu(strel) ===
-	
-	for (int i=0; i<=pocet_laseru; i++){
 
-	lasers[i].X += lasers[i].speed * cos(((float)lasers[i].angle/180)*M_PI);
-	lasers[i].Y -= lasers[i].speed  * sin(((float)lasers[i].angle/180)*M_PI); 	
+	for (int i=1; i<=pocet_lodi; i++){
+	  if(! lode[i].alive) continue;
+	  lode[i].X += lode[i].speed * cos(((float)lode[i].angle/180)*M_PI);
+	  lode[i].Y -= lode[i].speed  * sin(((float)lode[i].angle/180)*M_PI); 	
+	}
+
+	// === Pohyb projektilu(strel) ===
+	//
+	for (int i=0; i<=pocet_laseru; i++){
+	  if(! lasers[i].alive) continue;
+	  lasers[i].X += lasers[i].speed * cos(((float)lasers[i].angle/180)*M_PI);
+	  lasers[i].Y -= lasers[i].speed  * sin(((float)lasers[i].angle/180)*M_PI); 	
 	}
 	
 	for (int i=0; i<=pocet_raket; i++){
-
-	rockets[i].X += rockets[i].speed * cos(((float)rockets[i].angle/180)*M_PI);
-	rockets[i].Y -= rockets[i].speed * sin(((float)rockets[i].angle/180)*M_PI); 
+	  if(! rockets[i].alive) continue;
+	  rockets[i].X += rockets[i].speed * cos(((float)rockets[i].angle/180)*M_PI);
+	  rockets[i].Y -= rockets[i].speed * sin(((float)rockets[i].angle/180)*M_PI); 
 	}
 		
 
@@ -340,6 +348,7 @@ int Detekuj_kolize(){
 			lode[x].poskozeni += rockets[i].damage;
 			if(lode[x].poskozeni > lode[x].MAX_poskozeni){
 				printf("# SHIP n.%3d DESTROYED\n",x);
+				lode[x].speed= 0;
 				lode[x].X = 0;
 				lode[x].Y = 0;
 				lode[x].alive = 0;
@@ -360,9 +369,10 @@ int Detekuj_kolize(){
 			lode[x].poskozeni += lasers[i].damage;
 			if(lode[x].poskozeni > lode[x].MAX_poskozeni){
 				printf("# SHIP n.%3d DESTROYED\n",x);
-				lode[x].X = 0;
-				lode[x].Y = 0;
-				lode[x].alive = 0;
+				lode[x].speed= 0;
+				//lode[x].X = 0;
+				//lode[x].Y = 0;
+				//lode[x].alive = 0;
 			}
 		}
 	}

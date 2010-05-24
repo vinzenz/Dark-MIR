@@ -23,7 +23,18 @@ int Kresli_lod(T_ship *ship){
 		rect.y = (HEIGHT/2) - (ship->img->h/2) + ship->Y  - Y;	
 		
 //	}
+//
 	
+	if(ship->speed > 0)	
+		ship->rot_img = rotozoomSurface(ship->img_m, ship->angle, 1, 0);
+	else
+		ship->rot_img = rotozoomSurface(ship->img, ship->angle, 1, 0);
+
+	if(ship->MAX_poskozeni <= ship->poskozeni)		// crap
+		ship->rot_img = rotozoomSurface(ship->img_c, ship->angle, 1, 0);
+
+	SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
+	/*
 	// ship->angle did not change	
 	if((ship->angle2 == ship->angle) && (ship->rot_img != NULL)){
 		
@@ -31,8 +42,8 @@ int Kresli_lod(T_ship *ship){
 		
 	}
 	else{
-	
-		ship->rot_img = rotozoomSurface(ship->img, ship->angle, 1, 0);
+
+//		ship->rot_img = rotozoomSurface(ship->img, ship->angle, 1, 0);
 	
 
 		SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
@@ -40,6 +51,7 @@ int Kresli_lod(T_ship *ship){
 		ship->angle2 = ship->angle;
 	
 	}
+	*/
 return OK;
 }
 
@@ -67,12 +79,12 @@ int Kresli_pristroje(T_ship *my_ship){
 	SDL_BlitSurface(damage, &rect2, screen, &rect);	
 	
 	
-	// Ukazatel rychlosti
+	// Ukazatel speedi
 	
 	rect.x = WIDTH  - 30 - speed->w;
 	rect.y = 30 + speed->h;
 	
-	rect2.w = ((float)my_ship->rychlost / (float)my_ship->MAX_rychlost) * 100;
+	rect2.w = ((float)my_ship->speed / (float)my_ship->MAX_speed) * 100;
 	rect2.h = speed->h;
 	
 	SDL_BlitSurface(speed, &rect2, screen, &rect);	

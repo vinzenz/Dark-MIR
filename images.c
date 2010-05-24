@@ -43,9 +43,12 @@ int Nacti_obrazky_vesmir()
 {
 	space  	= LoadImage(ROOT"images/space.png", 1); 
 	
-	IMG_RED_RX	= LoadImage(ROOT"images/R_RX.png", 1); // Moje lod
-	IMG_BLUE_RX	= LoadImage(ROOT"images/B_RX.png", 1); // Moje lod
-	lode[1].img	= LoadImage(ROOT"images/l2.png", 1); // Cizi lod
+	IMG_RED_RX	= LoadImage(ROOT"images/R_RX.png", 1); 		// Moje lod
+	IMG_RED_RX_move	= LoadImage(ROOT"images/R_RX_move.png", 1); 	// Moje lod
+	IMG_RED_RX_crap = LoadImage(ROOT"images/R_RX_crap.png", 1); 	// Moje lod
+	IMG_BLUE_RX	= LoadImage(ROOT"images/B_RX.png", 1); 
+	IMG_BLUE_RX_move= LoadImage(ROOT"images/B_RX_move.png", 1); 
+	IMG_BLUE_RX_crap= LoadImage(ROOT"images/B_RX_crap.png", 1); 
 	
 	laser = LoadImage(ROOT"images/RED/laser.png", 1); 
 	raketa = LoadImage(ROOT"images/r1.png", 1); 
