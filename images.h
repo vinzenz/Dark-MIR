@@ -34,6 +34,7 @@ SDL_Surface *lod_c;			// hracohracova kosmicka lod carry
 SDL_Surface *lod_d;			// hracohracova kosmicka lod digger
 
 SDL_Surface *IMG_RED_RX;		// 
+SDL_Surface *IMG_BLUE_RX;		// 
 // Zbrane
 SDL_Surface *laser;
 SDL_Surface *raketa;

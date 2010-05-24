@@ -2,7 +2,7 @@
  #define SHIPS_H
 
 #include "lod.h"
-
+#include "images.h"
 
 
 /*
@@ -42,8 +42,20 @@ T_ship lode[MAX_LODI];
 T_ship SHIP_RED_RX = {
    .MAX_poskozeni = 100,	
    .MAX_rychlost = 5,
-   .zrychleni = 0.1,
+   .MAX_uhyb = 1.5,
+   .zrychleni = 0.2,
    .manevr = 5,
+   .alive = 1,
+};
+// =============================================================================
+//
+T_ship SHIP_BLUE_RX = {
+   .MAX_poskozeni = 70,	
+   .MAX_rychlost = 7,
+   .MAX_uhyb = 2,
+   .zrychleni = 0.2,
+   .manevr = 5,
+   .alive = 1,
 };
 
 

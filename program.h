@@ -24,14 +24,16 @@
 
 #define WIN_TITLE "Dark MIR"  
 
-#define VYCHOZI_JAZYK	"en"		// vychozi nastaveni se uplatni pokud systemovy jazyk nebude definovan 
-									//nebo nebudo odpovidat jedne z moznosti 
+#define VYCHOZI_JAZYK	"en"// vychozi nastaveni se uplatni pokud systemovy jazyk nebude definovan 
+			//nebo nebudo odpovidat jedne z moznosti 
+
 #define VYCHOZI_ROZLISENI   1 
 
 
 
 
 
+#define MAX_RES	5
 
 #define WIDTH	 rozliseni[nastavene_rozliseni].W // vychozi rozliseni
 #define HEIGHT   rozliseni[nastavene_rozliseni].H
@@ -46,6 +48,11 @@
 #define WIDTH2	1280 // 2 rozliseni
 #define HEIGHT2 1024
 
+#define WIDTH3	1280 // 3 rozliseni
+#define HEIGHT3 768
+
+#define WIDTH4	1440 // 4 rozliseni
+#define HEIGHT4  900
 
 #define COLOR   24 
 
@@ -72,7 +79,7 @@ struct R {
 	short X;	
 };
 
-struct R rozliseni[3]; // ->X=  0 800x600  	1 1024x768	2 1280x1024
+struct R rozliseni[MAX_RES]; // ->X=  0 800x600  	1 1024x768	2 1280x1024
 
 char pauza;
 

@@ -14,16 +14,18 @@ MODULY = program.o images.o vesmir.o kresli.o lod.o
 
 
 
+.PHONY: all clean ci
+
 all: $(MODULY)
 	$(CC) $(CFLAGS) $(LDFLAGS)  -o $(TARGET) $(MODULY)
 
 program.o: program.c program.h images.h
 images.o: images.c images.h program.h
-vesmir.o: vesmir.c  program.h images.h vesmir.h ships.h
+vesmir.o: vesmir.c  program.h images.h vesmir.h lod.h ships.h
 kresli.o: kresli.c images.h program.h lod.h
-lod.o: lod.c lod.h program.h zbrane.h
+lod.o: lod.c lod.h program.h zbrane.h weapons.h
 
-mir:
+run:
 	./mir
 
 

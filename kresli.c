@@ -1,46 +1,43 @@
 #include "program.h"
 #include "vesmir.h"
 #include "images.h"
-#include "zbrane.h"
 #include "lod.h"
+#include "zbrane.h"
 
 SDL_Rect rect2;
 
 //==============================================================================
 int Kresli_lod(T_ship *ship){
 //==============================================================================
-/*
-	if(i == 0){
-		rect.x = (WIDTH/2) - (ship->lod->w/2);
-		rect.y = (HEIGHT/2) - (ship->lod->h/2);
- 	}
-	else{
-		//rect.x = ship->X - (ship->lod->w/2);
-		//rect.y = ship->Y - (ship->lod->w/2);
-	
-		rect.x = (WIDTH/2)  - (ship->lod->w/2) + ship->X  - X;
-		rect.y = (HEIGHT/2) - (ship->lod->h/2) + ship->Y  - Y;	
-		
-	}
-*/	
-		rect.x = (WIDTH/2) - (ship->lod->w/2);
-		rect.y = (HEIGHT/2) - (ship->lod->h/2);
-	
-	if(uhel2 == ship->uhel){
-		
-		if(rlod != NULL) SDL_BlitSurface(rlod, NULL, screen, &rect);
-		
-	}
-	else{
-	
-		roto_lod = rotozoomSurface(ship->lod, ship->uhel, 1, 0);
-	
-		rlod = roto_lod;
 
-		SDL_BlitSurface(roto_lod, NULL, screen, &rect);
-		//SDL_FreeSurface(roto_lod); 
+	// My ship
+//	if(my_ship == ship){	
+//		rect.x = (WIDTH/2) - (ship->img->w/2);
+//		rect.y = (HEIGHT/2) - (ship->img->h/2);
+ //	}
+//	else{
+		//rect.x = ship->X - (ship->img->w/2);
+		//rect.y = ship->Y - (ship->img->w/2);
 	
-		uhel2 = ship->uhel;
+		rect.x = (WIDTH/2)  - (ship->img->w/2) + ship->X  - X;
+		rect.y = (HEIGHT/2) - (ship->img->h/2) + ship->Y  - Y;	
+		
+//	}
+	
+	// ship->angle did not change	
+	if((ship->angle2 == ship->angle) && (ship->rot_img != NULL)){
+		
+		SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
+		
+	}
+	else{
+	
+		ship->rot_img = rotozoomSurface(ship->img, ship->angle, 1, 0);
+	
+
+		SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
+	
+		ship->angle2 = ship->angle;
 	
 	}
 return OK;
@@ -64,7 +61,7 @@ int Kresli_pristroje(T_ship *my_ship){
 	rect.x = WIDTH  - 30 - damage->w;
 	rect.y = HEIGHT - 30 - damage->h;
 	
-	rect2.w = (my_ship->MAX_poskozeni / my_ship->poskozeni) * 100;
+	rect2.w = (my_ship->MAX_poskozeni / (my_ship->poskozeni+1)) * 100;
 	rect2.h = damage->h;	
  	
 	SDL_BlitSurface(damage, &rect2, screen, &rect);	
@@ -121,7 +118,33 @@ return OK;
 
 
 
+// -----------------------------------------------
+//==============================================================================
+int Draw_weapon(T_weapon *weapon){
+//==============================================================================
+  switch(weapon->type){
+	case LASER:
+		if(weapon->img == NULL)
+			weapon->img = rotozoomSurface(laser, weapon->angle, 1, 0);
+		
+		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X /*- lasers[i].sX */ - X;
+		rect.y = (HEIGHT/2) - (weapon->img->h/2) + weapon->Y /*- lasers[i].sY*/ - Y;
+		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
+		//SDL_FreeSurface(weapon->img);
+		break;
 
+	case ROCKET:
+		if(weapon->img == NULL)
+			weapon->img = rotozoomSurface(raketa, weapon->angle, 1, 0);
+		
+		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X  - X;
+		rect.y = (HEIGHT/2) - (weapon->img->w/2) + weapon->Y  - Y;
+		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
+		//SDL_FreeSurface(rockets[i].img);
+	break;
+  }
+ return OK;
+}
 // -----------------------------------------------
 //==============================================================================
 int Kresli_strely(){
@@ -129,27 +152,13 @@ int Kresli_strely(){
   int i;
 	
 	// Lasery(plasma)
-	
  	for(i = 0; i <= pocet_laseru; i++){
-	
-		lasery[i].zbran = rotozoomSurface(laser, lasery[i].uhel, 1, 0);
-		
-		rect.x = (WIDTH/2) - (laser->w/2) + lasery[i].X /*- lasery[i].sX */ - X;
-		rect.y = (HEIGHT/2) - (laser->h/2) + lasery[i].Y /*- lasery[i].sY*/ - Y;
-		SDL_BlitSurface(lasery[i].zbran, NULL, screen, &rect);
-		SDL_FreeSurface(lasery[i].zbran);
+		if(lasers[i].alive) Draw_weapon(&lasers[i]);
 	}
 
 	// Rakety
-	
 	for(i = 0; i <= pocet_raket; i++){
-	
-		rakety[i].zbran = rotozoomSurface(raketa, rakety[i].uhel, 1, 0);
-		
-		rect.x = (WIDTH/2) - (raketa->w/2) + rakety[i].X  - X;
-		rect.y = (HEIGHT/2) - (raketa->h/2) + rakety[i].Y  - Y;
-		SDL_BlitSurface(rakety[i].zbran, NULL, screen, &rect);
-		SDL_FreeSurface(rakety[i].zbran);
+		if(rockets[i].alive) Draw_weapon(&rockets[i]);
 	}
 
 return OK;

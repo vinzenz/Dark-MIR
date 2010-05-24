@@ -14,8 +14,9 @@
 //struct st
 
 
-  typedef struct str_lod {
-	SDL_Surface *lod;
+  typedef struct str_ship {
+	SDL_Surface *img;		// img of ship
+	SDL_Surface *rot_img;		// img ->angle rotated 
 	char strana;
 	
 	float rychlost;
@@ -28,17 +29,38 @@
 
 	int poskozeni;
 	int MAX_poskozeni;
+
+	float X; 			//  position
+	float Y;
+	int angle;
+	int angle2;
+
+	char alive;	
+		
+  } T_ship;
+/*
+  typedef struct str_weapon {
+	SDL_Surface *lod;
+	char strana;
+	
+	float speed;
+	float MAX_speed;
+	float acceleration;
+
+	int delta_angle;
+	int angle;
+
+	int poskozeni;
+	int MAX_damage;
 	
 	float X; //  pozice
 	float Y;
-	int sX;	 // pocatecni pozice
-	int sY;
 	int x;   // rect vykreslovaci pozice
 	int y;
-	int uhel;
 	
 		
-  } T_ship;
+  } T_weapon;
+*/
 
   T_ship lode[MAX_LODI];
   T_ship *my_ship;

@@ -43,8 +43,9 @@ int Nacti_obrazky_vesmir()
 {
 	space  	= LoadImage(ROOT"images/space.png", 1); 
 	
-	IMG_RED_RX	= LoadImage(ROOT"images/l3.png", 1); // Moje lod
-	lode[1].lod	= LoadImage(ROOT"images/l2.png", 1); // Cizi lod
+	IMG_RED_RX	= LoadImage(ROOT"images/R_RX.png", 1); // Moje lod
+	IMG_BLUE_RX	= LoadImage(ROOT"images/B_RX.png", 1); // Moje lod
+	lode[1].img	= LoadImage(ROOT"images/l2.png", 1); // Cizi lod
 	
 	laser = LoadImage(ROOT"images/RED/laser.png", 1); 
 	raketa = LoadImage(ROOT"images/r1.png", 1); 
@@ -59,7 +60,8 @@ int Nacti_obrazky_vesmir()
 	
 	if (space 		!= NULL && 
 		IMG_RED_RX	!= NULL &&
-		lode[1].lod	!= NULL &&
+		IMG_BLUE_RX	!= NULL &&
+		lode[1].img	!= NULL &&
 		laser 		!= NULL	&&
 		radar 		!= NULL	&&
 		damage 		!= NULL	&&
@@ -149,7 +151,13 @@ int Nastav_rozliseni(){
 
 	rozliseni[2].W = WIDTH2;
 	rozliseni[2].H = HEIGHT2;
-	
+
+
+	rozliseni[3].W = WIDTH3;
+	rozliseni[3].H = HEIGHT3;
+
+	rozliseni[4].W = WIDTH4;
+	rozliseni[4].H = HEIGHT4;
 return OK;	
 }
 
