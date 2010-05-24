@@ -19,7 +19,7 @@ all: $(MODULY)
 
 program.o: program.c program.h images.h
 images.o: images.c images.h program.h
-vesmir.o: vesmir.c  program.h images.h vesmir.h
+vesmir.o: vesmir.c  program.h images.h vesmir.h ships.h
 kresli.o: kresli.c images.h program.h lod.h
 lod.o: lod.c lod.h program.h zbrane.h
 

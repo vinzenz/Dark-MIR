@@ -6,9 +6,15 @@
 #define MAX_LODI 40
 
 
+#define LOD_RX_speed 4;
+#define LOD_RX_angle 10;
 
 
-struct str_lod{
+
+//struct st
+
+
+  typedef struct str_lod {
 	SDL_Surface *lod;
 	char strana;
 	
@@ -32,36 +38,41 @@ struct str_lod{
 	int uhel;
 	
 		
-} lode[MAX_LODI];
+  } T_ship;
 
-/*
-	lode[0]  je lod lokalniho hrace
-
-*/
+  T_ship lode[MAX_LODI];
+  T_ship *my_ship;
 
 
 
+// 	lode[0]  je lod lokalniho hrace
 
 
-// -----  Funkce  -----
 
-int Vystrel(int zbran, int lod);
-Uint32 Ovladani(Uint32 interval, void *param);
 
-SDL_Surface *roto_lod;
-SDL_Surface *rlod;
-int uhel;
-int uhel2;
 
-float rychlost;
-int MAX_rychlost;
-float zrychleni;
 
-int manevr;
-float uhyb;
-int MAX_uhyb;
+// Function Prototypes  
+// =============================================================================
 
-int poskozeni;
-int MAX_poskozeni;
+  int Vystrel(int zbran, T_ship *ship);
+  Uint32 Ovladani(Uint32 interval, void *param);
+
+// =============================================================================
+  SDL_Surface *roto_lod;
+  SDL_Surface *rlod;
+  int uhel;
+  int uhel2;
+
+  float rychlost;
+  int MAX_rychlost;
+  float zrychleni;
+
+  int manevr;
+  float uhyb;
+  int MAX_uhyb;
+
+  int poskozeni;
+  int MAX_poskozeni;
 
 #endif

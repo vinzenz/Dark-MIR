@@ -8,12 +8,12 @@
 //==============================================================================
 Uint32 Ovladani(Uint32 interval, void *param){
 //==============================================================================
+
+	my_ship->uhel += manevr;
+	my_ship->rychlost += zrychleni;	
 	
-	lode[0].uhel += manevr;
-	lode[0].rychlost += zrychleni;	
-	
-	if(strilej[LASER] != 0) Vystrel(LASER,0);
-	if(strilej[RAKETA] != 0) Vystrel(RAKETA,0);
+	if(strilej[LASER] != 0) Vystrel(LASER, my_ship);
+	if(strilej[RAKETA] != 0) Vystrel(RAKETA, my_ship);
 	
 return interval;	
 }
@@ -28,7 +28,7 @@ return interval;
 
 
 //==============================================================================
-int Vystrel(int zbran, int lod){
+int Vystrel(int zbran, T_ship *ship){
 //==============================================================================
 
 	switch(zbran){
@@ -36,7 +36,8 @@ int Vystrel(int zbran, int lod){
 		case LASER:
 			if(pocet_laseru < MAX_LASERU-1){
 				pocet_laseru++;
-				lasery[pocet_laseru].uhel = lode[lod].uhel;
+				lasery[pocet_laseru].uhel = ship->uhel;
+				lasery[pocet_laseru].uhel = ship->uhel;
 				lasery[pocet_laseru].sX = X;
 				lasery[pocet_laseru].sY = Y;
 				lasery[pocet_laseru].X = X;
@@ -51,8 +52,8 @@ int Vystrel(int zbran, int lod){
 			#ifdef DEBUG
 				
 				fprintf(stderr,"MAX: VYSTRELU(laseru) \n");
-				//fprintf(stderr,"poskozeni: %d \n",lode[0].poskozeni);
-				//fprintf(stderr,"rychlost: %G \n",lode[0].rychlost);
+				//fprintf(stderr,"poskozeni: %d \n",ship->poskozeni);
+				//fprintf(stderr,"rychlost: %G \n",ship->rychlost);
 				
 			#endif				
 				
@@ -64,7 +65,7 @@ int Vystrel(int zbran, int lod){
 			
 			if(pocet_raket < MAX_RAKET-1){
 				pocet_raket++;
-				rakety[pocet_raket].uhel = lode[lod].uhel;
+				rakety[pocet_raket].uhel = ship->uhel;
 				rakety[pocet_raket].sX = X;
 				rakety[pocet_raket].sY = Y;
 				rakety[pocet_raket].X = X;

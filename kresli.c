@@ -7,38 +7,40 @@
 SDL_Rect rect2;
 
 //==============================================================================
-int Kresli_lod(int i){
+int Kresli_lod(T_ship *ship){
 //==============================================================================
-
+/*
 	if(i == 0){
-		rect.x = (WIDTH/2) - (lode[i].lod->w/2);
-		rect.y = (HEIGHT/2) - (lode[i].lod->h/2);
+		rect.x = (WIDTH/2) - (ship->lod->w/2);
+		rect.y = (HEIGHT/2) - (ship->lod->h/2);
  	}
 	else{
-		//rect.x = lode[i].X - (lode[i].lod->w/2);
-		//rect.y = lode[i].Y - (lode[i].lod->w/2);
+		//rect.x = ship->X - (ship->lod->w/2);
+		//rect.y = ship->Y - (ship->lod->w/2);
 	
-		rect.x = (WIDTH/2)  - (lode[i].lod->w/2) + lode[i].X  - X;
-		rect.y = (HEIGHT/2) - (lode[i].lod->h/2) + lode[i].Y  - Y;	
+		rect.x = (WIDTH/2)  - (ship->lod->w/2) + ship->X  - X;
+		rect.y = (HEIGHT/2) - (ship->lod->h/2) + ship->Y  - Y;	
 		
 	}
+*/	
+		rect.x = (WIDTH/2) - (ship->lod->w/2);
+		rect.y = (HEIGHT/2) - (ship->lod->h/2);
 	
-	
-	if(uhel2 == lode[i].uhel){
+	if(uhel2 == ship->uhel){
 		
 		if(rlod != NULL) SDL_BlitSurface(rlod, NULL, screen, &rect);
 		
 	}
 	else{
 	
-		roto_lod = rotozoomSurface(lode[i].lod, lode[i].uhel, 1, 0);
+		roto_lod = rotozoomSurface(ship->lod, ship->uhel, 1, 0);
 	
 		rlod = roto_lod;
 
 		SDL_BlitSurface(roto_lod, NULL, screen, &rect);
 		//SDL_FreeSurface(roto_lod); 
 	
-		uhel2 = lode[i].uhel;
+		uhel2 = ship->uhel;
 	
 	}
 return OK;
@@ -47,7 +49,7 @@ return OK;
 
 // -----------------------------------------------
 //==============================================================================
-int Kresli_pristroje(){
+int Kresli_pristroje(T_ship *my_ship){
 //==============================================================================
 
 	// Radar
@@ -62,7 +64,7 @@ int Kresli_pristroje(){
 	rect.x = WIDTH  - 30 - damage->w;
 	rect.y = HEIGHT - 30 - damage->h;
 	
-	rect2.w = (lode[0].MAX_poskozeni / lode[0].poskozeni) * 100;
+	rect2.w = (my_ship->MAX_poskozeni / my_ship->poskozeni) * 100;
 	rect2.h = damage->h;	
  	
 	SDL_BlitSurface(damage, &rect2, screen, &rect);	
@@ -73,7 +75,7 @@ int Kresli_pristroje(){
 	rect.x = WIDTH  - 30 - speed->w;
 	rect.y = 30 + speed->h;
 	
-	rect2.w = ((float)lode[0].rychlost / (float)lode[0].MAX_rychlost) * 100;
+	rect2.w = ((float)my_ship->rychlost / (float)my_ship->MAX_rychlost) * 100;
 	rect2.h = speed->h;
 	
 	SDL_BlitSurface(speed, &rect2, screen, &rect);	

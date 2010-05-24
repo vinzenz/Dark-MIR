@@ -10,7 +10,7 @@
 #define MAX_RAKET 30
 
 #define LASER_rychlost 30
-#define R1_rychlost 8
+#define R1_rychlost 6
 
 int pocet_laseru;
 int pocet_raket;

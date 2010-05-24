@@ -43,7 +43,7 @@ int Nacti_obrazky_vesmir()
 {
 	space  	= LoadImage(ROOT"images/space.png", 1); 
 	
-	lode[0].lod	= LoadImage(ROOT"images/l3.png", 1); // Moje lod
+	IMG_RED_RX	= LoadImage(ROOT"images/l3.png", 1); // Moje lod
 	lode[1].lod	= LoadImage(ROOT"images/l2.png", 1); // Cizi lod
 	
 	laser = LoadImage(ROOT"images/RED/laser.png", 1); 
@@ -58,7 +58,7 @@ int Nacti_obrazky_vesmir()
 	position_ptr_y = LoadImage(ROOT"images/system/ptr_y.png", 1); 
 	
 	if (space 		!= NULL && 
-		lode[0].lod	!= NULL &&
+		IMG_RED_RX	!= NULL &&
 		lode[1].lod	!= NULL &&
 		laser 		!= NULL	&&
 		radar 		!= NULL	&&

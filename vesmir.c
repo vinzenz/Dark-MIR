@@ -5,6 +5,10 @@
 #include "vesmir.h"
 #include "lod.h"
 
+// Ship models
+#include "ships.h"
+
+
 int Prekresli_vesmir();
 
 
@@ -43,24 +47,22 @@ int Vesmir(){
 	uhel2 = 1; // predchozi uhel ve stupnich
 
 	
+
+
 	// Specifika hracovi lodi
-	lode[0].strana = RED;
-	
-	lode[0].X = 16000;
-	lode[0].Y = 16000;
-	
-	lode[0].MAX_poskozeni = 70;
-	lode[0].poskozeni = 1;
-	
-	lode[0].MAX_rychlost = 10;
-	lode[0].rychlost = 0;
-	lode[0].MAX_uhyb = 5;
-	lode[0].uhyb = 0;
-	lode[0].zrychleni = 0.3;
-	lode[0].manevr = 5;
-	lode[0].uhel = 0;
 	
 	
+	
+	
+	my_ship = &SHIP_RED_RX;	
+	my_ship->lod = IMG_RED_RX;
+
+	my_ship->strana = RED;
+	my_ship->poskozeni = 1;
+	my_ship->X = 16000;
+	my_ship->Y = 16000;
+	my_ship->rychlost = 0;
+	my_ship->uhel = 0;
 	
 	// Specifika cizi lodi
 	lode[1].strana = GREEN;
@@ -117,27 +119,27 @@ int Vesmir(){
 
 					
 				 case SDLK_LEFT:
-				 	manevr =  + lode[0].manevr;
+				 	manevr =  + my_ship->manevr;
 					break;
 
 				 case SDLK_RIGHT:
-				 	manevr =  - lode[0].manevr;
+				 	manevr =  - my_ship->manevr;
 					break;
 				
 				 case SDLK_UP:
-				 	zrychleni = + lode[0].zrychleni;
+				 	zrychleni = + my_ship->zrychleni;
 					break;
 				 
 				 case SDLK_DOWN:
-				 	zrychleni = - lode[0].zrychleni;
+				 	zrychleni = - my_ship->zrychleni;
 					break;
 				
 				 case SDLK_a:
-				 	lode[0].uhyb += 1;
+				 	my_ship->uhyb += 1;
 					break;
 				 
 				 case SDLK_d:
-				 	lode[0].uhyb -= 1;
+				 	my_ship->uhyb -= 1;
 					break;
 
 
@@ -149,7 +151,7 @@ int Vesmir(){
 				 
 				 case SDLK_RCTRL:
 				 case SDLK_LCTRL:
-				 	Vystrel(RAKETA,0);
+				 	Vystrel(RAKETA, my_ship);
 					break;
 				 
 				 
@@ -183,7 +185,7 @@ int Vesmir(){
 	keys = SDL_GetKeyState(NULL);
 	
 	if(keys[SDLK_a]  == SDL_RELEASED && keys[SDLK_d] == SDL_RELEASED){
-		lode[0].uhyb = 0;
+		my_ship->uhyb = 0;
 		//printf("A/D released\n");
 	}		
 	
@@ -224,18 +226,18 @@ int Vesmir(){
 	if(X > MAX_X) X = MAX_X;
 	if(Y > MAX_Y) Y = MAX_Y;	
 	
-	if(lode[0].uhel >= 360) lode[0].uhel -= 360;
-	if(lode[0].uhyb >= lode[0].MAX_uhyb ) lode[0].uhyb = lode[0].MAX_uhyb ;	
-	if(lode[0].uhyb <= -lode[0].MAX_uhyb ) lode[0].uhyb = -lode[0].MAX_uhyb ;		
-	if(lode[0].rychlost <= 0) lode[0].rychlost = 0 ;
-	if(lode[0].rychlost >= lode[0].MAX_rychlost) lode[0].rychlost = lode[0].MAX_rychlost ;
+	if(my_ship->uhel >= 360) my_ship->uhel -= 360;		// < 0 ; 360 ) degrees
+	if(my_ship->uhyb >= my_ship->MAX_uhyb ) my_ship->uhyb = my_ship->MAX_uhyb ;	
+	if(my_ship->uhyb <= -my_ship->MAX_uhyb ) my_ship->uhyb = -my_ship->MAX_uhyb ;		
+	if(my_ship->rychlost <= 0) my_ship->rychlost = 0 ;
+	if(my_ship->rychlost >= my_ship->MAX_rychlost) my_ship->rychlost = my_ship->MAX_rychlost ;
 
 	
 	// Pohyb lodi
 		
 	
-	X += lode[0].rychlost * cos(((float)lode[0].uhel/180)*M_PI) + lode[0].uhyb * cos(((float)(lode[0].uhel+90)/180)*M_PI);
-	Y -= lode[0].rychlost * sin(((float)lode[0].uhel/180)*M_PI) + lode[0].uhyb * sin(((float)(lode[0].uhel+90)/180)*M_PI);	
+	X += my_ship->rychlost * cos(((float)my_ship->uhel/180)*M_PI) + my_ship->uhyb * cos(((float)(my_ship->uhel+90)/180)*M_PI);
+	Y -= my_ship->rychlost * sin(((float)my_ship->uhel/180)*M_PI) + my_ship->uhyb * sin(((float)(my_ship->uhel+90)/180)*M_PI);	
 
 	// Pohyb projektilu(strel)
 	
@@ -263,12 +265,12 @@ int Vesmir(){
 */
 	//printf("X  %G    Y  %G\n", X, Y);
 
-	 float T1 = SDL_GetTicks();
+//	 float T1 = SDL_GetTicks();
 	
 	Prekresli_vesmir();
 	//SDL_Delay(10);	
 	
-	
+/*	
 	float T2 = SDL_GetTicks();
 
 	float fps = 1000 / (T2 - T1);
@@ -276,7 +278,7 @@ int Vesmir(){
 
 	T1 = 0;
 	T2 = 0;
-
+*/
 
 	}
 	
@@ -316,12 +318,12 @@ int Prekresli_vesmir(){
 	
 	// Lod
 	
-	Kresli_lod(1); // Cizi lod
-	Kresli_lod(0); // Moje lod
+	Kresli_lod(my_ship); 	// my ship 
+	//Kresli_lod(); 		// another ship
 	
 	// Pristroje
 	
-	Kresli_pristroje();
+	Kresli_pristroje(my_ship);
 	
 	
 	
