@@ -15,6 +15,8 @@
 // Function prototypes
 //==============================================================================
 int Prekresli_vesmir();
+int Pohybuj_objekty();
+int Detekuj_kolize();
 int Collision_detect(T_ship *ship, T_weapon *weapon );
 
 
@@ -23,7 +25,6 @@ int Collision_detect(T_ship *ship, T_weapon *weapon );
 int Vesmir(){
 //==============================================================================
  
- int i;
  int ukonci=0;
  SDL_Event event;
  Uint8* keys;	
@@ -65,8 +66,9 @@ int Vesmir(){
 	lode[1].X = 3450;
 	lode[1].Y = 3450;
 	
-	pocet_laseru=0;
-	pocet_raket=0;
+	pocet_lodi   = 1;
+	pocet_laseru = 0;
+	pocet_raket  = 0;
 	
 	
 	// --------------------- Hlavni smycka -------------------
@@ -202,67 +204,11 @@ int Vesmir(){
 	if(my_ship->rychlost >= my_ship->MAX_rychlost) my_ship->rychlost = my_ship->MAX_rychlost ;
 
 	
-	//  === Pohyb lodi ===
-	
-	X += my_ship->rychlost * cos(((float)my_ship->angle/180)*M_PI)
-	       	+ my_ship->uhyb * cos(((float)(my_ship->angle+90)/180)*M_PI);
-
-	Y -= my_ship->rychlost * sin(((float)my_ship->angle/180)*M_PI)
-	       	+ my_ship->uhyb * sin(((float)(my_ship->angle+90)/180)*M_PI);	
-
-	// === Pohyb projektilu(strel) ===
-	
-	for (i=0; i<=pocet_laseru; i++){
-
-	lasers[i].X += lasers[i].speed * cos(((float)lasers[i].angle/180)*M_PI);
-	lasers[i].Y -= lasers[i].speed  * sin(((float)lasers[i].angle/180)*M_PI); 	
-	}
-	
-	for (i=0; i<=pocet_raket; i++){
-
-	rockets[i].X += rockets[i].speed * cos(((float)rockets[i].angle/180)*M_PI);
-	rockets[i].Y -= rockets[i].speed * sin(((float)rockets[i].angle/180)*M_PI); 
-	}
-		
-	// === Collision detect ===
-	//
-	for(int i=0; i <= pocet_raket; i++)
-		if(Collision_detect(&lode[1], &rockets[i])){
-			// DISABLE PROJECTIL
-			rockets[i].alive = 0;
-			rockets[i].X = 0;
-			rockets[i].Y = 0;
-			rockets[i].speed = 0;
-			// MAKE DAMAGE
-			lode[1].poskozeni += rockets[i].damage;
-			if(lode[1].poskozeni > lode[1].MAX_poskozeni){
-				printf("# SHIP DESTROYED\n");
-				lode[1].X = 0;
-				lode[1].Y = 0;
-				lode[1].alive = 0;
-			}
-
-		}
-
-	for(int i=0; i <= pocet_laseru; i++)
-		if(Collision_detect(&lode[1], &lasers[i])){
-			// DISABLE PROJECTIL
-			lasers[i].alive = 0;
-			lasers[i].X = 0;
-			lasers[i].Y = 0;
-			lasers[i].speed = 0;
-			// MAKE DAMAGE
-			lode[1].poskozeni += lasers[i].damage;
-			if(lode[1].poskozeni > lode[1].MAX_poskozeni){
-				printf("# SHIP DESTROYED\n");
-				lode[1].X = 0;
-				lode[1].Y = 0;
-				lode[1].alive = 0;
-			}
-		}
-
+	Pohybuj_objekty();
 	
 		
+		
+ 	Detekuj_kolize();
 		
 /*		
 	printf("   %G\n",(float)angle/180);
@@ -288,8 +234,7 @@ int Vesmir(){
 
 	}
 	
-	// Uklizeni
-		
+  // === Uklizeni ===
   Uklid_obrazky_vesmir();
   
   SDL_RemoveTimer(kb_timer);
@@ -345,29 +290,96 @@ int Prekresli_vesmir(){
 return OK;	
 }
 
+
+//==============================================================================
+int Pohybuj_objekty(){
+//==============================================================================
+	//  === Pohyb lodi ===
+	
+	X += my_ship->rychlost * cos(((float)my_ship->angle/180)*M_PI)
+	       	+ my_ship->uhyb * cos(((float)(my_ship->angle+90)/180)*M_PI);
+
+	Y -= my_ship->rychlost * sin(((float)my_ship->angle/180)*M_PI)
+	       	+ my_ship->uhyb * sin(((float)(my_ship->angle+90)/180)*M_PI);	
+
+	// === Pohyb projektilu(strel) ===
+	
+	for (int i=0; i<=pocet_laseru; i++){
+
+	lasers[i].X += lasers[i].speed * cos(((float)lasers[i].angle/180)*M_PI);
+	lasers[i].Y -= lasers[i].speed  * sin(((float)lasers[i].angle/180)*M_PI); 	
+	}
+	
+	for (int i=0; i<=pocet_raket; i++){
+
+	rockets[i].X += rockets[i].speed * cos(((float)rockets[i].angle/180)*M_PI);
+	rockets[i].Y -= rockets[i].speed * sin(((float)rockets[i].angle/180)*M_PI); 
+	}
+		
+
+ return OK;
+}
+//==============================================================================
+int Detekuj_kolize(){
+//==============================================================================
+
+	// === Collision detect ===
+
+		//
+  for(int x=1; x <= pocet_lodi; x++){		
+  	if(! lode[x].alive) continue;
+
+	for(int i=0; i <= pocet_raket; i++){
+		if(!rockets[i].alive) continue;
+		if(Collision_detect(&lode[x], &rockets[i])){
+			// DISABLE PROJECTIL
+			rockets[i].alive = 0;
+			rockets[i].X = 0;
+			rockets[i].Y = 0;
+			rockets[i].speed = 0;
+			// MAKE DAMAGE
+			lode[x].poskozeni += rockets[i].damage;
+			if(lode[x].poskozeni > lode[x].MAX_poskozeni){
+				printf("# SHIP n.%3d DESTROYED\n",x);
+				lode[x].X = 0;
+				lode[x].Y = 0;
+				lode[x].alive = 0;
+			}
+
+		}
+	}
+
+	for(int i=0; i <= pocet_laseru; i++){
+		if(!lasers[i].alive) continue;
+		if(Collision_detect(&lode[x], &lasers[i])){
+			// DISABLE PROJECTIL
+			lasers[i].alive = 0;
+			lasers[i].X = 0;
+			lasers[i].Y = 0;
+			lasers[i].speed = 0;
+			// MAKE DAMAGE
+			lode[x].poskozeni += lasers[i].damage;
+			if(lode[x].poskozeni > lode[x].MAX_poskozeni){
+				printf("# SHIP n.%3d DESTROYED\n",x);
+				lode[x].X = 0;
+				lode[x].Y = 0;
+				lode[x].alive = 0;
+			}
+		}
+	}
+  } 
+
+return OK;
+}
 //==============================================================================
 int Collision_detect(T_ship *ship, T_weapon *weapon ){
 //==============================================================================
 int c = 0;
 
- /* // prilis velky rozptyl
-  c = 	(fabs(ship->X - weapon->X) < ship->img->w + weapon->img->w) &&
-  	(fabs(ship->Y - weapon->Y) < ship->img->h + weapon->img->h);
-*/
   c = 	(fabs(ship->X - weapon->X) < (ship->img->w  >> 1)) &&
   	(fabs(ship->Y - weapon->Y) < (ship->img->h >> 1));
 
-  if(c)	printf("COLLISION: X: %d Y: %d\n",(int)(ship->X), (int)(ship->Y));
+  //if(c)	printf("COLLISION: X: %d Y: %d\n",(int)(ship->X), (int)(ship->Y));
 
-
-/*
-  if(ship->X < weapon->X)
-    if((ship->X + ship->img->w) > weapon->X)
-      if(ship->Y < weapon->Y)
-        if((ship->Y + ship->img->h) > weapon->Y)
-		c = 1;
-
-  if(c)	printf("SHIP COLLISION: X: %d Y: %d\n",(int)(ship->X), (int)(ship->Y));
-*/
   return c;
 }

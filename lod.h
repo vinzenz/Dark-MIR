@@ -71,7 +71,7 @@
 
 
 
-
+  int pocet_lodi;
 
 
 // Function Prototypes  

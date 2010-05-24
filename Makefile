@@ -4,7 +4,7 @@
 # license GNU GPL3
 
 TARGET = mir
-CFLAGS = --std=c99 -Wall -pedantic -g $(shell sdl-config --cflags)  -O2 -DDEBUG
+CFLAGS = --std=c99 -Wall -pedantic -g $(shell sdl-config --cflags)  -O2 -DDEBUG 
 LDFLAGS = $(shell sdl-config --libs) -lSDL_image -lSDL_ttf  -lSDL_gfx -lm
 OPTIMALIZE = -O2
 
