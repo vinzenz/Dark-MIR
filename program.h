@@ -2,16 +2,19 @@
 #ifndef PROGRAM_H
  #define PROGRAM_H
 
-#define  VERSION "0.03"
+#define  VERSION "0.01"
 
 #include <stdio.h> 
 #include <stdlib.h> 
+
 #include <SDL/SDL.h>  
 #include <SDL/SDL_image.h>  
 #include <SDL/SDL_ttf.h>  
 #include <SDL/SDL_thread.h> 
 #include <SDL/SDL_opengl.h>
 #include <SDL/SDL_rotozoom.h>
+#include <SDL/SDL_net.h>  
+
 #include <math.h> 
 
 #define OK 0 
@@ -30,48 +33,44 @@
 #define VYCHOZI_ROZLISENI   1 
 
 
-
-
-
 #define MAX_RES	5
 
 #define WIDTH	 rozliseni[nastavene_rozliseni].W // vychozi rozliseni
 #define HEIGHT   rozliseni[nastavene_rozliseni].H
 
-
-#define WIDTH0	 800 // 0 rozliseni
+#define WIDTH0	 800 
 #define HEIGHT0  600
 
-#define WIDTH1	1024 // 1 rozliseni
+#define WIDTH1	1024 
 #define HEIGHT1  768
 
-#define WIDTH2	1280 // 2 rozliseni
+#define WIDTH2	1280
 #define HEIGHT2 1024
 
-#define WIDTH3	1280 // 3 rozliseni
+#define WIDTH3	1280
 #define HEIGHT3 768
 
-#define WIDTH4	1440 // 4 rozliseni
+#define WIDTH4	1440
 #define HEIGHT4  900
 
-#define COLOR   24 
+#define COLOR   24 	// bits
 
 
 
 
 
 
-
-
+// Global vriables
+//==============================================================================
 
 short nastavene_rozliseni;
-char F; // detekce jeli fullscreen
+char F; 		// detekce jeli fullscreen
 
-char *jazyk;	  // kod jazyka
+char *jazyk;	  	// kod jazyka
 char *j;
 
-char m_text[16][32]; // texty tlacitek v menu
-char konfigurace[80][32]; // nacteny konfiguracni soubor
+char m_text[16][32]; 		// texty tlacitek v menu
+char konfigurace[80][32]; 	// nacteny konfiguracni soubor
 
 struct R {
 	int W;	
@@ -79,7 +78,7 @@ struct R {
 	short X;	
 };
 
-struct R rozliseni[MAX_RES]; // ->X=  0 800x600  	1 1024x768	2 1280x1024
+struct R rozliseni[MAX_RES]; 
 
 char pauza;
 
@@ -87,7 +86,8 @@ SDL_Rect rect;
 double X,Y;
 
 
-// Funkce
+// Function prototypes
+//==============================================================================
 
 int Init();
 int Vesmir();

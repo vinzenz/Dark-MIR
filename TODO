@@ -8,7 +8,13 @@
 
  - Sit
 	Aneb hlavni prvek hry
-    Naimplementovat herni server pres SDL network
+    	Naimplementovat herni server pres SDL network
+
+ - Multiplayer
+	Kazda strana bude pouzivat jiny druh deleni prostredku(zdroju, koristi ...)
+	RED -> vsichni dostanou rovnym dilem, + hrdina, ktery korist ziskal dostane bonus
+	BLUE -> vsechna korist pripadne tomu, kdo ji ziskal
+	GREEN -> 50% nalezce, 5o% frakce
 
  - Grafika
  	Lode, zbrane, zakladny, asteroidy .....
