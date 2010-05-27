@@ -10,48 +10,27 @@ SDL_Rect rect2;
 int Kresli_lod(T_ship *ship){
 //==============================================================================
 
-	// My ship
-//	if(my_ship == ship){	
-//		rect.x = (WIDTH/2) - (ship->img->w/2);
-//		rect.y = (HEIGHT/2) - (ship->img->h/2);
- //	}
-//	else{
-		//rect.x = ship->X - (ship->img->w/2);
-		//rect.y = ship->Y - (ship->img->w/2);
 	
 		rect.x = (WIDTH/2)  - (ship->img->w/2) + ship->X  - X;
 		rect.y = (HEIGHT/2) - (ship->img->h/2) + ship->Y  - Y;	
 		
-//	}
-//
-	
-	if(ship->speed > 0)	
+
+
+	if(ship->speed > 0){
+		SDL_FreeSurface(ship->rot_img);		// free old img
 		ship->rot_img = rotozoomSurface(ship->img_m, ship->angle, 1, 0);
-	else
-		ship->rot_img = rotozoomSurface(ship->img, ship->angle, 1, 0);
-
-	if(ship->MAX_poskozeni <= ship->poskozeni)		// crap
-		ship->rot_img = rotozoomSurface(ship->img_c, ship->angle, 1, 0);
-
-	SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
-	/*
-	// ship->angle did not change	
-	if((ship->angle2 == ship->angle) && (ship->rot_img != NULL)){
-		
-		SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
-		
 	}
 	else{
-
-//		ship->rot_img = rotozoomSurface(ship->img, ship->angle, 1, 0);
-	
-
-		SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
-	
-		ship->angle2 = ship->angle;
-	
+		SDL_FreeSurface(ship->rot_img);		// free old img
+		ship->rot_img = rotozoomSurface(ship->img, ship->angle, 1, 0);
 	}
-	*/
+	if(ship->MAX_poskozeni <= ship->poskozeni){		// crap
+		SDL_FreeSurface(ship->rot_img);		// free old img
+		ship->rot_img = rotozoomSurface(ship->img_c, ship->angle, 1, 0);
+	}
+
+	SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
+
 return OK;
 }
 

@@ -22,20 +22,21 @@
 	char strana;
 	
 	float speed;
-	int MAX_speed;
+	float MAX_speed;
 	float zrychleni;
 
-	int manevr;
+	float manevr;
+	float angle;
+	float angle2;
+
 	float uhyb;
-	int MAX_uhyb;
+	float MAX_uhyb;
 
 	int poskozeni;
 	int MAX_poskozeni;
 
 	float X; 			//  position
 	float Y;
-	int angle;
-	int angle2;
 
 	int alive;	
 		
@@ -92,7 +93,7 @@
   int MAX_speed;
   float zrychleni;
 
-  int manevr;
+  float manevr;
   float uhyb;
   int MAX_uhyb;
 

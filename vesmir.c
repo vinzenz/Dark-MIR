@@ -11,6 +11,10 @@
 // Weapon models
 //#include "weapons.h"
 
+// Global variables
+//==============================================================================
+ SDL_TimerID kb_timer = NULL;
+ SDL_TimerID mv_timer = NULL;
 
 // Function prototypes
 //==============================================================================
@@ -29,7 +33,6 @@ int Vesmir(){
  int ukonci=0;
  SDL_Event event;
  Uint8* keys;	
- SDL_TimerID kb_timer = NULL;
 
 	
 	// Inicializace
@@ -42,7 +45,8 @@ int Vesmir(){
 
 	// casovani reakci na klavesy
 	
-	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 
+	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 	// KEYBORD
+	mv_timer = SDL_AddTimer(50, Pohybuj_objekty, NULL); 	// MOVE
 	
 	X = 3000;
 	Y = 3000;
@@ -162,7 +166,9 @@ int Vesmir(){
 	//
 	if(X > MAX_X) X = MAX_X;
 	if(Y > MAX_Y) Y = MAX_Y;	
-	
+
+
+	// === prubezne opravy parametru ===	
 	if(my_ship->angle >= 360) my_ship->angle -= 360;		// < 0 ; 360 ) degrees
 	if(my_ship->uhyb >= my_ship->MAX_uhyb ) my_ship->uhyb = my_ship->MAX_uhyb ;	
 	if(my_ship->uhyb <= -my_ship->MAX_uhyb ) my_ship->uhyb = -my_ship->MAX_uhyb ;		
@@ -170,7 +176,7 @@ int Vesmir(){
 	if(my_ship->speed >= my_ship->MAX_speed) my_ship->speed = my_ship->MAX_speed ;
 
 	
-	Pohybuj_objekty();
+	//Pohybuj_objekty();
 	
 		
 		
@@ -198,7 +204,7 @@ int Vesmir(){
 	T2 = 0;
 */
 
-	}
+	} // END GAME LOOP
 	
   // === Uklizeni ===
   Uklid_obrazky_vesmir();
@@ -281,8 +287,8 @@ int Inicializuj_objekty(){
 	// Specifika cizi lodi
 	// ====================
 	lode[1] = SHIP_BLUE_RX;
-	lode[1].speed = 1; // angle ve stupnich
-	lode[1].angle = 45; // angle ve stupnich
+	lode[1].speed = 0.1; // angle ve stupnich
+	lode[1].angle = -125; // angle ve stupnich
 	
 	lode[1].X = 3450;
 	lode[1].Y = 3450;
@@ -297,7 +303,12 @@ int Inicializuj_objekty(){
 //==============================================================================
 int Pohybuj_objekty(){
 //==============================================================================
+//
+	printf("TIMER: Pohybuj_objekty()\n");
+	mv_timer = SDL_AddTimer(50, Pohybuj_objekty, NULL); 	// MOVE
 	//  === Pohyb lodi ===
+	my_ship->angle += manevr;
+	my_ship->speed += zrychleni;	
 	
 	X += my_ship->speed * cos(((float)my_ship->angle/180)*M_PI)
 	       	+ my_ship->uhyb * cos(((float)(my_ship->angle+90)/180)*M_PI);
@@ -329,6 +340,8 @@ int Pohybuj_objekty(){
 
  return OK;
 }
+
+
 //==============================================================================
 int Detekuj_kolize(){
 //==============================================================================
