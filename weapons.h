@@ -22,6 +22,27 @@
 } T_weapon;
 */
 
+
+// NEW speeds
+T_weapon RX_laser = {
+	.type = LASER,
+	.speed = 1,
+	.damage = 10,
+	.alive = 1,
+
+};
+
+T_weapon RX_R1 = {
+	.type = ROCKET,
+	.speed = 0.8,
+	.damage = 30,
+	.alive = 1,
+
+};
+
+
+/*
+// OLD speeds
 T_weapon RX_laser = {
 	.type = LASER,
 	.speed = 9,
@@ -37,7 +58,7 @@ T_weapon RX_R1 = {
 	.alive = 1,
 
 };
-
+*/
 
 
 #endif

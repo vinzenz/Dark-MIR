@@ -15,6 +15,7 @@
 //==============================================================================
  SDL_TimerID kb_timer = NULL;
  SDL_TimerID mv_timer = NULL;
+ SDL_TimerID draw_timer = NULL;
 
 // Function prototypes
 //==============================================================================
@@ -24,7 +25,8 @@ int Detekuj_kolize();
  int Collision_detect(T_ship *ship, T_weapon *weapon );
 int Prekresli_vesmir();
 
-
+Uint32 Timed_loop(Uint32 interval, void *param);
+Uint32 Redraw_loop(Uint32 interval, void *param);
 
 //==============================================================================
 int Vesmir(){
@@ -46,7 +48,8 @@ int Vesmir(){
 	// casovani reakci na klavesy
 	
 	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 	// KEYBORD
-	mv_timer = SDL_AddTimer(50, Pohybuj_objekty, NULL); 	// MOVE
+	mv_timer = SDL_AddTimer(50, Timed_loop, NULL); 	// MOVE
+//	draw_timer = SDL_AddTimer(50, Redraw_loop, NULL); 	// MOVE
 	
 	X = 3000;
 	Y = 3000;
@@ -176,11 +179,11 @@ int Vesmir(){
 	if(my_ship->speed >= my_ship->MAX_speed) my_ship->speed = my_ship->MAX_speed ;
 
 	
-	//Pohybuj_objekty();
+//	Pohybuj_objekty();
 	
 		
 		
- 	Detekuj_kolize();
+//	Detekuj_kolize();
 		
 /*		
 	printf("   %G\n",(float)angle/180);
@@ -189,12 +192,12 @@ int Vesmir(){
 */
 	//printf("X  %G    Y  %G\n", X, Y);
 
-//	 float T1 = SDL_GetTicks();
+	 float T1 = SDL_GetTicks();
 	
 	Prekresli_vesmir();
 	//SDL_Delay(10);	
 	
-/*	
+	
 	float T2 = SDL_GetTicks();
 
 	float fps = 1000 / (T2 - T1);
@@ -202,13 +205,15 @@ int Vesmir(){
 
 	T1 = 0;
 	T2 = 0;
-*/
+
 
 	} // END GAME LOOP
 	
   // === Uklizeni ===
   Uklid_obrazky_vesmir();
   
+  SDL_RemoveTimer(draw_timer);
+  SDL_RemoveTimer(mv_timer);
   SDL_RemoveTimer(kb_timer);
 	
 	
@@ -216,6 +221,33 @@ int Vesmir(){
 }
 
 
+//==============================================================================
+Uint32 Redraw_loop(Uint32 interval, void *param){
+//==============================================================================
+
+	printf("TIMER: Redraw_loop()\n");
+	draw_timer = SDL_AddTimer(50, Redraw_loop, NULL); 	// MOVE
+
+	Prekresli_vesmir();
+
+ return OK;
+}
+//==============================================================================
+Uint32 Timed_loop(Uint32 interval, void *param){
+//==============================================================================
+// 50 ms
+	printf("TIMER: Pohybuj_objekty()\n");
+	mv_timer = SDL_AddTimer(50, Timed_loop, NULL); 	// MOVE
+
+	Pohybuj_objekty();
+
+	Detekuj_kolize();
+
+//	Prekresli_vesmir();
+
+
+return OK;
+}
 
 
 //==============================================================================
@@ -304,8 +336,6 @@ int Inicializuj_objekty(){
 int Pohybuj_objekty(){
 //==============================================================================
 //
-	printf("TIMER: Pohybuj_objekty()\n");
-	mv_timer = SDL_AddTimer(50, Pohybuj_objekty, NULL); 	// MOVE
 	//  === Pohyb lodi ===
 	my_ship->angle += manevr;
 	my_ship->speed += zrychleni;	
