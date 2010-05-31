@@ -1,6 +1,5 @@
 
 
-
 #include "program.h"
 #include "server.h"
 #include "lod.h"
@@ -8,49 +7,12 @@
 #include "vesmir.h"
 #include "zbrane.h"
 
+#include "protokol.h"
+
 #define TTY stdout
 #define MAX_PLAYERS 2
 
-#define BUFF_SIZE 512
 
-/* Communication Protokol Description v0.01
- * 
- * Clients request
- *
- * 1. Byte = request code
- * 2. - ... data
- *
- *
- *  0x01 = new player
- *  0x02 = 
- *  0x03 =
- *
- *  0x10 = rotate right
- *  0x11 = rotate left
- *  0x12 = accelerate speed up
- *  0x13 = slow down
- *  0x14 = shift right
- *  0x15 = shift left
- *
- *  0x41 = fire 1. weapon
- *  0x42 = fire 2. weapon
- *  0x43 = fire 2. weapon
- *
- *  0xFF = logout
- */
-
-
-/* Server answer
- * 
- * 1. Byte = answer code
- * 2. Byte ...N X position
- * N. Byte ...M Y position
- * N. Byte ...M angle
- * N. Byte ...M speed
- *
- *
- *
- */
 typedef struct str_player{
 	IPaddress  ip;	
 	char nick[32];
@@ -61,13 +23,28 @@ typedef struct str_player{
 } T_player;
 
 
+int p_id;
 T_player player[MAX_PLAYERS+1];
+
+
+float f;
+double D;
+int I;
 
 // Function prototypes
  //==============================================================================
 int Init_server();
 int Server();
 int New_client(T_player *p);
+int Free_client(T_player *p);
+
+ //==============================================================================
+int Speed_up(int id);
+int Slow_down(int id);
+int Rotate_R(int id);
+int Rotate_L(int id);
+int Shift_R(int id);
+int Shift_L(int id);
 
 int Inicializuj_objekty();
 int Pohybuj_objekty();
@@ -76,12 +53,14 @@ int Detekuj_kolize();
 
 // Global variables
  //==============================================================================
-  TCPsocket sd, csd; /* Socket descriptor, Client socket descriptor */
+  TCPsocket ssd, sd; /* Socket descriptor, Client socket descriptor */
   IPaddress ip, *remoteIP;
 
   int players = 0;	// count of
-  unsigned char buffer[512];
-
+  unsigned char rbuff[512];
+  unsigned char tbuff[512];
+  unsigned char *tp;		// rbuff pointer
+  int len=0;
  //==============================================================================
  //==============================================================================
 int main(int argc, char **argv){
@@ -109,7 +88,7 @@ int Init_server(){
   }
  
 /* Open a connection with the IP provided (listen on the host's port) */
-  if (!(sd = SDLNet_TCP_Open(&ip))){
+  if (!(ssd = SDLNet_TCP_Open(&ip))){
 	fprintf(stderr, "SDLNet_TCP_Open: %s\n", SDLNet_GetError());
 	exit(EXIT_FAILURE);
   }
@@ -127,17 +106,17 @@ int Server(){
   int quit, quit2;
 	/* Wait for a connection, send data and term */
   quit = 0;
-while (!quit){
+while (1){
 
   /* This check the sd if there is a pending connection.
    * If there is one, accept that, and open a new socket for communicating */
-  if ((csd = SDLNet_TCP_Accept(sd))){
+  if ((sd = SDLNet_TCP_Accept(ssd))){
   
-  /* Now we can communicate with the client using csd socket
+  /* Now we can communicate with the client using sd socket
    * sd will remain opened waiting other connections */
  
   /* Get the remote address */
-  if ((remoteIP = SDLNet_TCP_GetPeerAddress(csd))){
+  if ((remoteIP = SDLNet_TCP_GetPeerAddress(sd))){
  	 /* Print the address, converting in the host format */
 	printf("Host connected: %x %d\n", 
 		SDLNet_Read32(&remoteIP->host), SDLNet_Read16(&remoteIP->port));
@@ -152,31 +131,58 @@ while (!quit){
   }
   else
 	fprintf(stderr, "SDLNet_TCP_GetPeerAddress: %s\n", SDLNet_GetError());
-  quit2 = 0;
-  while (!quit2){
+  quit = 0;
+  while (!quit){
 
-  if (SDLNet_TCP_Recv(csd, buffer, 512) > 0){
+	RECV;
+	tp = tbuff;
+	
+	switch(rbuff[0]){
 
-
-	switch(buffer[0]){
-
-
-	  case 0x01: 			// NEW PLAYER
-		New_client(&player[players]);
+	  	case P_NEW_PLAYER: 			// NEW PLAYER
+			New_client(&player[players]);
 			break;
-	  case 0x10: 	
+	  
+	  	case P_ROTATE_R: 	
+			Rotate_R(p_id);
+			break;
+
+	  	case P_ROTATE_L: 	
+			Rotate_L(p_id);
+			break;
 
 
-	  case 0xFF: 	
-		quit2 = 1;
-		printf("Terminate connection\n");
+		case P_SPEED_UP:  
+			Speed_up(p_id);
+			break;
+
+		case P_SLOW_DOWN: 
+			Slow_down(p_id);
+			break;
+
+		case P_SHIFT_R:
+			Shift_R(p_id);
+			break;
+
+		case P_SHIFT_L: 
+			Shift_L(p_id);
+			break;
+			
+		case P_FIRE_1:   
+		case P_FIRE_2:    
+		case P_FIRE_3:     
+			break;
+
+
+	  case P_LOGOUT: 	
+			Free_client(&player[players]);
+			quit = 1;
 	}
   			
  }
- }
  
 /* Close the client socket */
-  SDLNet_TCP_Close(csd);
+  SDLNet_TCP_Close(sd);
  }
 }
  
@@ -195,18 +201,12 @@ int New_client(T_player *p){
 //==============================================================================
 
 	fprintf(TTY, "S: New_client\n");
-	if (SDLNet_TCP_Recv(csd, buffer, 512) > 0){
+	fprintf(TTY, "S: new nick: %s\n", &rbuff[1]);
+	strncpy(p->nick, (char *)rbuff, 32);
+
+	p->score = 0;
+	p->ship = SHIP_RED_RX;
  
-		printf("S: new nick: %s\n", buffer);
-		//strncpy(p->nick, buffer, 32);
-		bzero(buffer, BUFF_SIZE);
-
-		p->score = 0;
-
-		p->ship = SHIP_RED_RX;
-  	}
- 
-
 
  return OK;
 }
@@ -215,9 +215,132 @@ int New_client(T_player *p){
 int Free_client(T_player *p){
 //==============================================================================
 
+	fprintf(TTY, "S: Client disconnected\n");
  return OK;
 }
 
+//==============================================================================
+int Speed_up(int id){
+//==============================================================================
+	
+  player[id].ship.speed += player[id].ship.zrychleni;	
+
+  if(player[id].ship.speed > player[id].ship.MAX_speed)
+		  player[id].ship.speed = player[id].ship.MAX_speed;	
+
+  tp = tbuff;
+  *tp =  P_SPEED_UP;
+  tp++;
+  memcpy(tp, &player[id].ship.speed, sizeof(float));
+
+  SEND;
+
+ return OK;
+}
+//==============================================================================
+int Slow_down(int id){
+//==============================================================================
+	
+  player[id].ship.speed -= player[id].ship.zrychleni;	
+  if(player[id].ship.speed < 0)
+		  player[id].ship.speed = 0;
+
+  tp = tbuff;
+  *tp =  P_SLOW_DOWN;
+  tp++;
+  memcpy(tp, &player[id].ship.speed, sizeof(float));
+
+  SEND;
+
+ return OK;
+}
+
+//==============================================================================
+int Rotate_R(int id){
+//==============================================================================
+	
+  player[id].ship.angle += player[id].ship.manevr;	
+
+  if((player[id].ship.angle > 360)||(player[id].ship.angle < 0))
+	player[id].ship.angle = 0;
+
+  tp = tbuff;
+  *tp =  P_ROTATE_R;
+  tp++;
+  memcpy(tp, &player[id].ship.angle, sizeof(float));
+
+  SEND;
+
+ return OK;
+}
+//==============================================================================
+int Rotate_L(int id){
+//==============================================================================
+	
+  player[id].ship.angle -= player[id].ship.manevr;	
+
+  if((player[id].ship.angle > 360)||(player[id].ship.angle < 0))
+	player[id].ship.angle = 0;
+
+  tp = tbuff;
+  *tp =  P_ROTATE_L;
+  tp++;
+  memcpy(tp, &player[id].ship.angle, sizeof(float));
+
+  SEND;
+
+ return OK;
+}
+//==============================================================================
+int Shift_R(int id){
+//==============================================================================
+	
+  player[id].ship.uhyb = player[id].ship.MAX_uhyb;
+
+  tp = tbuff;
+  *tp =  P_SHIFT_R;
+  tp++;
+  memcpy(tp, &player[id].ship.uhyb, sizeof(float));
+
+  SEND;
+
+ return OK;
+}
+//==============================================================================
+int Shift_L(int id){
+//==============================================================================
+	
+  player[id].ship.uhyb = player[id].ship.MAX_uhyb;
+
+  tp = tbuff;
+  *tp =  P_SHIFT_L;
+  tp++;
+  memcpy(tp, &player[id].ship.uhyb, sizeof(float));
+
+  SEND;
+
+ return OK;
+}
+
+//==============================================================================
+int Position_XY(int id){
+	
+
+  tp = tbuff;
+  *tp =  P_POSITION;
+  tp++;
+  memcpy(tp, &player[id].ship.X, sizeof(float));
+  tp += sizeof(float);
+  memcpy(tp, &player[id].ship.Y, sizeof(float));
+
+  SEND;
+
+
+ return OK;
+}
+//==============================================================================
+//=============================================================================
+//
 //==============================================================================
 //==============================================================================
 //==============================================================================

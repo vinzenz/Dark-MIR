@@ -6,6 +6,7 @@
 
 #include <stdio.h> 
 #include <stdlib.h> 
+#include <unistd.h> 
 
 #include <SDL/SDL.h>  
 #include <SDL/SDL_image.h>  
@@ -101,6 +102,8 @@ int Vesmir();
 
 
 
+
+#define POINT(N) printf("POINT: %3d\n",(N)); fflush(stdout);
 
 
 #endif

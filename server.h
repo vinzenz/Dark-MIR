@@ -1,6 +1,11 @@
 #ifndef SERVER_H 
  #define SERVER_H 
 
-#define PORT  7111
+#define PORT  		7111
+#define BUFF_SIZE 	512
+
+
+
+
 
 #endif
