@@ -56,6 +56,13 @@ typedef struct str_player{
 } T_player;
 */
 
+
+#define NICKNAME_MAX 	32	
+#define HOSTNAME_MAX 	256
+
+
+#define SERVER_TIME_INTERVAL 10
+
 #define P_NEW_PLAYER 	0x01
 #define P_LOGOUT 		0xFF
 // ----------------------------
@@ -69,8 +76,12 @@ typedef struct str_player{
 #define P_SHIFT_L		0x16
 
 
+
 // ----------------------------
+//  0x21, X, Y, speed, [ angle ]
 #define P_POSITION		0x21
+#define P_STATE			0x22
+
 
 // ----------------------------
 #define P_FIRE_1		0x41
@@ -86,7 +97,9 @@ typedef struct str_player{
 		bzero(rbuff, BUFF_SIZE);\
 		if (SDLNet_TCP_Recv(sd, (void *)rbuff, BUFF_SIZE) > 0){\
 			printf("recived: 0x%X:%s\n", rbuff[0], rbuff+1);\
-		}else quit = 1; \
+			printf("recived: 0x%X:%f\n", rbuff[0], (double) *((float *) rbuff+1));\
+		}else   \
+			printf("INVALID PACKET");\
 
 
 #define SEND \
@@ -101,4 +114,20 @@ typedef struct str_player{
 
 
 
+
+// FUNCTIONS
+// =============================================================================
+int New_client();
+int Logout();
+
+int Speed_up();
+int Slow_down();
+int Rotate_R();
+int Rotate_L();
+int Shift_R();
+int Shift_L();
+
+int Get_ship_state();
+
+// =============================================================================
 #endif

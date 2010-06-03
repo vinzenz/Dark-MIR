@@ -13,17 +13,18 @@
 #define MAX_PLAYERS 2
 
 
+
 typedef struct str_player{
 	IPaddress  ip;	
 	char nick[32];
 	
 	int score;
 	T_ship ship;
-	
+	TCPsocket sd;	
+
 } T_player;
 
 
-int p_id;
 T_player player[MAX_PLAYERS+1];
 
 
@@ -31,12 +32,17 @@ float f;
 double D;
 int I;
 
+
+
+
 // Function prototypes
  //==============================================================================
+int Init();
 int Init_server();
 int Server();
 int New_client(T_player *p);
-int Free_client(T_player *p);
+int Free_client(int id);
+
 
  //==============================================================================
 int Speed_up(int id);
@@ -46,6 +52,8 @@ int Rotate_L(int id);
 int Shift_R(int id);
 int Shift_L(int id);
 
+Uint32 Timed_loop(Uint32 interval, void *param);
+
 int Inicializuj_objekty();
 int Pohybuj_objekty();
 int Detekuj_kolize();
@@ -53,23 +61,40 @@ int Detekuj_kolize();
 
 // Global variables
  //==============================================================================
+  SDL_TimerID mv_timer = NULL;
   TCPsocket ssd, sd; /* Socket descriptor, Client socket descriptor */
   IPaddress ip, *remoteIP;
 
   int players = 0;	// count of
-  unsigned char rbuff[512];
-  unsigned char tbuff[512];
+  unsigned char rbuff[BUFF_SIZE];
+  unsigned char tbuff[BUFF_SIZE];
   unsigned char *tp;		// rbuff pointer
   int len=0;
+  int p_id = 0;
  //==============================================================================
  //==============================================================================
 int main(int argc, char **argv){
  //==============================================================================
-  
+
+  Init();	
   Init_server();
+  Inicializuj_objekty();
+
   Server();
 
  return EXIT_SUCCESS;
+}
+
+ //==============================================================================
+int Init(){
+ //==============================================================================
+
+	if (SDL_Init(SDL_SERVER_SUBSYSTEMS)==-1){
+		fprintf(stderr, "ERROR:  SDL subsystems init: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+
+  return OK;	
 }
 
  //==============================================================================
@@ -103,9 +128,12 @@ int Init_server(){
 int Server(){
 //==============================================================================
 
-  int quit, quit2;
-	/* Wait for a connection, send data and term */
-  quit = 0;
+  int quit=0;
+
+  mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL);  // MOVE
+			
+
+
 while (1){
 
   /* This check the sd if there is a pending connection.
@@ -120,22 +148,18 @@ while (1){
  	 /* Print the address, converting in the host format */
 	printf("Host connected: %x %d\n", 
 		SDLNet_Read32(&remoteIP->host), SDLNet_Read16(&remoteIP->port));
-/*
-	if( players < MAX_PLAYERS ){
-		if(New_client(&player[players]) == OK){
-			players++;
-		}
-	}
 
-*/
   }
   else
 	fprintf(stderr, "SDLNet_TCP_GetPeerAddress: %s\n", SDLNet_GetError());
+
+ // ===== ---- ===== ---- ===== ---- ===== ---- ===== 
+
   quit = 0;
   while (!quit){
 
 	RECV;
-	tp = tbuff;
+	//tp = tbuff;
 	
 	switch(rbuff[0]){
 
@@ -175,7 +199,7 @@ while (1){
 
 
 	  case P_LOGOUT: 	
-			Free_client(&player[players]);
+			Free_client(p_id);
 			quit = 1;
 	}
   			
@@ -186,36 +210,62 @@ while (1){
  }
 }
  
+  SDL_RemoveTimer(mv_timer);
   SDLNet_TCP_Close(sd);
   SDLNet_Quit();
 
  return OK;
 }
 
+//==============================================================================
+Uint32 Timed_loop(Uint32 interval, void *param){
+//==============================================================================
+  mv_timer = SDL_AddTimer(50, Timed_loop, NULL);  // MOVE
 
+	Pohybuj_objekty();
 
-
-
+	return OK;
+}
+//==============================================================================
 //==============================================================================
 int New_client(T_player *p){
 //==============================================================================
 
-	fprintf(TTY, "S: New_client\n");
+	fprintf(TTY, "S: New_client id:%2d: connected\n", players);
 	fprintf(TTY, "S: new nick: %s\n", &rbuff[1]);
 	strncpy(p->nick, (char *)rbuff, 32);
 
 	p->score = 0;
 	p->ship = SHIP_RED_RX;
- 
 
+	players++;
+
+	// ACK
+	tp=tbuff;
+	if(players >= MAX_PLAYERS)
+		*tp = P_LOGOUT;				// server is full
+	else
+		*tp = P_NEW_PLAYER;			// player joined
+
+	SEND;
+	
  return OK;
 }
 
 //==============================================================================
-int Free_client(T_player *p){
+int Free_client(int id){
 //==============================================================================
 
-	fprintf(TTY, "S: Client disconnected\n");
+	fprintf(TTY, "S: Client id:%2d: disconnected\n", id);
+
+	// DELETE PLAYER - shift player[] array
+	for(int i=id; i < players-1; i++){
+		player[i] = player[i+1];
+		POINT(i);
+	}
+
+	players--;
+
  return OK;
 }
 
@@ -228,13 +278,13 @@ int Speed_up(int id){
   if(player[id].ship.speed > player[id].ship.MAX_speed)
 		  player[id].ship.speed = player[id].ship.MAX_speed;	
 
-  tp = tbuff;
+  /*tp = tbuff;
   *tp =  P_SPEED_UP;
   tp++;
   memcpy(tp, &player[id].ship.speed, sizeof(float));
 
   SEND;
-
+*/
  return OK;
 }
 //==============================================================================
@@ -244,14 +294,14 @@ int Slow_down(int id){
   player[id].ship.speed -= player[id].ship.zrychleni;	
   if(player[id].ship.speed < 0)
 		  player[id].ship.speed = 0;
-
+/*
   tp = tbuff;
   *tp =  P_SLOW_DOWN;
   tp++;
   memcpy(tp, &player[id].ship.speed, sizeof(float));
 
   SEND;
-
+*/
  return OK;
 }
 
@@ -259,36 +309,41 @@ int Slow_down(int id){
 int Rotate_R(int id){
 //==============================================================================
 	
-  player[id].ship.angle += player[id].ship.manevr;	
+  player[id].ship.angle -= player[id].ship.manevr;	
 
-  if((player[id].ship.angle > 360)||(player[id].ship.angle < 0))
-	player[id].ship.angle = 0;
+  if(player[id].ship.angle > 360)
+	player[id].ship.angle -= 360;
+  if(player[id].ship.angle < 0)
+	player[id].ship.angle += 360;
 
+/*
   tp = tbuff;
   *tp =  P_ROTATE_R;
   tp++;
   memcpy(tp, &player[id].ship.angle, sizeof(float));
 
   SEND;
-
+*/
  return OK;
 }
 //==============================================================================
 int Rotate_L(int id){
 //==============================================================================
 	
-  player[id].ship.angle -= player[id].ship.manevr;	
+  player[id].ship.angle += player[id].ship.manevr;	
 
-  if((player[id].ship.angle > 360)||(player[id].ship.angle < 0))
-	player[id].ship.angle = 0;
-
+  if(player[id].ship.angle > 360)
+	player[id].ship.angle -= 360;
+  if(player[id].ship.angle < 0)
+	player[id].ship.angle += 360;
+/*
   tp = tbuff;
   *tp =  P_ROTATE_L;
   tp++;
   memcpy(tp, &player[id].ship.angle, sizeof(float));
 
   SEND;
-
+*/
  return OK;
 }
 //==============================================================================
@@ -302,7 +357,7 @@ int Shift_R(int id){
   tp++;
   memcpy(tp, &player[id].ship.uhyb, sizeof(float));
 
-  SEND;
+//  SEND;
 
  return OK;
 }
@@ -317,27 +372,36 @@ int Shift_L(int id){
   tp++;
   memcpy(tp, &player[id].ship.uhyb, sizeof(float));
 
-  SEND;
+//  SEND;
 
  return OK;
 }
 
 //==============================================================================
-int Position_XY(int id){
+//==============================================================================
+int Send_ship_state(int i){
+//==============================================================================
+
+printf(">>> sending ship state <<<\n");
+fflush(stdout);
+	unsigned char *tp = tbuff;
+	//*tp = P_STATE;
+	*tp = 0xFA;
+	tp++;	
+	*( (float *)tp) = player[i].ship.X;
+	fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));
+	tp += sizeof(float);
+	*( (float *)tp) = player[i].ship.Y;
+	tp += sizeof(float);
+	*( (float *)tp) = player[i].ship.speed;
+	tp += sizeof(float);
+	*( (float *)tp) = player[i].ship.angle;
+
+	SEND;
 	
-
-  tp = tbuff;
-  *tp =  P_POSITION;
-  tp++;
-  memcpy(tp, &player[id].ship.X, sizeof(float));
-  tp += sizeof(float);
-  memcpy(tp, &player[id].ship.Y, sizeof(float));
-
-  SEND;
-
-
- return OK;
+	return OK;
 }
+//==============================================================================
 //==============================================================================
 //=============================================================================
 //
@@ -361,23 +425,17 @@ int Inicializuj_objekty(){
 	SHIP_BLUE_RX.img_c = IMG_BLUE_RX_crap;
 	SHIP_BLUE_RX.strana = BLUE;
 
-	lode[0] = SHIP_RED_RX;
-	//lode[0] = SHIP_BLUE_RX;
 	
-	my_ship = &lode[0];	
 	
-	// Specifika cizi lodi
-	// ====================
-	lode[1] = SHIP_BLUE_RX;
-	lode[1].speed = 0.1; // angle ve stupnich
-	lode[1].angle = -125; // angle ve stupnich
-	
-	lode[1].X = 3450;
-	lode[1].Y = 3450;
-	
-	pocet_lodi   = 1;
-	pocet_laseru = 0;
-	pocet_raket  = 0;
+	for(int i=0; i < MAX_PLAYERS; i++){
+		player[i].ship = SHIP_RED_RX;
+		player[i].ship.X = (MAX_X/2) + (i * 200);
+		player[i].ship.Y = (MAX_Y/2) + (i * 200);
+		player[i].ship.speed = 0.1;
+		player[i].ship.angle = 0;
+		player[i].ship.alive= 1;
+	}
+
 
  return OK;
 }
@@ -387,22 +445,42 @@ int Pohybuj_objekty(){
 //==============================================================================
 //
 	//  === Pohyb lodi ===
-	my_ship->angle += manevr;
-	my_ship->speed += zrychleni;	
+  for(int i=0; i < players; i++){
+	if(! player[i].ship.alive) continue;
+
+	// ==== speed limit ====
+	if(player[i].ship.speed > player[i].ship.MAX_speed) 
+			player[i].ship.speed =  player[i].ship.MAX_speed;
+
+	//player[i].ship.angle += player[i].ship.manevr;
+	//player[i].ship.manevr = 0;
+
+	//player[i].ship.speed += player[i].ship.zrychleni;	
+	//player[i].ship.zrychleni = 0;
 	
-	X += my_ship->speed * cos(((float)my_ship->angle/180)*M_PI)
-	       	+ my_ship->uhyb * cos(((float)(my_ship->angle+90)/180)*M_PI);
+	// ==== position change ====
+	player[i].ship.X += player[i].ship.speed * cos(((float)player[i].ship.angle/180)*M_PI)
+	       	+ player[i].ship.uhyb * cos(((float)(player[i].ship.angle+90)/180)*M_PI);
 
-	Y -= my_ship->speed * sin(((float)my_ship->angle/180)*M_PI)
-	       	+ my_ship->uhyb * sin(((float)(my_ship->angle+90)/180)*M_PI);	
+	player[i].ship.Y -= player[i].ship.speed * sin(((float)player[i].ship.angle/180)*M_PI)
+			+ player[i].ship.uhyb * sin(((float)(player[i].ship.angle+90)/180)*M_PI);	
 
+	// ==== position limits ====
+	// RIGHT  DOWN 
+	if(player[i].ship.X > MAX_X) 
+			player[i].ship.X = MAX_X;
+	if(player[i].ship.Y > MAX_Y) 
+			player[i].ship.Y = MAX_Y;
 
-	for (int i=1; i<=pocet_lodi; i++){
-	  if(! lode[i].alive) continue;
-	  lode[i].X += lode[i].speed * cos(((float)lode[i].angle/180)*M_PI);
-	  lode[i].Y -= lode[i].speed  * sin(((float)lode[i].angle/180)*M_PI); 	
-	}
+	// LEFT  UP
+	if(player[i].ship.X < 0) 
+			player[i].ship.X = 0;
+	if(player[i].ship.Y < 0) 
+			player[i].ship.Y = 0;
 
+	Send_ship_state(i);
+  }
+/*
 	// === Pohyb projektilu(strel) ===
 	//
 	for (int i=0; i<=pocet_laseru; i++){
@@ -416,7 +494,7 @@ int Pohybuj_objekty(){
 	  rockets[i].X += rockets[i].speed * cos(((float)rockets[i].angle/180)*M_PI);
 	  rockets[i].Y -= rockets[i].speed * sin(((float)rockets[i].angle/180)*M_PI); 
 	}
-		
+*/		
 
  return OK;
 }

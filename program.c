@@ -23,36 +23,58 @@
 
 #include "program.h"
 #include "images.h"
+#include "client.h"
 
 #include <getopt.h>
 
 
-int Init();	
+
+int	Init(int w, int h, int bits, int full);
+int NET_Init();	
+int	Get_Opts(int argc, char **argv);
 
 
 // -------------------------------------------------------------------------------------------
 
-#define HELP_MSG "\
-GROZA RTS v 0.1\n\
-2008 copyright by (c) Alexej alexej.x@mail.ru GNU GPL-3 \n\
-    	-h		show this help    \n\
-    	-f		fullscreen    \n\
-    	-r NUM		resolution(default 1) 0 = 800x600; 1 = 1024x768; 2 = 1280x1024;\n\
-    	-l LANG		language (LANG: cs,sk,ru,en ) \n\
-    	-e		map editor    \n\
-"
+//==============================================================================
+int main(int argc,char *argv[]){
+//==============================================================================
 
-//==============================================================================
-int main(int argc,char *argv[])
-//==============================================================================
-{
-  char *p_lang;
-	
+
+  strcpy(nick, "PLAYER_Alexej");
+
+	Get_Opts(argc, argv);  
 	
 //	Nacti_konfiguraci();
 	
-	
-	
+//	Nacti_jazyk(p_lang);
+
+	NET_Init();
+
+	Nastav_rozliseni();   
+	Zmena_rozliseni(nastavene_rozliseni);
+
+//	Init(WIDTH, HEIGHT, COLOR, 0);
+    
+   
+	Vesmir(); // Hlavni funkce
+	 
+
+	SDL_Quit();
+
+	return OK;
+}
+
+
+
+
+
+// -------------------------------------------------------------------------------------------
+//==============================================================================
+int	Get_Opts(int argc, char **argv){
+//==============================================================================
+  char *p_lang;
+
 	// argumenty 
     while (1) {
 	 int c = getopt(argc, argv, "hfer:l:");
@@ -100,30 +122,12 @@ int main(int argc,char *argv[])
 	  }
    }
 
-
-
-
-
-//	Nacti_jazyk(p_lang);
-    
-	Nastav_rozliseni();   
-	Zmena_rozliseni(nastavene_rozliseni);
-
-//	Init(WIDTH, HEIGHT, COLOR, 0);
-    
-   
-	Vesmir(); // Hlavni funkce
-	 
-
-	SDL_Quit();
+	// The last parameter is hostname of server //
+	if(argv[argc-1] != NULL)
+			strncpy(hostname, argv[argc-1], HOSTNAME_MAX);
 
 	return OK;
 }
-
-
-
-
-
 // -------------------------------------------------------------------------------------------
 
 
@@ -131,12 +135,10 @@ int main(int argc,char *argv[])
 
 
 
-
-
 //==============================================================================
-int	Init(int w, int h, int bits, int full)
+int	Init(int w, int h, int bits, int full){
 //==============================================================================
-{
+
 	if (SDL_Init(SDL_SUBSYSTEMS)==-1){
 		
 	
@@ -157,15 +159,36 @@ int	Init(int w, int h, int bits, int full)
 		return FAIL;
 	}
 	
-	if(TTF_Init() == -1)
-        {
-        	printf("Nepodarilo se inicializovat SDL_ttf: %s\n", TTF_GetError());
-        	return FAIL;
-        }
+	if(TTF_Init() == -1){
+    	printf("Nepodarilo se inicializovat SDL_ttf: %s\n", TTF_GetError());
+    	return FAIL;
+    }
 
 	if(F==1)SDL_WM_ToggleFullScreen(screen);	
-	
-	
-	
+
+    return OK;	
+}
+
+//==============================================================================
+int	NET_Init(){
+//==============================================================================
+	// ==== SDL_NET_Init ====
+	if (SDLNet_Init() == FAIL){
+	    fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
+		exit(EXIT_FAILURE);
+	}
+ 
+	/* Resolving the host */
+  	if (SDLNet_ResolveHost(&ip, hostname, PORT) == FAIL){
+		fprintf(stderr, "SDLNet_ResolveHost: %s\n", SDLNet_GetError());
+	    exit(EXIT_FAILURE);
+    }
+ 
+	/* Open a connection with the IP provided ) */
+  	if (!(sd = SDLNet_TCP_Open(&ip))){
+		fprintf(stderr, "SDLNet_TCP_Open: %s\n", SDLNet_GetError());
+		exit(EXIT_FAILURE);
+	}
+
     return OK;	
 }

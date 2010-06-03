@@ -5,6 +5,10 @@
 #include "vesmir.h"
 #include "lod.h"
 
+// Net stuff
+#include "protokol.h"
+#include "client.h"
+
 // Ship models
 #include "ships.h"
 
@@ -36,8 +40,15 @@ int Vesmir(){
  SDL_Event event;
  Uint8* keys;	
 
-	
 	// Inicializace
+
+	if(New_client() == OK)		// TELL "hello server"
+		printf("---==:: CONNECTED ::==---\n");
+	else{			
+		fprintf(stderr, "SERVER ERROR");
+		// react somehow
+	}
+
 	
 	if(Nacti_obrazky_vesmir() == FAIL) 
 		fprintf(stderr, "ERROR: nepodarilo se nacist obrazky pro vesmir\n");
@@ -48,7 +59,7 @@ int Vesmir(){
 	// casovani reakci na klavesy
 	
 	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 	// KEYBORD
-	mv_timer = SDL_AddTimer(50, Timed_loop, NULL); 	// MOVE
+	mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL); 	// MOVE
 //	draw_timer = SDL_AddTimer(50, Redraw_loop, NULL); 	// MOVE
 	
 	X = 3000;
@@ -82,27 +93,33 @@ int Vesmir(){
 					break;
 					
 				 case SDLK_LEFT:
-				 	manevr =  + my_ship->manevr;
+					Rotate_L();
+				 	//manevr =  + my_ship->manevr;
 					break;
 
 				 case SDLK_RIGHT:
-				 	manevr =  - my_ship->manevr;
+					Rotate_R();
+				 	//manevr =  - my_ship->manevr;
 					break;
 				
 				 case SDLK_UP:
-				 	zrychleni = + my_ship->zrychleni;
+					Speed_up();
+				 	//zrychleni = + my_ship->zrychleni;
 					break;
 				 
 				 case SDLK_DOWN:
-				 	zrychleni = - my_ship->zrychleni;
+					Slow_down();
+				 	//zrychleni = - my_ship->zrychleni;
 					break;
 				
 				 case SDLK_a:
-				 	my_ship->uhyb += 1;
+					Shift_L();
+				 	//my_ship->uhyb += 1;
 					break;
 				 
 				 case SDLK_d:
-				 	my_ship->uhyb -= 1;
+					Shift_R();
+				 	//my_ship->uhyb -= 1;
 					break;
 
 
@@ -167,10 +184,11 @@ int Vesmir(){
 	
 	// === Konec nekonecneho vesmiru ===
 	//
-	if(X > MAX_X) X = MAX_X;
-	if(Y > MAX_Y) Y = MAX_Y;	
+	//if(X > MAX_X) X = MAX_X;
+//	if(Y > MAX_Y) Y = MAX_Y;	
 
-
+// NYNI RESI SERVER	
+/*
 	// === prubezne opravy parametru ===	
 	if(my_ship->angle >= 360) my_ship->angle -= 360;		// < 0 ; 360 ) degrees
 	if(my_ship->uhyb >= my_ship->MAX_uhyb ) my_ship->uhyb = my_ship->MAX_uhyb ;	
@@ -178,7 +196,7 @@ int Vesmir(){
 	if(my_ship->speed <= 0) my_ship->speed = 0 ;
 	if(my_ship->speed >= my_ship->MAX_speed) my_ship->speed = my_ship->MAX_speed ;
 
-	
+*/	
 //	Pohybuj_objekty();
 	
 		
@@ -201,13 +219,17 @@ int Vesmir(){
 	float T2 = SDL_GetTicks();
 
 	float fps = 1000 / (T2 - T1);
-	printf("%G  FPS: %3.2G	\n",T2 - T1, fps);	
+//	printf("%G  FPS: %3.2G	\n",T2 - T1, fps);	
 
 	T1 = 0;
 	T2 = 0;
 
 
-	} // END GAME LOOP
+	} 
+// ==== END GAME LOOP ====
+
+  Logout();		// TELL "goodbye server"
+  printf("---==:: DISCONNECTED ::==---\n");
 	
   // === Uklizeni ===
   Uklid_obrazky_vesmir();
@@ -225,7 +247,7 @@ int Vesmir(){
 Uint32 Redraw_loop(Uint32 interval, void *param){
 //==============================================================================
 
-	printf("TIMER: Redraw_loop()\n");
+//	printf("TIMER: Redraw_loop()\n");
 	draw_timer = SDL_AddTimer(50, Redraw_loop, NULL); 	// MOVE
 
 	Prekresli_vesmir();
@@ -236,12 +258,21 @@ Uint32 Redraw_loop(Uint32 interval, void *param){
 Uint32 Timed_loop(Uint32 interval, void *param){
 //==============================================================================
 // 50 ms
-	printf("TIMER: Pohybuj_objekty()\n");
+//	printf("TIMER: Pohybuj_objekty()\n");
 	mv_timer = SDL_AddTimer(50, Timed_loop, NULL); 	// MOVE
 
-	Pohybuj_objekty();
+	
+// SERVER periodical message P_STATE
 
-	Detekuj_kolize();
+	Get_ship_state();
+
+	//Speed_up();	
+	
+
+//	Pohybuj_objekty();
+
+//	Detekuj_kolize();
+	
 
 //	Prekresli_vesmir();
 
@@ -256,8 +287,8 @@ int Prekresli_vesmir(){
   
   int x,y;
   
-	my_ship->X = X;
-	my_ship->Y = Y;
+	X = my_ship->X;
+	Y = my_ship->Y;
   
 	// === Pozadi === 
 	

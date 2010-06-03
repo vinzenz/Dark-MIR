@@ -33,19 +33,18 @@ typedef struct str_lod {
 } T_ship;
 
 T_ship lode[MAX_LODI];
+
 */
-/*
 T_ship SHIP_RED_RX = {
    .MAX_poskozeni = 100,	
-   .MAX_speed 	= 5.50,
+   .MAX_speed 	= 1.50,
    .MAX_uhyb 	= 2.25,
    .zrychleni 	= 0.2,
-   .manevr 	= 2.00,
+   .manevr 	= 4.00,
    .alive = 1,
 };
 // =============================================================================
-*/
-
+/*
 // LOD_RED_RX
 
 T_ship SHIP_RED_RX = {
@@ -58,7 +57,7 @@ T_ship SHIP_RED_RX = {
 };
 
 // =============================================================================
-//
+*/
 T_ship SHIP_BLUE_RX = {
    .MAX_poskozeni = 70,	
    .MAX_speed 	= 0.70,

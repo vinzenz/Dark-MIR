@@ -24,7 +24,10 @@
 #define ROOT "./" 
 
 #define WIN_FLAGS SDL_HWSURFACE|SDL_ANYFORMAT|SDL_DOUBLEBUF|SDL_HWPALETTE|SDL_HWACCEL//|SDL_NOFRAME
+
 #define SDL_SUBSYSTEMS SDL_INIT_VIDEO|SDL_INIT_TIMER  
+
+#define SDL_SERVER_SUBSYSTEMS SDL_INIT_TIMER  
 
 #define WIN_TITLE "Dark MIR"  
 
@@ -99,9 +102,15 @@ int Vesmir();
 
 
 
-
-
-
+#define HELP_MSG "\
+GROZA RTS v 0.1\n\
+2008 copyright by (c) Alexej alexej.x@mail.ru GNU GPL-3 \n\
+    	-h		show this help    \n\
+    	-f		fullscreen    \n\
+    	-r NUM		resolution(default 1) 0 = 800x600; 1 = 1024x768; 2 = 1280x1024;\n\
+    	-l LANG		language (LANG: cs,sk,ru,en ) \n\
+    	-e		map editor    \n\
+"
 
 #define POINT(N) printf("POINT: %3d\n",(N)); fflush(stdout);
 

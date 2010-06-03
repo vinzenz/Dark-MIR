@@ -80,6 +80,11 @@ int main(int argc, char **argv){
 		tp++;
 		f= *((float *) tp);
 		printf("rbuff+1: %f ", (double) f);
+
+ 		tp=tbuff;
+		*tp = P_LOGOUT;
+
+  		SEND;
  
   SDLNet_TCP_Close(sd);
   SDLNet_Quit();
