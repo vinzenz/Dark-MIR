@@ -261,7 +261,7 @@ if (strcmp((char *)p->data, "quit") == 0)
 //==============================================================================
 Uint32 Timed_loop(Uint32 interval, void *param){
 //==============================================================================
-  mv_timer = SDL_AddTimer(50, Timed_loop, NULL);  // MOVE
+  mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL);  // MOVE
 
 	Pohybuj_objekty();
 

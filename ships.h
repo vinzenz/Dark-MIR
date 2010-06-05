@@ -39,8 +39,8 @@ T_ship SHIP_RED_RX = {
    .MAX_poskozeni = 100,	
    .MAX_speed 	= 1.50,
    .MAX_uhyb 	= 2.25,
-   .zrychleni 	= 0.2,
-   .manevr 	= 4.00,
+   .zrychleni 	= 0.1,
+   .manevr 	= 2.00,
    .alive = 1,
 };
 // =============================================================================

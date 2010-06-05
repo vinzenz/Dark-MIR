@@ -16,7 +16,7 @@
 //#include "weapons.h"
 
 // Global variables
-//==============================================================================
+//=============================================================================
  SDL_TimerID kb_timer = NULL;
  SDL_TimerID mv_timer = NULL;
  SDL_TimerID draw_timer = NULL;
@@ -58,24 +58,24 @@ int Vesmir(){
 
 	// casovani reakci na klavesy
 	
-	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 	// KEYBORD
-	mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL); 	// MOVE
-//	draw_timer = SDL_AddTimer(50, Redraw_loop, NULL); 	// MOVE
+	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 					// KEYBORD
+//	mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL); 	// MOVE
+//	draw_timer = SDL_AddTimer(50, Redraw_loop, NULL); 					// DRAW
 	
-	X = 3000;
-	Y = 3000;
-
 
 	Inicializuj_objekty();
 	
 	// ============================== GAME LOOP ==============================
 	while(!ukonci){
 
+		// Recieving position X,Y, angle, speed ... of ship	
+		//Get_ship_state();		// NON blocking function
+		Timed_loop(1, NULL);
 
 		while(SDL_PollEvent(&event)){
 			switch(event.type){
 				
-				// KLAVESY ZMACKNOUT				
+			// 	KEYs PRESSED
 				
 			  case SDL_KEYDOWN: 	
 				switch(event.key.keysym.sym){
@@ -259,15 +259,12 @@ Uint32 Timed_loop(Uint32 interval, void *param){
 //==============================================================================
 // 50 ms
 //	printf("TIMER: Pohybuj_objekty()\n");
-	mv_timer = SDL_AddTimer(50, Timed_loop, NULL); 	// MOVE
+	mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL); 	// MOVE
 
 	
 // SERVER periodical message P_STATE
-
 	Get_ship_state();
 
-	//Speed_up();	
-	
 
 //	Pohybuj_objekty();
 

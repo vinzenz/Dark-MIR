@@ -4,8 +4,8 @@
 #include "lod.h"
 
 
-unsigned char tbuff[BUFF_SIZE];
-unsigned char rbuff[BUFF_SIZE];
+//unsigned char tbuff[BUFF_SIZE];
+//unsigned char rbuff[BUFF_SIZE];
 
 // =============================================================================
 // Client side protokol module
@@ -16,20 +16,20 @@ unsigned char rbuff[BUFF_SIZE];
 int New_client(){
 //==============================================================================
 	unsigned char *tp=NULL;
-	tp=tbuff;
+	tp=t->data;
 
 	*tp = P_NEW_PLAYER;
 	tp++;
 	strncpy((char *) tp, (char *) nick, NICKNAME_MAX);
 
-	printf("tbuff[0]: 0x%X\n",tbuff[0]);
-	printf("tbuff+1: %s\n", tp);
+	printf("t->data[0]: 0x%X\n",t->data[0]);
+	printf("t->data+1: %s\n", tp);
 
-	SEND;
+	UDP_SEND;
 
-	RECV;
+	UDP_RECV;
 
-	if(rbuff[0] == P_NEW_PLAYER)
+	if(r->data[0] == P_NEW_PLAYER)
   		return OK;
 	else
   		return FAIL;
@@ -40,16 +40,16 @@ int New_client(){
 int Logout(){
 //==============================================================================
 	unsigned char *tp=NULL;
-	tp=tbuff;
+	tp=t->data;
 
 	*tp = P_LOGOUT;
 	tp++;
 	strcpy((char *) tp, "... leaving ...\n");
 
-	printf("tbuff[0]: 0x%X\n",tbuff[0]);
-	printf("tbuff+1: %s\n", tp);
+	printf("t->data[0]: 0x%X\n",t->data[0]);
+	printf("t->data+1: %s\n", tp);
 
-	SEND;
+	UDP_SEND;
 
   return OK;
 }
@@ -58,14 +58,14 @@ int Logout(){
 int Speed_up(){
 //==============================================================================
 	unsigned char *tp=NULL;
-	tp=tbuff;
+	tp=t->data;
 
 	*tp = P_SPEED_UP;
 	tp++;
 
-	printf("tbuff[0]: 0x%X\n",tbuff[0]);
+	printf("t->data[0]: 0x%X\n",t->data[0]);
 
-	SEND;
+	UDP_SEND;
 	return OK;
 }
 
@@ -73,13 +73,13 @@ int Speed_up(){
 int Slow_down(){
 //==============================================================================
 	unsigned char *tp=NULL;
-	tp=tbuff;
+	tp=t->data;
 
 	*tp = P_SLOW_DOWN;
 	tp++;
-	printf("tbuff[0]: 0x%X\n",tbuff[0]);
+	printf("t->data[0]: 0x%X\n",t->data[0]);
 
-	SEND;
+	UDP_SEND;
 	return OK;
 }
 
@@ -87,13 +87,13 @@ int Slow_down(){
 int Rotate_L(){
 //==============================================================================
 	unsigned char *tp=NULL;
-	tp=tbuff;
+	tp=t->data;
 
 	*tp = P_ROTATE_L;
 	tp++;
-	printf("tbuff[0]: 0x%X\n",tbuff[0]);
+	printf("t->data[0]: 0x%X\n",t->data[0]);
 
-	SEND;
+	UDP_SEND;
 	return OK;
 }
 
@@ -101,13 +101,13 @@ int Rotate_L(){
 int Rotate_R(){
 //==============================================================================
 	unsigned char *tp=NULL;
-	tp=tbuff;
+	tp=t->data;
 
 	*tp = P_ROTATE_R;
 	tp++;
-	printf("tbuff[0]: 0x%X\n",tbuff[0]);
+	printf("t->data[0]: 0x%X\n",t->data[0]);
 
-	SEND;
+	UDP_SEND;
 	return OK;
 }
 
@@ -116,26 +116,26 @@ int Rotate_R(){
 int Shift_L(){
 //==============================================================================
 	unsigned char *tp=NULL;
-	tp=tbuff;
+	tp=t->data;
 
 	*tp = P_SHIFT_L;
 	tp++;
-	printf("tbuff[0]: 0x%X\n",tbuff[0]);
+	printf("t->data[0]: 0x%X\n",t->data[0]);
 
-	SEND;
+	UDP_SEND;
 	return OK;
 }
 //==============================================================================
 int Shift_R(){
 //==============================================================================
 	unsigned char *tp=NULL;
-	tp=tbuff;
+	tp=t->data;
 
 	*tp = P_SHIFT_R;
 	tp++;
-	printf("tbuff[0]: 0x%X\n",tbuff[0]);
+	printf("t->data[0]: 0x%X\n",t->data[0]);
 
-	SEND;
+	UDP_SEND;
 	return OK;
 }
 
@@ -143,9 +143,9 @@ int Shift_R(){
 //==============================================================================
 int Get_ship_state(){
 //==============================================================================
-	RECV;
+	UDP_RECV;
 
-	unsigned char *tp = rbuff;
+	unsigned char *tp = r->data;
 	//if(*tp == P_STATE){
 		tp++;	
 		my_ship->X = *( (float *)tp);
