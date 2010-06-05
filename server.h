@@ -2,7 +2,7 @@
  #define SERVER_H 
 
 #define PORT  		7111
-#define BUFF_SIZE 	512
+#define BUFF_SIZE 	64
 
 
 

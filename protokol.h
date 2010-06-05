@@ -109,6 +109,17 @@ typedef struct str_player{
 			exit(EXIT_FAILURE);\
 		}\
 		bzero(tbuff, BUFF_SIZE);
+// UDP
+// =============================================================================
+#define  UDP_RECV \
+		if (SDLNet_UDP_Recv(usd, r))
+
+
+#define UDP_SEND \
+		printf("Sending data: 0x%2X\n", t->data[0]);\
+		SDLNet_UDP_Send(usd, -1, t);\
+		bzero(t->data, BUFF_SIZE);
+
 
 
 
@@ -129,5 +140,6 @@ int Shift_L();
 
 int Get_ship_state();
 
+int print_ip();
 // =============================================================================
 #endif

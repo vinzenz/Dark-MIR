@@ -62,13 +62,20 @@ int Detekuj_kolize();
 // Global variables
  //==============================================================================
   SDL_TimerID mv_timer = NULL;
-  TCPsocket ssd, sd; /* Socket descriptor, Client socket descriptor */
+
+  TCPsocket ssd;	// server listening socket
+  TCPsocket sd; 	// server - client socket
   IPaddress ip, *remoteIP;
 
+  UDPsocket ussd;	// server listening socket
+  UDPsocket usd;	// client socket
+  UDPpacket *t;		// transmit
+  UDPpacket *r;		// recieve
+
   int players = 0;	// count of
-  unsigned char rbuff[BUFF_SIZE];
-  unsigned char tbuff[BUFF_SIZE];
-  unsigned char *tp;		// rbuff pointer
+  //unsigned char r->data[BUFF_SIZE];
+  //unsigned char t->data[BUFF_SIZE];
+  unsigned char *tp;		// r->data pointer
   int len=0;
   int p_id = 0;
  //==============================================================================
@@ -85,9 +92,9 @@ int main(int argc, char **argv){
  return EXIT_SUCCESS;
 }
 
- //==============================================================================
+// ==============================================================================
 int Init(){
- //==============================================================================
+// ==============================================================================
 
 	if (SDL_Init(SDL_SERVER_SUBSYSTEMS)==-1){
 		fprintf(stderr, "ERROR:  SDL subsystems init: %s\n", SDL_GetError());
@@ -97,28 +104,51 @@ int Init(){
   return OK;	
 }
 
- //==============================================================================
+// ==============================================================================
 int Init_server(){
- //==============================================================================
- 
+// ==============================================================================
+  
   if (SDLNet_Init() == FAIL){
-	fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
+	fprintf(stderr, "ERROR: SDLNet_Init: %s\n", SDLNet_GetError());
 	exit(EXIT_FAILURE);
   }
+
+// ---- TCP ----
+/*
  
-/* Resolving the host using NULL make network interface to listen */
+  // Resolving the host using NULL make network interface to listen
   if (SDLNet_ResolveHost(&ip, NULL, PORT) == FAIL){
 	fprintf(stderr, "SDLNet_ResolveHost: %s\n", SDLNet_GetError());
 	exit(EXIT_FAILURE);
   }
  
-/* Open a connection with the IP provided (listen on the host's port) */
+  // Open a connection with the IP provided (listen on the host's port) 
   if (!(ssd = SDLNet_TCP_Open(&ip))){
 	fprintf(stderr, "SDLNet_TCP_Open: %s\n", SDLNet_GetError());
 	exit(EXIT_FAILURE);
   }
- 
+*/
 
+// ---- UDP ----
+
+  usd = SDLNet_UDP_Open(PORT);
+
+  if(usd == NULL) {
+	fprintf(stderr, "ERROR: SDLNet_UDP_Open: %s\n", SDLNet_GetError());
+	exit(EXIT_FAILURE);
+  }
+
+  if (!(r = SDLNet_AllocPacket(BUFF_SIZE))) {
+	fprintf(stderr, "ERROR: SDLNet_AllocPacket: %s\n", SDLNet_GetError());
+	exit(EXIT_FAILURE);
+  }
+  if (!(t = SDLNet_AllocPacket(BUFF_SIZE))) {
+	fprintf(stderr, "ERROR: SDLNet_AllocPacket: %s\n", SDLNet_GetError());
+	exit(EXIT_FAILURE);
+  }
+
+  fprintf(TTY, "------------===[ DARK MIR ]===------------\n");
+  fprintf(TTY, "> server listen on UDP port %d\n", PORT);
 
  return OK;
 }
@@ -136,32 +166,37 @@ int Server(){
 
 while (1){
 
-  /* This check the sd if there is a pending connection.
-   * If there is one, accept that, and open a new socket for communicating */
-  if ((sd = SDLNet_TCP_Accept(ssd))){
-  
-  /* Now we can communicate with the client using sd socket
-   * sd will remain opened waiting other connections */
+/*
+if (SDLNet_UDP_Recv(ussd, p)) {
+	printf("UDP Packet incoming\n");
+	printf("\tChan:    %d\n", p->channel);
+	printf("\tData:    %s\n", (char *)p->data);
+	printf("\tLen:     %d\n", p->len);
+	printf("\tMaxlen:  %d\n", p->maxlen);
+	printf("\tStatus:  %d\n", p->status);
+	printf("\tAddress: %x %x\n", p->address.host, p->address.port);
+
+// Quit if packet contains "quit" 
+if (strcmp((char *)p->data, "quit") == 0)
+	quit = 1;
+
+	//continue; // ------ ^
+*/
+		
  
-  /* Get the remote address */
-  if ((remoteIP = SDLNet_TCP_GetPeerAddress(sd))){
- 	 /* Print the address, converting in the host format */
-	printf("Host connected: %x %d\n", 
-		SDLNet_Read32(&remoteIP->host), SDLNet_Read16(&remoteIP->port));
-
-  }
-  else
-	fprintf(stderr, "SDLNet_TCP_GetPeerAddress: %s\n", SDLNet_GetError());
-
  // ===== ---- ===== ---- ===== ---- ===== ---- ===== 
 
   quit = 0;
   while (!quit){
 
-	RECV;
-	//tp = tbuff;
+	UDP_RECV{
+//		*remoteIP = (r->address);
+		printf("0x%2X \n", r->data[0]);
+	}else continue;
+
+
 	
-	switch(rbuff[0]){
+	switch(r->data[0]){
 
 	  	case P_NEW_PLAYER: 			// NEW PLAYER
 			New_client(&player[players]);
@@ -200,18 +235,24 @@ while (1){
 
 	  case P_LOGOUT: 	
 			Free_client(p_id);
-			quit = 1;
+	//		quit = 1;
+			break;
 	}
   			
- }
- 
+  } 
 /* Close the client socket */
-  SDLNet_TCP_Close(sd);
- }
+  //SDLNet_TCP_Close(sd);
+  SDLNet_FreePacket(t);
+  SDLNet_FreePacket(r);
+  SDLNet_UDP_Close(usd);
+ 
 }
  
+
+  //SDLNet_TCP_Close(ssd);
+  //SDLNet_UDP_Close(ussd);		// server listening socket
+
   SDL_RemoveTimer(mv_timer);
-  SDLNet_TCP_Close(sd);
   SDLNet_Quit();
 
  return OK;
@@ -232,22 +273,24 @@ int New_client(T_player *p){
 //==============================================================================
 
 	fprintf(TTY, "S: New_client id:%2d: connected\n", players);
-	fprintf(TTY, "S: new nick: %s\n", &rbuff[1]);
-	strncpy(p->nick, (char *)rbuff, 32);
+	fprintf(TTY, "S: new nick: %s\n", &r->data[1]);
+	strncpy(p->nick, (char *)r->data, 32);
 
 	p->score = 0;
 	p->ship = SHIP_RED_RX;
 
-	players++;
 
 	// ACK
-	tp=tbuff;
+	t->address = r->address;
+  	t->len = BUFF_SIZE;
+	tp=t->data;
 	if(players >= MAX_PLAYERS)
 		*tp = P_LOGOUT;				// server is full
-	else
+	else{
+		players++;
 		*tp = P_NEW_PLAYER;			// player joined
-
-	SEND;
+	}
+	UDP_SEND;
 	
  return OK;
 }
@@ -278,12 +321,12 @@ int Speed_up(int id){
   if(player[id].ship.speed > player[id].ship.MAX_speed)
 		  player[id].ship.speed = player[id].ship.MAX_speed;	
 
-  /*tp = tbuff;
+  /*tp = t->data;
   *tp =  P_SPEED_UP;
   tp++;
   memcpy(tp, &player[id].ship.speed, sizeof(float));
 
-  SEND;
+  UDP_SEND;
 */
  return OK;
 }
@@ -295,12 +338,12 @@ int Slow_down(int id){
   if(player[id].ship.speed < 0)
 		  player[id].ship.speed = 0;
 /*
-  tp = tbuff;
+  tp = t->data;
   *tp =  P_SLOW_DOWN;
   tp++;
   memcpy(tp, &player[id].ship.speed, sizeof(float));
 
-  SEND;
+  UDP_SEND;
 */
  return OK;
 }
@@ -317,12 +360,12 @@ int Rotate_R(int id){
 	player[id].ship.angle += 360;
 
 /*
-  tp = tbuff;
+  tp = t->data;
   *tp =  P_ROTATE_R;
   tp++;
   memcpy(tp, &player[id].ship.angle, sizeof(float));
 
-  SEND;
+  UDP_SEND;
 */
  return OK;
 }
@@ -337,12 +380,12 @@ int Rotate_L(int id){
   if(player[id].ship.angle < 0)
 	player[id].ship.angle += 360;
 /*
-  tp = tbuff;
+  tp = t->data;
   *tp =  P_ROTATE_L;
   tp++;
   memcpy(tp, &player[id].ship.angle, sizeof(float));
 
-  SEND;
+  UDP_SEND;
 */
  return OK;
 }
@@ -352,12 +395,12 @@ int Shift_R(int id){
 	
   player[id].ship.uhyb = player[id].ship.MAX_uhyb;
 
-  tp = tbuff;
+  tp = t->data;
   *tp =  P_SHIFT_R;
   tp++;
   memcpy(tp, &player[id].ship.uhyb, sizeof(float));
 
-//  SEND;
+//  UDP_SEND;
 
  return OK;
 }
@@ -367,12 +410,12 @@ int Shift_L(int id){
 	
   player[id].ship.uhyb = player[id].ship.MAX_uhyb;
 
-  tp = tbuff;
+  tp = t->data;
   *tp =  P_SHIFT_L;
   tp++;
   memcpy(tp, &player[id].ship.uhyb, sizeof(float));
 
-//  SEND;
+//  UDP_SEND;
 
  return OK;
 }
@@ -384,9 +427,8 @@ int Send_ship_state(int i){
 
 printf(">>> sending ship state <<<\n");
 fflush(stdout);
-	unsigned char *tp = tbuff;
-	//*tp = P_STATE;
-	*tp = 0xFA;
+	unsigned char *tp = t->data;
+	*tp = P_STATE;
 	tp++;	
 	*( (float *)tp) = player[i].ship.X;
 	fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));
@@ -397,7 +439,7 @@ fflush(stdout);
 	tp += sizeof(float);
 	*( (float *)tp) = player[i].ship.angle;
 
-	SEND;
+	UDP_SEND;
 	
 	return OK;
 }

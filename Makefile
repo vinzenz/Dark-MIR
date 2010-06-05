@@ -18,7 +18,7 @@ SERVER_MODULES = server.o
 
 .PHONY: all run clean ci
 
-all: $(MODULES)  $(SERVER_TARGET) client
+all: $(MODULES)  $(SERVER_TARGET) udp_client
 	$(CC) $(CFLAGS) $(LDFLAGS)  -o $(TARGET) $(MODULES)
 
 program.o: program.c program.h images.h client.h
@@ -29,10 +29,11 @@ lod.o: lod.c lod.h program.h zbrane.h weapons.h
 protokol.o: protokol.c program.h protokol.h client.h
 
 
-client: client.o
-	$(CC) $(CFLAGS) $(LDFLAGS)  -o client client.o
+udp_client: udp_client.o
+	$(CC) $(CFLAGS) $(LDFLAGS)  -o udp_client udp_client.o
 
-client.o: client.c server.h program.h protokol.h
+udp_client.o: udp_client.c server.h program.h protokol.h		
+#client.o: client.c server.h program.h protokol.h		# TCP
 
 server: $(SERVER_MODULES)
 	$(CC) $(CFLAGS) $(LDFLAGS)  -o $(SERVER_TARGET) $(SERVER_MODULES)
@@ -44,6 +45,8 @@ run:
 
 
 clean:
+	rm -f *.o
+	rm -f client
 	rm -f $(TARGET)
 	rm -f $(SERVER_TARGET)
 	rm -f $(MODULES)
