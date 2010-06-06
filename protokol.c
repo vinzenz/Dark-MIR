@@ -27,13 +27,22 @@ int New_client(){
 
 	UDP_SEND;
 
+
+  for(int i=0; i < 100; i++){
+
+	usleep(200000);	  
+		  
 	UDP_RECV;
+	else continue;
 
-	if(r->data[0] == P_NEW_PLAYER)
+	if(r->data[0] == P_NEW_PLAYER){
+		ID = r->data[1];
+		printf("ID: %2d\n", ID);
   		return OK;
-	else
+	}
+  }
+		printf("SERVER IS FULL\n");		
   		return FAIL;
-
 }
 
 //==============================================================================
@@ -137,7 +146,25 @@ int Shift_R(){
 
 	UDP_SEND;
 	return OK;
+
 }
+
+//==============================================================================
+int Fire(int wp){
+//==============================================================================
+	unsigned char *tp=NULL;
+	tp=t->data;
+
+	*tp = P_FIRE_0 + wp;	
+	tp++;
+
+	printf("t->data[0]: 0x%X\n",t->data[0]);
+
+	UDP_SEND;
+	return OK;
+}
+
+
 
 
 //==============================================================================
@@ -157,6 +184,40 @@ int Get_ship_state(){
 		my_ship->angle = *( (float *)tp);
 	printf("STATE RECIVED\n");			
 	//}
+	return OK;
+}
+//==============================================================================
+int Get_ship_states(){
+//==============================================================================
+	UDP_RECV;
+
+	Uint8 *tp = r->data;
+
+if(*tp == P_SHIP_STATES){					// OP_code
+  tp++;	
+
+  for(int i = 0; i < 1; i++){
+
+	  	if(*tp != ID)						// ID
+				continue;	// testing ignore other ships
+
+		tp++;	
+		my_ship->type = *(tp);				// TYPE
+		tp++;	
+		my_ship->X = *( (float *)tp);		// X
+		printf("X: %f\n", (double)my_ship->X);
+		tp += sizeof(float);
+		my_ship->Y = *( (float *)tp);		// Y
+		tp += sizeof(float);
+		my_ship->speed = *( (float *)tp);	// SPEED
+		tp += sizeof(float);
+		my_ship->angle = *( (float *)tp);	// ANGLE
+		tp += sizeof(float);
+
+	printf("__==");			
+	}
+	
+  }
 	return OK;
 }
 // =============================================================================

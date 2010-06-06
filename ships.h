@@ -38,7 +38,7 @@ T_ship lode[MAX_LODI];
 T_ship SHIP_RED_RX = {
    .MAX_poskozeni = 100,	
    .MAX_speed 	= 1.50,
-   .MAX_uhyb 	= 2.25,
+   .MAX_uhyb 	= 50.00,
    .zrychleni 	= 0.1,
    .manevr 	= 2.00,
    .alive = 1,
@@ -62,8 +62,8 @@ T_ship SHIP_BLUE_RX = {
    .MAX_poskozeni = 70,	
    .MAX_speed 	= 0.70,
    .MAX_uhyb 	= 0.30,
-   .zrychleni 	= 0.002,
-   .manevr 	= 0.10,
+   .zrychleni 	= 0.02,
+   .manevr 	= 3.0,
    .alive = 1,
 };
 

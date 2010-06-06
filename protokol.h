@@ -63,6 +63,8 @@ typedef struct str_player{
 
 #define SERVER_TIME_INTERVAL 10
 
+// PROTOCOL OP CODES
+// =============================================================================
 #define P_NEW_PLAYER 	0x01
 #define P_LOGOUT 		0xFF
 // ----------------------------
@@ -76,18 +78,34 @@ typedef struct str_player{
 #define P_SHIFT_L		0x16
 
 
-
-// ----------------------------
-//  0x21, X, Y, speed, [ angle ]
+//______________________________________________________________________________
+//  State:	OP_code | X | Y | speed |  angle 
 #define P_POSITION		0x21
 #define P_STATE			0x22
+//______________________________________________________________________________
+//  State:  OP_code | id | type | X | Y | speed | angle
+#define P_SHIP_STATES	0x23
+#define P_WEAPON_STATES	0x26
 
 
 // ----------------------------
+#define P_FIRE_0		0x40
 #define P_FIRE_1		0x41
 #define P_FIRE_2		0x42
 #define P_FIRE_3		0x43
 
+
+// PROTOCOL TYPE IDENTIFIERS
+// =============================================================================
+#define SHIP 	0
+#define WEAPON	1
+
+
+// PROTOCOL SUBTYPE IDENTIFIERS
+// =============================================================================
+// SHIP
+#define RED_RX	1
+#define BLUE_RX	2
 
 
 // MACROS
@@ -125,20 +143,6 @@ typedef struct str_player{
 
 
 
-
-// FUNCTIONS
-// =============================================================================
-int New_client();
-int Logout();
-
-int Speed_up();
-int Slow_down();
-int Rotate_R();
-int Rotate_L();
-int Shift_R();
-int Shift_L();
-
-int Get_ship_state();
 
 int print_ip();
 // =============================================================================

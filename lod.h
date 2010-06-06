@@ -3,8 +3,7 @@
 
 #include "program.h"
 
-#define MAX_LODI 40
-
+#define MAX_SHIPS 40
 
 #define LOD_RX_speed 4;
 #define LOD_RX_angle 10;
@@ -19,7 +18,10 @@
 	SDL_Surface *img_m;		// img of ship on move
 	SDL_Surface *img_c;		// img of ship crap
 	SDL_Surface *rot_img;		// img ->angle rotated 
-	char strana;
+
+	Uint8 strana;
+	Uint8 type;
+	Uint8 model;
 	
 	float speed;
 	float MAX_speed;
@@ -65,7 +67,7 @@
   } T_weapon;
 */
 
-  T_ship lode[MAX_LODI];
+  T_ship lode[MAX_SHIPS];
   T_ship *my_ship;
 
 

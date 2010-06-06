@@ -126,14 +126,16 @@ int Vesmir(){
 				 
 				 case SDLK_LALT:			// MODIFIKATOR = FIRE 1
 				 case SDLK_SPACE:
-				 	Vystrel(LASER, my_ship);	
+					Fire(LASER);
+				 	//Vystrel(LASER, my_ship);	
 					//strilej[LASER] = 1;		// HOLD and FIRE
 				 	
 					break;
 				 
 				 case SDLK_RCTRL:
 				 case SDLK_LCTRL:
-				 	Vystrel(ROCKET, my_ship);	// FIRE 1
+					Fire(ROCKET);
+				 	//Vystrel(ROCKET, my_ship);	// FIRE 1
 					break;
 				 
 				 
@@ -179,8 +181,8 @@ int Vesmir(){
 	
 	// === Pocatek nekonecneho vesmiru ===
 	//
-	if(X < 0) X = 0;
-	if(Y < 0) Y = 0;
+//	if(X < 0) X = 0;
+//	if(Y < 0) Y = 0;
 	
 	// === Konec nekonecneho vesmiru ===
 	//
@@ -203,14 +205,8 @@ int Vesmir(){
 		
 //	Detekuj_kolize();
 		
-/*		
-	printf("   %G\n",(float)angle/180);
-	printf("   %d\n",angle);
-	printf("   %G\n",cos((float)angle/180));
-*/
-	//printf("X  %G    Y  %G\n", X, Y);
 
-	 float T1 = SDL_GetTicks();
+	float T1 = SDL_GetTicks();
 	
 	Prekresli_vesmir();
 	//SDL_Delay(10);	
@@ -218,7 +214,7 @@ int Vesmir(){
 	
 	float T2 = SDL_GetTicks();
 
-	float fps = 1000 / (T2 - T1);
+	//float fps = 1000 / (T2 - T1);
 //	printf("%G  FPS: %3.2G	\n",T2 - T1, fps);	
 
 	T1 = 0;
@@ -261,18 +257,9 @@ Uint32 Timed_loop(Uint32 interval, void *param){
 //	printf("TIMER: Pohybuj_objekty()\n");
 	mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL); 	// MOVE
 
-	
 // SERVER periodical message P_STATE
-	Get_ship_state();
-
-
-//	Pohybuj_objekty();
-
-//	Detekuj_kolize();
-	
-
-//	Prekresli_vesmir();
-
+	//Get_ship_state();
+	Get_ship_states();
 
 return OK;
 }

@@ -1,11 +1,12 @@
 
 
 #include "program.h"
+#include "vesmir.h"
 #include "server.h"
 #include "lod.h"
 #include "ships.h"
-#include "vesmir.h"
 #include "zbrane.h"
+#include "weapons.h"
 
 #include "protokol.h"
 
@@ -20,7 +21,8 @@ typedef struct str_player{
 	
 	int score;
 	T_ship ship;
-	TCPsocket sd;	
+//	TCPsocket sd;	
+    UDPsocket usd;
 
 } T_player;
 
@@ -52,6 +54,11 @@ int Rotate_L(int id);
 int Shift_R(int id);
 int Shift_L(int id);
 
+int Fire(int id, int wp);
+
+int Send_ship_state();
+int Send_ship_states();
+
 Uint32 Timed_loop(Uint32 interval, void *param);
 
 int Inicializuj_objekty();
@@ -78,10 +85,10 @@ int Detekuj_kolize();
   unsigned char *tp;		// r->data pointer
   int len=0;
   int p_id = 0;
- //==============================================================================
- //==============================================================================
+// ==============================================================================
+// ==============================================================================
 int main(int argc, char **argv){
- //==============================================================================
+// ==============================================================================
 
   Init();	
   Init_server();
@@ -227,9 +234,12 @@ if (strcmp((char *)p->data, "quit") == 0)
 			Shift_L(p_id);
 			break;
 			
+		case P_FIRE_0:   
 		case P_FIRE_1:   
 		case P_FIRE_2:    
 		case P_FIRE_3:     
+
+			Fire(p_id, r->data[0] - P_FIRE_0);
 			break;
 
 
@@ -237,6 +247,9 @@ if (strcmp((char *)p->data, "quit") == 0)
 			Free_client(p_id);
 	//		quit = 1;
 			break;
+
+	  default:  fprintf(TTY, "invalid packet OP code\n");
+
 	}
   			
   } 
@@ -277,18 +290,21 @@ int New_client(T_player *p){
 	strncpy(p->nick, (char *)r->data, 32);
 
 	p->score = 0;
-	p->ship = SHIP_RED_RX;
 
 
 	// ACK
 	t->address = r->address;
   	t->len = BUFF_SIZE;
 	tp=t->data;
+
 	if(players >= MAX_PLAYERS)
 		*tp = P_LOGOUT;				// server is full
 	else{
-		players++;
 		*tp = P_NEW_PLAYER;			// player joined
+		tp++;						// player ID
+		*tp = players;			// player joined
+
+		players++;
 	}
 	UDP_SEND;
 	
@@ -393,34 +409,70 @@ int Rotate_L(int id){
 int Shift_R(int id){
 //==============================================================================
 	
-  player[id].ship.uhyb = player[id].ship.MAX_uhyb;
-
+  player[id].ship.uhyb = - player[id].ship.MAX_uhyb;
+/*
   tp = t->data;
   *tp =  P_SHIFT_R;
   tp++;
   memcpy(tp, &player[id].ship.uhyb, sizeof(float));
 
 //  UDP_SEND;
-
+*/
  return OK;
 }
 //==============================================================================
 int Shift_L(int id){
 //==============================================================================
 	
-  player[id].ship.uhyb = player[id].ship.MAX_uhyb;
-
+  player[id].ship.uhyb = + player[id].ship.MAX_uhyb;
+/*
   tp = t->data;
   *tp =  P_SHIFT_L;
   tp++;
   memcpy(tp, &player[id].ship.uhyb, sizeof(float));
 
 //  UDP_SEND;
-
+*/
  return OK;
 }
 
 //==============================================================================
+
+//==============================================================================
+int Fire(int id, int wp){
+//==============================================================================
+
+	switch(wp){
+		
+		case LASER:
+			if(pocet_laseru < MAX_LASER-1){
+				pocet_laseru++;
+				lasers[pocet_laseru] = RX_laser;
+				lasers[pocet_laseru].angle = player[id].ship.angle;
+				lasers[pocet_laseru].X = player[id].ship.X;;
+				lasers[pocet_laseru].Y = player[id].ship.Y;;
+				lasers[pocet_laseru].strana = player[id].ship.strana;
+			}
+			else{
+
+			}	
+			break;
+
+		case ROCKET:
+			
+			if(pocet_raket < MAX_ROCKET-1){
+				pocet_raket++;
+				rockets[pocet_raket] = RX_R1;
+				rockets[pocet_raket].angle = player[id].ship.angle;
+				rockets[pocet_raket].X = player[id].ship.X;
+				rockets[pocet_raket].Y = player[id].ship.Y;
+				rockets[pocet_raket].strana = player[id].ship.strana;
+			}
+	}	
+
+ return OK;
+}
+
 //==============================================================================
 int Send_ship_state(int i){
 //==============================================================================
@@ -431,7 +483,7 @@ fflush(stdout);
 	*tp = P_STATE;
 	tp++;	
 	*( (float *)tp) = player[i].ship.X;
-	fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));
+	//fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));
 	tp += sizeof(float);
 	*( (float *)tp) = player[i].ship.Y;
 	tp += sizeof(float);
@@ -439,6 +491,41 @@ fflush(stdout);
 	tp += sizeof(float);
 	*( (float *)tp) = player[i].ship.angle;
 
+	UDP_SEND;
+	
+	return OK;
+}
+//==============================================================================
+int Send_ship_states(){
+//==============================================================================
+
+
+  Uint8 *tp = t->data;
+
+  *tp = P_SHIP_STATES;											// OP CODE
+  tp++;
+
+  for(int i=0; i < players; i++){		
+
+	*tp = i;													// ID
+	tp++;
+	*tp = SHIP;													// TYPE
+	tp++;
+
+	*((float *)tp) = player[i].ship.X;							// X
+	fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));	
+	tp += sizeof(float);
+	*((float *)tp) = player[i].ship.Y;							// Y
+	tp += sizeof(float);
+	*((float *)tp) = player[i].ship.speed;						// SPEED
+	tp += sizeof(float);
+	*((float *)tp) = player[i].ship.angle;						// ANGLE
+	tp += sizeof(float);
+
+printf("|| sending ship states ==__ \n");
+fflush(stdout);
+  }
+  if(players > 0)
 	UDP_SEND;
 	
 	return OK;
@@ -470,13 +557,21 @@ int Inicializuj_objekty(){
 	
 	
 	for(int i=0; i < MAX_PLAYERS; i++){
-		player[i].ship = SHIP_RED_RX;
+		if(i % 2)
+			player[i].ship = SHIP_RED_RX;
+		else
+			player[i].ship = SHIP_BLUE_RX;
+
 		player[i].ship.X = (MAX_X/2) + (i * 200);
 		player[i].ship.Y = (MAX_Y/2) + (i * 200);
 		player[i].ship.speed = 0.1;
 		player[i].ship.angle = 0;
 		player[i].ship.alive= 1;
 	}
+
+	pocet_raket = 0;
+	pocet_laseru = 0;
+	players = 0;
 
 
  return OK;
@@ -500,12 +595,16 @@ int Pohybuj_objekty(){
 	//player[i].ship.speed += player[i].ship.zrychleni;	
 	//player[i].ship.zrychleni = 0;
 	
+	
 	// ==== position change ====
 	player[i].ship.X += player[i].ship.speed * cos(((float)player[i].ship.angle/180)*M_PI)
 	       	+ player[i].ship.uhyb * cos(((float)(player[i].ship.angle+90)/180)*M_PI);
 
 	player[i].ship.Y -= player[i].ship.speed * sin(((float)player[i].ship.angle/180)*M_PI)
 			+ player[i].ship.uhyb * sin(((float)(player[i].ship.angle+90)/180)*M_PI);	
+
+
+	player[i].ship.uhyb /= 1.1;
 
 	// ==== position limits ====
 	// RIGHT  DOWN 
@@ -520,11 +619,11 @@ int Pohybuj_objekty(){
 	if(player[i].ship.Y < 0) 
 			player[i].ship.Y = 0;
 
-	Send_ship_state(i);
   }
-/*
-	// === Pohyb projektilu(strel) ===
-	//
+	Send_ship_states();
+
+	// === projectiles movement ===
+	
 	for (int i=0; i<=pocet_laseru; i++){
 	  if(! lasers[i].alive) continue;
 	  lasers[i].X += lasers[i].speed * cos(((float)lasers[i].angle/180)*M_PI);
@@ -536,7 +635,7 @@ int Pohybuj_objekty(){
 	  rockets[i].X += rockets[i].speed * cos(((float)rockets[i].angle/180)*M_PI);
 	  rockets[i].Y -= rockets[i].speed * sin(((float)rockets[i].angle/180)*M_PI); 
 	}
-*/		
+		
 
  return OK;
 }
@@ -546,25 +645,25 @@ int Pohybuj_objekty(){
 int Detekuj_kolize(){
 //==============================================================================
 
-  for(int x=1; x <= pocet_lodi; x++){		
-  	if(! lode[x].alive) continue;
+  for(int x=0; x < players; x++){		
+  	if(! player[x].ship.alive) continue;
 
 	for(int i=0; i <= pocet_raket; i++){
 		if(!rockets[i].alive) continue;
-		if(Collision_detect(&lode[x], &rockets[i])){
+		if(Collision_detect(&player[x].ship, &rockets[i])){
 			// DISABLE PROJECTIL
 			rockets[i].alive = 0;
 			rockets[i].X = 0;
 			rockets[i].Y = 0;
 			rockets[i].speed = 0;
 			// MAKE DAMAGE
-			lode[x].poskozeni += rockets[i].damage;
-			if(lode[x].poskozeni > lode[x].MAX_poskozeni){
+			player[x].ship.poskozeni += rockets[i].damage;
+			if(player[x].ship.poskozeni > player[x].ship.MAX_poskozeni){
 				printf("# SHIP n.%3d DESTROYED\n",x);
-				lode[x].speed= 0;
-				lode[x].X = 0;
-				lode[x].Y = 0;
-				lode[x].alive = 0;
+				player[x].ship.speed= 0;
+				player[x].ship.X = 0;
+				player[x].ship.Y = 0;
+				player[x].ship.alive = 0;
 			}
 
 		}
@@ -572,20 +671,20 @@ int Detekuj_kolize(){
 
 	for(int i=0; i <= pocet_laseru; i++){
 		if(!lasers[i].alive) continue;
-		if(Collision_detect(&lode[x], &lasers[i])){
+		if(Collision_detect(&player[x].ship, &lasers[i])){
 			// DISABLE PROJECTIL
 			lasers[i].alive = 0;
 			lasers[i].X = 0;
 			lasers[i].Y = 0;
 			lasers[i].speed = 0;
 			// MAKE DAMAGE
-			lode[x].poskozeni += lasers[i].damage;
-			if(lode[x].poskozeni > lode[x].MAX_poskozeni){
+			player[x].ship.poskozeni += lasers[i].damage;
+			if(player[x].ship.poskozeni > player[x].ship.MAX_poskozeni){
 				printf("# SHIP n.%3d DESTROYED\n",x);
-				lode[x].speed= 0;
-				//lode[x].X = 0;
-				//lode[x].Y = 0;
-				//lode[x].alive = 0;
+				player[x].ship.speed= 0;
+				//player[x].ship.X = 0;
+				//player[x].ship.Y = 0;
+				//player[x].ship.alive = 0;
 			}
 		}
 	}
