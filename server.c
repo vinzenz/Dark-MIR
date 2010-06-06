@@ -22,7 +22,9 @@ typedef struct str_player{
 	int score;
 	T_ship ship;
 //	TCPsocket sd;	
-    UDPsocket usd;
+//  UDPsocket usd;
+	Uint8 channel;
+	Uint8 alive;
 
 } T_player;
 
@@ -173,6 +175,9 @@ int Server(){
 
 while (1){
 
+
+	usleep(10000);		// free CPU
+
 /*
 if (SDLNet_UDP_Recv(ussd, p)) {
 	printf("UDP Packet incoming\n");
@@ -199,10 +204,16 @@ if (strcmp((char *)p->data, "quit") == 0)
 	UDP_RECV{
 //		*remoteIP = (r->address);
 		printf("0x%2X \n", r->data[0]);
+
+		for(p_id = 0; p_id < players; p_id++){		// player identification
+			if(player[p_id].channel == r->channel)
+				break;	
+		}
+
 	}else continue;
 
 
-	
+
 	switch(r->data[0]){
 
 	  	case P_NEW_PLAYER: 			// NEW PLAYER
@@ -297,12 +308,17 @@ int New_client(T_player *p){
   	t->len = BUFF_SIZE;
 	tp=t->data;
 
-	if(players >= MAX_PLAYERS)
+	if(players >= MAX_PLAYERS){
 		*tp = P_LOGOUT;				// server is full
+ 		return FAIL;
+	}
 	else{
 		*tp = P_NEW_PLAYER;			// player joined
-		tp++;						// player ID
-		*tp = players;			// player joined
+		tp++;						// 
+		*tp = players;	 			// player ID
+
+		p[players].channel = SDLNet_UDP_Bind(usd, -1, &r->address);
+		p[players].alive = 1;
 
 		players++;
 	}
@@ -525,8 +541,13 @@ int Send_ship_states(){
 printf("|| sending ship states ==__ \n");
 fflush(stdout);
   }
-  if(players > 0)
-	UDP_SEND;
+
+  for(int x = 0; x < players; x++){
+	if(player[x].alive)
+			UDP_CHANNEL_SEND(player[x].channel);
+
+
+  }
 	
 	return OK;
 }
@@ -604,7 +625,7 @@ int Pohybuj_objekty(){
 			+ player[i].ship.uhyb * sin(((float)(player[i].ship.angle+90)/180)*M_PI);	
 
 
-	player[i].ship.uhyb /= 1.1;
+	player[i].ship.uhyb /= 1.01;
 
 	// ==== position limits ====
 	// RIGHT  DOWN 

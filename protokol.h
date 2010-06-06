@@ -132,10 +132,14 @@ typedef struct str_player{
 #define  UDP_RECV \
 		if (SDLNet_UDP_Recv(usd, r))
 
-
 #define UDP_SEND \
 		printf("Sending data: 0x%2X\n", t->data[0]);\
 		SDLNet_UDP_Send(usd, -1, t);\
+		bzero(t->data, BUFF_SIZE);
+
+#define UDP_CHANNEL_SEND(C) \
+		printf("Sending data: 0x%2X\n", t->data[0]);\
+		SDLNet_UDP_Send(usd, (C), t);\
 		bzero(t->data, BUFF_SIZE);
 
 
