@@ -82,6 +82,7 @@ int Detekuj_kolize();
   UDPpacket *r;		// recieve
 
   int players = 0;	// count of
+  int live_players = 0;	// count of
   //unsigned char r->data[BUFF_SIZE];
   //unsigned char t->data[BUFF_SIZE];
   unsigned char *tp;		// r->data pointer
@@ -203,11 +204,13 @@ if (strcmp((char *)p->data, "quit") == 0)
 
 	UDP_RECV{
 //		*remoteIP = (r->address);
-		printf("0x%2X \n", r->data[0]);
+//		printf("0x%2X \n", r->data[0]);
 
 		for(p_id = 0; p_id < players; p_id++){		// player identification
-			if(player[p_id].channel == r->channel)
+			if(player[p_id].channel == r->channel){
+				POINT(p_id);
 				break;	
+			}
 		}
 
 	}else continue;
@@ -295,12 +298,8 @@ Uint32 Timed_loop(Uint32 interval, void *param){
 //==============================================================================
 int New_client(T_player *p){
 //==============================================================================
-
-	fprintf(TTY, "S: New_client id:%2d: connected\n", players);
-	fprintf(TTY, "S: new nick: %s\n", &r->data[1]);
-	strncpy(p->nick, (char *)r->data, 32);
-
-	p->score = 0;
+  int id=0;
+  p = NULL;
 
 
 	// ACK
@@ -308,21 +307,39 @@ int New_client(T_player *p){
   	t->len = BUFF_SIZE;
 	tp=t->data;
 
-	if(players >= MAX_PLAYERS){
+	if(live_players >= MAX_PLAYERS){
 		*tp = P_LOGOUT;				// server is full
- 		return FAIL;
+		UDP_CHANNEL_SEND(-1);
+		fprintf(TTY, "S: attempt to connect: servers is full \n");
+		return FAIL;
 	}
 	else{
 		*tp = P_NEW_PLAYER;			// player joined
 		tp++;						// 
-		*tp = players;	 			// player ID
 
-		p[players].channel = SDLNet_UDP_Bind(usd, -1, &r->address);
-		p[players].alive = 1;
+		for(id=0; id < players; id++){	// find first not .alive player
+			if(! player[id].alive){		// and use his slot 
+					p = &player[id];
+					break;
+			}
+		}	
+		if( p == NULL){
+			p = &player[players];
+			players++;
+		}
+		*tp = id;	 			// player ID
+		live_players++;
 
-		players++;
+	fprintf(TTY, "S: New_client id:%2d: connected\n", id);
+	fprintf(TTY, "S: new nick: %s\n", &r->data[1]);
+
+		p->channel = SDLNet_UDP_Bind(usd, id, &r->address);
+		p->alive = 1;
+		p->score = 0;
+		strncpy(p->nick, (char *)r->data, 32);
+
 	}
-	UDP_SEND;
+	UDP_CHANNEL_SEND(p->channel);
 	
  return OK;
 }
@@ -333,6 +350,9 @@ int Free_client(int id){
 
 	fprintf(TTY, "S: Client id:%2d: disconnected\n", id);
 
+	player[id].alive = 0;
+	live_players--;
+/*
 	// DELETE PLAYER - shift player[] array
 	for(int i=id; i < players-1; i++){
 		player[i] = player[i+1];
@@ -340,7 +360,7 @@ int Free_client(int id){
 	}
 
 	players--;
-
+*/
  return OK;
 }
 
@@ -529,7 +549,7 @@ int Send_ship_states(){
 	tp++;
 
 	*((float *)tp) = player[i].ship.X;							// X
-	fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));	
+//	fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));	
 	tp += sizeof(float);
 	*((float *)tp) = player[i].ship.Y;							// Y
 	tp += sizeof(float);
@@ -538,15 +558,15 @@ int Send_ship_states(){
 	*((float *)tp) = player[i].ship.angle;						// ANGLE
 	tp += sizeof(float);
 
-printf("|| sending ship states ==__ \n");
+//printf("|| sending ship states ==__ \n");
 fflush(stdout);
   }
 
   for(int x = 0; x < players; x++){
-	if(player[x].alive)
-			UDP_CHANNEL_SEND(player[x].channel);
-
-
+	if(player[x].alive){
+		UDP_CHANNEL_SEND(player[x].channel);
+		fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+	}
   }
 	
 	return OK;
@@ -604,6 +624,7 @@ int Pohybuj_objekty(){
 //
 	//  === Pohyb lodi ===
   for(int i=0; i < players; i++){
+	if(! player[i].alive) continue;
 	if(! player[i].ship.alive) continue;
 
 	// ==== speed limit ====

@@ -30,7 +30,7 @@ int New_client(){
 
   for(int i=0; i < 100; i++){
 
-	usleep(200000);	  
+	usleep(2000);	  
 		  
 	UDP_RECV;
 	else continue;
@@ -42,7 +42,7 @@ int New_client(){
 	}
   }
 		printf("SERVER IS FULL\n");		
-  		return FAIL;
+  		exit(EXIT_FAILURE);
 }
 
 //==============================================================================
@@ -190,16 +190,19 @@ int Get_ship_state(){
 int Get_ship_states(){
 //==============================================================================
 	UDP_RECV;
+	else return OK;
 
 	Uint8 *tp = r->data;
 
 if(*tp == P_SHIP_STATES){					// OP_code
   tp++;	
 
-  for(int i = 0; i < 1; i++){
+printf(":||:");			
 
-	  	if(*tp != ID)						// ID
-				continue;	// testing ignore other ships
+  for(int i = 0; i < 2; i++){
+
+	if(*tp == ID){						// ID
+		printf("__==");			
 
 		tp++;	
 		my_ship->type = *(tp);				// TYPE
@@ -213,11 +216,15 @@ if(*tp == P_SHIP_STATES){					// OP_code
 		tp += sizeof(float);
 		my_ship->angle = *( (float *)tp);	// ANGLE
 		tp += sizeof(float);
+		break;
+	}else{
+		tp +=  (4 * sizeof(float) + 2);
+		POINT(*tp);
+		POINT(ID);
 
-	printf("__==");			
 	}
-	
   }
+ }
 	return OK;
 }
 // =============================================================================
