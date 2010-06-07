@@ -134,10 +134,10 @@ typedef struct str_player{
 
 #define UDP_SEND \
 		SDLNet_UDP_Send(usd, -1, t);\
-		bzero(t->data, BUFF_SIZE);
+		memset(t->data, 0xFF ,BUFF_SIZE);
 
 #define UDP_CHANNEL_SEND(C) \
-		SDLNet_UDP_Send(usd, (C), t);
+		SDLNet_UDP_Send(usd, (C), t);\
 
 
 

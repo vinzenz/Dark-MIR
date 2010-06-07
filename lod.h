@@ -67,7 +67,7 @@
   } T_weapon;
 */
 
-  T_ship lode[MAX_SHIPS];
+  T_ship ship[MAX_SHIPS];
   T_ship *my_ship;
 
 

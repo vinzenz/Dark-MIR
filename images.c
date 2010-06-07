@@ -64,7 +64,7 @@ int Nacti_obrazky_vesmir()
 	if (space 		!= NULL && 
 		IMG_RED_RX	!= NULL &&
 		IMG_BLUE_RX	!= NULL &&
-		lode[1].img	!= NULL &&
+		ship[1].img	!= NULL &&
 		laser 		!= NULL	&&
 		radar 		!= NULL	&&
 		damage 		!= NULL	&&

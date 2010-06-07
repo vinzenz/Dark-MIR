@@ -188,22 +188,27 @@ int Get_ship_state(){
 }
 //==============================================================================
 int Get_ship_states(){
-//==============================================================================
+//==============================================================================	
 	UDP_RECV;
 	else return OK;
 
 	Uint8 *tp = r->data;
+	Uint8 id = 0;
+
+
+
+printf("!!--");			
 
 if(*tp == P_SHIP_STATES){					// OP_code
   tp++;	
 
 printf(":||:");			
 
-  for(int i = 0; i < 2; i++){
+  for(int i = 0; i < 3; i++){
 
-	if(*tp == ID){						// ID
+	//if(*tp == ID){							// ID
 		printf("__==");			
-
+/*
 		tp++;	
 		my_ship->type = *(tp);				// TYPE
 		tp++;	
@@ -216,13 +221,28 @@ printf(":||:");
 		tp += sizeof(float);
 		my_ship->angle = *( (float *)tp);	// ANGLE
 		tp += sizeof(float);
-		break;
-	}else{
-		tp +=  (4 * sizeof(float) + 2);
+*/		
+	//}else{
+
+		id = *(tp);							// ID
+		if(id == 0xFF) break;
+
+		tp++;	
+		ship[id].type = *(tp);				// TYPE
+		tp++;	
+		ship[id].X = *( (float *)tp);		// X
+		tp += sizeof(float);
+		ship[id].Y = *( (float *)tp);		// Y
+		tp += sizeof(float);
+		ship[id].speed = *( (float *)tp);	// SPEED
+		tp += sizeof(float);
+		ship[id].angle = *( (float *)tp);	// ANGLE
+		tp += sizeof(float);
+
 		POINT(*tp);
 		POINT(ID);
 
-	}
+	//}
   }
  }
 	return OK;

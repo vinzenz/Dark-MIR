@@ -538,6 +538,7 @@ int Send_ship_states(){
 
   Uint8 *tp = t->data;
 
+  memset(t->data, 0xFF ,BUFF_SIZE);
   *tp = P_SHIP_STATES;											// OP CODE
   tp++;
 
