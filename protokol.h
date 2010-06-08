@@ -57,11 +57,14 @@ typedef struct str_player{
 */
 
 
+#define START			1
+#define STOP 			0
+
 #define NICKNAME_MAX 	32	
 #define HOSTNAME_MAX 	256
 
 
-#define SERVER_TIME_INTERVAL 10
+#define SERVER_TIME_INTERVAL 20
 
 // PROTOCOL OP CODES
 // =============================================================================
@@ -78,6 +81,12 @@ typedef struct str_player{
 #define P_SHIFT_L		0x16
 
 
+#define P_STOP_ROTATE_R		0x91
+#define P_STOP_ROTATE_L		0x92
+#define P_STOP_SPEED_UP		0x93
+#define P_STOP_SLOW_DOWN	0x94
+#define P_STOP_SHIFT_R		0x95
+#define P_STOP_SHIFT_L		0x96
 //______________________________________________________________________________
 //  State:	OP_code | X | Y | speed |  angle 
 #define P_POSITION		0x21

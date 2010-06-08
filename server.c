@@ -49,12 +49,12 @@ int Free_client(int id);
 
 
  //==============================================================================
-int Speed_up(int id);
-int Slow_down(int id);
-int Rotate_R(int id);
-int Rotate_L(int id);
-int Shift_R(int id);
-int Shift_L(int id);
+int Speed_up	(int id, int X);
+int Slow_down	(int id, int X);
+int Rotate_R	(int id, int X);
+int Rotate_L	(int id, int X);
+int Shift_R		(int id, int X);
+int Shift_L		(int id, int X);
 
 int Fire(int id, int wp);
 
@@ -204,7 +204,7 @@ if (strcmp((char *)p->data, "quit") == 0)
 
 	UDP_RECV{
 //		*remoteIP = (r->address);
-//		printf("0x%2X \n", r->data[0]);
+		printf("0x%2X \n", r->data[0]);
 
 		for(p_id = 0; p_id < players; p_id++){		// player identification
 			if(player[p_id].channel == r->channel){
@@ -223,29 +223,47 @@ if (strcmp((char *)p->data, "quit") == 0)
 			New_client(&player[players]);
 			break;
 	  
-	  	case P_ROTATE_R: 	
-			Rotate_R(p_id);
+	  	case P_ROTATE_R:	 	
+			Rotate_R(p_id, START);
+			break;
+	  	case P_STOP_ROTATE_R: 	
+			Rotate_R(p_id, STOP);
 			break;
 
 	  	case P_ROTATE_L: 	
-			Rotate_L(p_id);
+			Rotate_L(p_id, START);
+			break;
+	  	case P_STOP_ROTATE_L: 	
+			Rotate_L(p_id, STOP);
 			break;
 
 
 		case P_SPEED_UP:  
-			Speed_up(p_id);
+			Speed_up(p_id, START);
+			break;
+		case P_STOP_SPEED_UP:  
+			Speed_up(p_id, STOP);
 			break;
 
 		case P_SLOW_DOWN: 
-			Slow_down(p_id);
+			Slow_down(p_id, START);
+			break;
+		case P_STOP_SLOW_DOWN: 
+			Slow_down(p_id, STOP);
 			break;
 
 		case P_SHIFT_R:
-			Shift_R(p_id);
+			Shift_R(p_id, START);
+			break;
+		case P_STOP_SHIFT_R:
+			Shift_R(p_id, STOP);
 			break;
 
 		case P_SHIFT_L: 
-			Shift_L(p_id);
+			Shift_L(p_id, START);
+			break;
+		case P_STOP_SHIFT_L: 
+			Shift_L(p_id, STOP);
 			break;
 			
 		case P_FIRE_0:   
@@ -365,13 +383,17 @@ int Free_client(int id){
 }
 
 //==============================================================================
-int Speed_up(int id){
+int Speed_up(int id, int X){
 //==============================================================================
 	
-  player[id].ship.speed += player[id].ship.zrychleni;	
+  //player[id].ship.speed += player[id].ship.acceleration;	
+  if( X == STOP);
+  	//player[id].ship.acceleration = 0;
+  else
+  	player[id].ship.acceleration = + player[id].ship.MAX_acceleration;	
 
-  if(player[id].ship.speed > player[id].ship.MAX_speed)
-		  player[id].ship.speed = player[id].ship.MAX_speed;	
+  printf("acceleration: %f\n", (double) player[id].ship.acceleration);
+
 
   /*tp = t->data;
   *tp =  P_SPEED_UP;
@@ -383,12 +405,13 @@ int Speed_up(int id){
  return OK;
 }
 //==============================================================================
-int Slow_down(int id){
+int Slow_down(int id, int X){
 //==============================================================================
 	
-  player[id].ship.speed -= player[id].ship.zrychleni;	
-  if(player[id].ship.speed < 0)
-		  player[id].ship.speed = 0;
+  if( X == STOP)
+  	player[id].ship.acceleration = 0;
+  else		  
+  	player[id].ship.acceleration = - player[id].ship.MAX_acceleration;	
 /*
   tp = t->data;
   *tp =  P_SLOW_DOWN;
@@ -401,15 +424,13 @@ int Slow_down(int id){
 }
 
 //==============================================================================
-int Rotate_R(int id){
+int Rotate_R(int id, int X){
 //==============================================================================
-	
-  player[id].ship.angle -= player[id].ship.manevr;	
 
-  if(player[id].ship.angle > 360)
-	player[id].ship.angle -= 360;
-  if(player[id].ship.angle < 0)
-	player[id].ship.angle += 360;
+  if(X == STOP)		
+  	player[id].ship.manevr = 0;
+  else	
+  	player[id].ship.manevr = - player[id].ship.MAX_manevr;	
 
 /*
   tp = t->data;
@@ -422,15 +443,14 @@ int Rotate_R(int id){
  return OK;
 }
 //==============================================================================
-int Rotate_L(int id){
+int Rotate_L(int id, int X){
 //==============================================================================
 	
-  player[id].ship.angle += player[id].ship.manevr;	
 
-  if(player[id].ship.angle > 360)
-	player[id].ship.angle -= 360;
-  if(player[id].ship.angle < 0)
-	player[id].ship.angle += 360;
+  if(X == STOP)		
+  	player[id].ship.manevr = 0;
+  else	
+  	player[id].ship.manevr = + player[id].ship.MAX_manevr;	
 /*
   tp = t->data;
   *tp =  P_ROTATE_L;
@@ -442,30 +462,36 @@ int Rotate_L(int id){
  return OK;
 }
 //==============================================================================
-int Shift_R(int id){
+int Shift_R(int id, int X){
 //==============================================================================
 	
-  player[id].ship.uhyb = - player[id].ship.MAX_uhyb;
+  if(X == STOP)		
+  	player[id].ship.shift = 0;
+  else
+  	player[id].ship.shift = - player[id].ship.MAX_shift;
 /*
   tp = t->data;
   *tp =  P_SHIFT_R;
   tp++;
-  memcpy(tp, &player[id].ship.uhyb, sizeof(float));
+  memcpy(tp, &player[id].ship.shift, sizeof(float));
 
 //  UDP_SEND;
 */
  return OK;
 }
 //==============================================================================
-int Shift_L(int id){
+int Shift_L(int id, int X){
 //==============================================================================
 	
-  player[id].ship.uhyb = + player[id].ship.MAX_uhyb;
+  if(X == STOP)		
+  	player[id].ship.shift = 0;
+  else
+  	player[id].ship.shift = + player[id].ship.MAX_shift;
 /*
   tp = t->data;
   *tp =  P_SHIFT_L;
   tp++;
-  memcpy(tp, &player[id].ship.uhyb, sizeof(float));
+  memcpy(tp, &player[id].ship.shift, sizeof(float));
 
 //  UDP_SEND;
 */
@@ -509,10 +535,10 @@ int Fire(int id, int wp){
  return OK;
 }
 
+/*
 //==============================================================================
 int Send_ship_state(int i){
 //==============================================================================
-
 printf(">>> sending ship state <<<\n");
 fflush(stdout);
 	unsigned char *tp = t->data;
@@ -530,7 +556,8 @@ fflush(stdout);
 	UDP_SEND;
 	
 	return OK;
-}
+} 
+*/
 //==============================================================================
 int Send_ship_states(){
 //==============================================================================
@@ -606,9 +633,12 @@ int Inicializuj_objekty(){
 
 		player[i].ship.X = (MAX_X/2) + (i * 200);
 		player[i].ship.Y = (MAX_Y/2) + (i * 200);
-		player[i].ship.speed = 0.1;
-		player[i].ship.angle = 0;
-		player[i].ship.alive= 1;
+		player[i].ship.speed 	= 0.0;
+		player[i].ship.angle 	= 0;
+		player[i].ship.manevr	= 0;
+		player[i].ship.shift 	= 0;
+		player[i].ship.acceleration	= 0;
+		player[i].ship.alive	= 1;
 	}
 
 	pocet_raket = 0;
@@ -625,29 +655,37 @@ int Pohybuj_objekty(){
 //
 	//  === Pohyb lodi ===
   for(int i=0; i < players; i++){
+
 	if(! player[i].alive) continue;
 	if(! player[i].ship.alive) continue;
 
+	player[i].ship.angle += player[i].ship.manevr;
+	printf("angle: %f\n", (double) player[i].ship.angle);
+
+	player[i].ship.speed += player[i].ship.acceleration;	
+	
 	// ==== speed limit ====
+ 	if(player[i].ship.speed < 0)
+		  player[i].ship.speed = 0;
 	if(player[i].ship.speed > player[i].ship.MAX_speed) 
 			player[i].ship.speed =  player[i].ship.MAX_speed;
 
-	//player[i].ship.angle += player[i].ship.manevr;
-	//player[i].ship.manevr = 0;
+		
+	// ==== angle limit ====
+  	if(player[i].ship.angle > 360)
+		player[i].ship.angle -= 360;
+	if(player[i].ship.angle < 0)
+		player[i].ship.angle += 360;
 
-	//player[i].ship.speed += player[i].ship.zrychleni;	
-	//player[i].ship.zrychleni = 0;
-	
-	
 	// ==== position change ====
 	player[i].ship.X += player[i].ship.speed * cos(((float)player[i].ship.angle/180)*M_PI)
-	       	+ player[i].ship.uhyb * cos(((float)(player[i].ship.angle+90)/180)*M_PI);
+	       	+ player[i].ship.shift * cos(((float)(player[i].ship.angle+90)/180)*M_PI);
 
 	player[i].ship.Y -= player[i].ship.speed * sin(((float)player[i].ship.angle/180)*M_PI)
-			+ player[i].ship.uhyb * sin(((float)(player[i].ship.angle+90)/180)*M_PI);	
+			+ player[i].ship.shift * sin(((float)(player[i].ship.angle+90)/180)*M_PI);	
 
 
-	player[i].ship.uhyb /= 1.01;
+	player[i].ship.shift /= 1.01;
 
 	// ==== position limits ====
 	// RIGHT  DOWN 
@@ -700,8 +738,8 @@ int Detekuj_kolize(){
 			rockets[i].Y = 0;
 			rockets[i].speed = 0;
 			// MAKE DAMAGE
-			player[x].ship.poskozeni += rockets[i].damage;
-			if(player[x].ship.poskozeni > player[x].ship.MAX_poskozeni){
+			player[x].ship.damage += rockets[i].damage;
+			if(player[x].ship.damage > player[x].ship.MAX_damage){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				player[x].ship.speed= 0;
 				player[x].ship.X = 0;
@@ -721,8 +759,8 @@ int Detekuj_kolize(){
 			lasers[i].Y = 0;
 			lasers[i].speed = 0;
 			// MAKE DAMAGE
-			player[x].ship.poskozeni += lasers[i].damage;
-			if(player[x].ship.poskozeni > player[x].ship.MAX_poskozeni){
+			player[x].ship.damage += lasers[i].damage;
+			if(player[x].ship.damage > player[x].ship.MAX_damage){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				player[x].ship.speed= 0;
 				//player[x].ship.X = 0;

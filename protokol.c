@@ -64,12 +64,16 @@ int Logout(){
 }
 
 //==============================================================================
-int Speed_up(){
+int Speed_up(int X){
 //==============================================================================
 	unsigned char *tp=NULL;
 	tp=t->data;
 
-	*tp = P_SPEED_UP;
+	if(X == STOP)
+		*tp = P_STOP_SPEED_UP;
+	else			
+		*tp = P_SPEED_UP;
+
 	tp++;
 
 	printf("t->data[0]: 0x%X\n",t->data[0]);
@@ -79,12 +83,16 @@ int Speed_up(){
 }
 
 //==============================================================================
-int Slow_down(){
+int Slow_down(int X){
 //==============================================================================
 	unsigned char *tp=NULL;
 	tp=t->data;
 
-	*tp = P_SLOW_DOWN;
+	if(X == STOP)
+		*tp = P_STOP_SLOW_DOWN;
+	else
+		*tp = P_SLOW_DOWN;
+
 	tp++;
 	printf("t->data[0]: 0x%X\n",t->data[0]);
 
@@ -93,12 +101,16 @@ int Slow_down(){
 }
 
 //==============================================================================
-int Rotate_L(){
+int Rotate_L(int X){
 //==============================================================================
 	unsigned char *tp=NULL;
 	tp=t->data;
 
-	*tp = P_ROTATE_L;
+	if(X == STOP)
+		*tp = P_STOP_ROTATE_L;
+	else
+		*tp = P_ROTATE_L;
+
 	tp++;
 	printf("t->data[0]: 0x%X\n",t->data[0]);
 
@@ -107,12 +119,16 @@ int Rotate_L(){
 }
 
 //==============================================================================
-int Rotate_R(){
+int Rotate_R(int X){
 //==============================================================================
 	unsigned char *tp=NULL;
 	tp=t->data;
 
-	*tp = P_ROTATE_R;
+	if(X == STOP)
+		*tp = P_STOP_ROTATE_R;
+	else
+		*tp = P_ROTATE_R;
+
 	tp++;
 	printf("t->data[0]: 0x%X\n",t->data[0]);
 
@@ -122,12 +138,16 @@ int Rotate_R(){
 
 //==============================================================================
 //==============================================================================
-int Shift_L(){
+int Shift_L(int X){
 //==============================================================================
 	unsigned char *tp=NULL;
 	tp=t->data;
 
-	*tp = P_SHIFT_L;
+	if(X == STOP)
+		*tp = P_STOP_SHIFT_L;
+	else
+		*tp = P_SHIFT_L;
+
 	tp++;
 	printf("t->data[0]: 0x%X\n",t->data[0]);
 
@@ -135,12 +155,16 @@ int Shift_L(){
 	return OK;
 }
 //==============================================================================
-int Shift_R(){
+int Shift_R(int X){
 //==============================================================================
 	unsigned char *tp=NULL;
 	tp=t->data;
 
-	*tp = P_SHIFT_R;
+	if(X == STOP)
+		*tp = P_SHIFT_R;
+	else
+		*tp = P_STOP_SHIFT_R;
+
 	tp++;
 	printf("t->data[0]: 0x%X\n",t->data[0]);
 
@@ -231,12 +255,16 @@ printf(":||:");
 		ship[id].type = *(tp);				// TYPE
 		tp++;	
 		ship[id].X = *( (float *)tp);		// X
+		printf("X: %f\n", ship[id].X);
 		tp += sizeof(float);
 		ship[id].Y = *( (float *)tp);		// Y
+		printf("Y: %f\n", ship[id].Y);
 		tp += sizeof(float);
 		ship[id].speed = *( (float *)tp);	// SPEED
+		printf("speed: %f\n", ship[id].speed);
 		tp += sizeof(float);
 		ship[id].angle = *( (float *)tp);	// ANGLE
+		printf("angle: %f\n", ship[id].angle);
 		tp += sizeof(float);
 
 		POINT(*tp);

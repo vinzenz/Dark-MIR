@@ -53,7 +53,7 @@ int Vesmir(){
 	if(Nacti_obrazky_vesmir() == FAIL) 
 		fprintf(stderr, "ERROR: nepodarilo se nacist obrazky pro vesmir\n");
  
-	SDL_EnableKeyRepeat( 50, 50);  // Dalsi signal stisknute klavesy odesle po 50ms
+	//SDL_EnableKeyRepeat( 50, 50);  // Dalsi signal stisknute klavesy odesle po 50ms
 	SDL_ShowCursor(SDL_DISABLE);  // vypne zobrazovani systemoveho kurzoru
 
 	// casovani reakci na klavesy
@@ -76,8 +76,7 @@ int Vesmir(){
 			switch(event.type){
 				
 			// 	KEYs PRESSED
-				
-			  case SDL_KEYDOWN: 	
+			case SDL_KEYDOWN: 	
 				switch(event.key.keysym.sym){
 					
 				  case SDLK_ESCAPE:
@@ -93,33 +92,33 @@ int Vesmir(){
 					break;
 					
 				 case SDLK_LEFT:
-					Rotate_L();
+					Rotate_L(START);
 				 	//manevr =  + my_ship->manevr;
 					break;
 
 				 case SDLK_RIGHT:
-					Rotate_R();
+					Rotate_R(START);
 				 	//manevr =  - my_ship->manevr;
 					break;
 				
 				 case SDLK_UP:
-					Speed_up();
-				 	//zrychleni = + my_ship->zrychleni;
+					Speed_up(START);
+				 	//acceleration = + my_ship->acceleration;
 					break;
 				 
 				 case SDLK_DOWN:
-					Slow_down();
-				 	//zrychleni = - my_ship->zrychleni;
+					Slow_down(START);
+				 	//acceleration = - my_ship->acceleration;
 					break;
 				
 				 case SDLK_a:
-					Shift_L();
-				 	//my_ship->uhyb += 1;
+					Shift_L(START);
+				 	//my_ship->shift += 1;
 					break;
 				 
 				 case SDLK_d:
-					Shift_R();
-				 	//my_ship->uhyb -= 1;
+					Shift_R(START);
+				 	//my_ship->shift -= 1;
 					break;
 
 
@@ -142,7 +141,45 @@ int Vesmir(){
 				  default:break;
 									
 				}
+				break;
+
+			// ==== KEY RELEASED ===	
+			case SDL_KEYUP: 		
+				switch(event.key.keysym.sym){
+				
+					
+				 case SDLK_LEFT:
+					Rotate_L(STOP);
+					break;
+
+				 case SDLK_RIGHT:
+					Rotate_R(STOP);
+					break;
+				
+				 case SDLK_UP:
+					Speed_up(STOP);
+					break;
+				 
+				 case SDLK_DOWN:
+					Slow_down(STOP);
+					break;
+				
+				 case SDLK_a:
+					Shift_L(STOP);
+					break;
+				 
+				 case SDLK_d:
+					Shift_R(STOP);
+					break;
+						
+				 default: break;
+				}
+				break;
 	
+			case SDL_QUIT:
+				ukonci = 1;
+				break;
+
 				
 		}
 	}
@@ -155,7 +192,7 @@ int Vesmir(){
 	keys = SDL_GetKeyState(NULL);
 	
 	if(keys[SDLK_a]  == SDL_RELEASED && keys[SDLK_d] == SDL_RELEASED){
-		my_ship->uhyb = 0;
+		my_ship->shift = 0;
 		//printf("A/D released\n");
 	}		
 	
@@ -165,7 +202,7 @@ int Vesmir(){
 	}
 
 	if(keys[SDLK_UP] == SDL_RELEASED && keys[SDLK_DOWN] == SDL_RELEASED){
-		zrychleni = 0;
+		acceleration = 0;
 		//printf("SIPKY NAHORU/DOLU released\n");
 	}
 /*
@@ -193,8 +230,8 @@ int Vesmir(){
 /*
 	// === prubezne opravy parametru ===	
 	if(my_ship->angle >= 360) my_ship->angle -= 360;		// < 0 ; 360 ) degrees
-	if(my_ship->uhyb >= my_ship->MAX_uhyb ) my_ship->uhyb = my_ship->MAX_uhyb ;	
-	if(my_ship->uhyb <= -my_ship->MAX_uhyb ) my_ship->uhyb = -my_ship->MAX_uhyb ;		
+	if(my_ship->shift >= my_ship->MAX_shift ) my_ship->shift = my_ship->MAX_shift ;	
+	if(my_ship->shift <= -my_ship->MAX_shift ) my_ship->shift = -my_ship->MAX_shift ;		
 	if(my_ship->speed <= 0) my_ship->speed = 0 ;
 	if(my_ship->speed >= my_ship->MAX_speed) my_ship->speed = my_ship->MAX_speed ;
 
@@ -349,13 +386,13 @@ int Pohybuj_objekty(){
 //
 	//  === Pohyb lodi ===
 	my_ship->angle += manevr;
-	my_ship->speed += zrychleni;	
+	my_ship->speed += acceleration;	
 	
 	X += my_ship->speed * cos(((float)my_ship->angle/180)*M_PI)
-	       	+ my_ship->uhyb * cos(((float)(my_ship->angle+90)/180)*M_PI);
+	       	+ my_ship->shift * cos(((float)(my_ship->angle+90)/180)*M_PI);
 
 	Y -= my_ship->speed * sin(((float)my_ship->angle/180)*M_PI)
-	       	+ my_ship->uhyb * sin(((float)(my_ship->angle+90)/180)*M_PI);	
+	       	+ my_ship->shift * sin(((float)(my_ship->angle+90)/180)*M_PI);	
 
 
 	for (int i=1; i<=pocet_lodi; i++){
@@ -399,8 +436,8 @@ int Detekuj_kolize(){
 			rockets[i].Y = 0;
 			rockets[i].speed = 0;
 			// MAKE DAMAGE
-			ship[x].poskozeni += rockets[i].damage;
-			if(ship[x].poskozeni > ship[x].MAX_poskozeni){
+			ship[x].damage += rockets[i].damage;
+			if(ship[x].damage > ship[x].MAX_damage){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				ship[x].speed= 0;
 				ship[x].X = 0;
@@ -420,8 +457,8 @@ int Detekuj_kolize(){
 			lasers[i].Y = 0;
 			lasers[i].speed = 0;
 			// MAKE DAMAGE
-			ship[x].poskozeni += lasers[i].damage;
-			if(ship[x].poskozeni > ship[x].MAX_poskozeni){
+			ship[x].damage += lasers[i].damage;
+			if(ship[x].damage > ship[x].MAX_damage){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				ship[x].speed= 0;
 				//ship[x].X = 0;

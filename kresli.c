@@ -24,7 +24,7 @@ int Kresli_lod(T_ship *ship){
 		SDL_FreeSurface(ship->rot_img);		// free old img
 		ship->rot_img = rotozoomSurface(ship->img, ship->angle, 1, 0);
 	}
-	if(ship->MAX_poskozeni <= ship->poskozeni){		// crap
+	if(ship->MAX_damage <= ship->damage){		// crap
 		SDL_FreeSurface(ship->rot_img);		// free old img
 		ship->rot_img = rotozoomSurface(ship->img_c, ship->angle, 1, 0);
 	}
@@ -47,12 +47,12 @@ int Kresli_pristroje(T_ship *my_ship){
  	
 	SDL_BlitSurface(radar, NULL, screen, &rect);
 
-	// Ukazatel poskozeni
+	// Ukazatel damage
 	
 	rect.x = WIDTH  - 30 - damage->w;
 	rect.y = HEIGHT - 30 - damage->h;
 	
-	rect2.w = (my_ship->MAX_poskozeni / (my_ship->poskozeni+1)) * 100;
+	rect2.w = (my_ship->MAX_damage / (my_ship->damage+1)) * 100;
 	rect2.h = damage->h;	
  	
 	SDL_BlitSurface(damage, &rect2, screen, &rect);	

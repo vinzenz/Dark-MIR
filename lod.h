@@ -25,17 +25,21 @@
 	
 	float speed;
 	float MAX_speed;
-	float zrychleni;
+
+	float acceleration;
+	float MAX_acceleration;
 
 	float manevr;
+	float MAX_manevr;
+
 	float angle;
 	float angle2;
 
-	float uhyb;
-	float MAX_uhyb;
+	float shift;
+	float MAX_shift;
 
-	int poskozeni;
-	int MAX_poskozeni;
+	int damage;
+	int MAX_damage;
 
 	float X; 			//  position
 	float Y;
@@ -93,13 +97,13 @@
 
   //float speed;
   int MAX_speed;
-  float zrychleni;
+  float acceleration;
 
   float manevr;
-  float uhyb;
-  int MAX_uhyb;
+  float shift;
+  int MAX_shift;
 
-  int poskozeni;
-  int MAX_poskozeni;
+ // int damage;
+  int MAX_damage;
 
 #endif

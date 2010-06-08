@@ -23,12 +23,12 @@
 int New_client();
 int Logout();
 
-int Speed_up();
-int Slow_down();
-int Rotate_R();
-int Rotate_L();
-int Shift_R();
-int Shift_L();
+int Speed_up(int);
+int Slow_down(int);
+int Rotate_R(int);
+int Rotate_L(int);
+int Shift_R(int);
+int Shift_L(int);
 
 int Fire(int wp);
 

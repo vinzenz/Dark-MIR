@@ -11,7 +11,7 @@ Uint32 Ovladani(Uint32 interval, void *param){
 //==============================================================================
 
 	my_ship->angle += manevr;
-	my_ship->speed += zrychleni;	
+	my_ship->speed += acceleration;	
 	
 //	if(strilej[LASER] != 0) Vystrel(LASER, my_ship);
 //	if(strilej[ROCKET] != 0) Vystrel(ROCKET, my_ship);

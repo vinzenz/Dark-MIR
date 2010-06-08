@@ -12,14 +12,14 @@ typedef struct str_lod {
 	
 	float speed;
 	int MAX_speed;
-	float zrychleni;
+	float acceleration;
 
 	int manevr;
-	float uhyb;
-	int MAX_uhyb;
+	float shift;
+	int MAX_shift;
 
-	int poskozeni;
-	int MAX_poskozeni;
+	int damage;
+	int MAX_damage;
 	
 	float X; //  pozice
 	float Y;
@@ -36,11 +36,11 @@ T_ship lode[MAX_LODI];
 
 */
 T_ship SHIP_RED_RX = {
-   .MAX_poskozeni = 100,	
-   .MAX_speed 	= 1.50,
-   .MAX_uhyb 	= 50.00,
-   .zrychleni 	= 0.1,
-   .manevr 	= 2.00,
+   .MAX_damage 			= 100,	
+   .MAX_speed 			= 5.50,
+   .MAX_shift 			= 5.00,
+   .MAX_acceleration 	= 0.1,
+   .MAX_manevr= 0.1,
    .alive = 1,
 };
 // =============================================================================
@@ -48,10 +48,10 @@ T_ship SHIP_RED_RX = {
 // LOD_RED_RX
 
 T_ship SHIP_RED_RX = {
-   .MAX_poskozeni = 100,	
+   .MAX_damage = 100,	
    .MAX_speed 	= 0.50,
-   .MAX_uhyb 	= 0.25,
-   .zrychleni 	= 0.001,
+   .MAX_shift 	= 0.25,
+   .acceleration 	= 0.001,
    .manevr 	= 0.10,
    .alive = 1,
 };
@@ -59,11 +59,11 @@ T_ship SHIP_RED_RX = {
 // =============================================================================
 */
 T_ship SHIP_BLUE_RX = {
-   .MAX_poskozeni = 70,	
-   .MAX_speed 	= 0.70,
-   .MAX_uhyb 	= 0.30,
-   .zrychleni 	= 0.02,
-   .manevr 	= 3.0,
+   .MAX_damage = 70,	
+   .MAX_speed 	= 2.70,
+   .MAX_shift 	= 5.00,
+   .MAX_acceleration = 0.02,
+   .MAX_manevr 	= 0.1,
    .alive = 1,
 };
 
