@@ -60,7 +60,7 @@ int Vesmir(){
 	
 //	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 					// KEYBORD
 	//mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL); 	// MOVE
-	mv_timer = SDL_AddTimer(2, Timed_loop, NULL); 	// MOVE
+	mv_timer = SDL_AddTimer(1, Timed_loop, NULL); 	// MOVE
 	draw_timer = SDL_AddTimer(30, Redraw_loop, NULL); 					// DRAW
 	
 
@@ -293,12 +293,23 @@ Uint32 Redraw_loop(Uint32 interval, void *param){
 Uint32 Timed_loop(Uint32 interval, void *param){
 //==============================================================================
 // 50 ms
-	printf("TIMER: Pohybuj_objekty()\n");
+	printf("TIMER: UDP_RECV()\n");
 	//mv_timer = SDL_AddTimer(10, Timed_loop, NULL); 	// MOVE
 
 // SERVER periodical message P_STATE
 	
-	if(Get_ship_states() == OK){
+	UDP_RECV;
+	else return interval;
+
+	switch(r->data[0]){
+
+		case P_SHIP_STATES:
+			Get_ship_states(); 
+			break;
+		case P_WEAPON_STATES:
+			Get_weapon_states(); 
+			break;
+
 	}
 
 return interval;

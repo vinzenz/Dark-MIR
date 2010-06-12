@@ -1,12 +1,12 @@
 #ifndef LOD_H
  #define LOD_H
+
 #include "program.h"
 
 #define MAX_SHIPS 40
 
 #define LOD_RX_speed 4
 #define LOD_RX_angle 10
-
 
 typedef struct str_ship{
 	SDL_Surface *img;		// img of ship

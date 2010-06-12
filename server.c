@@ -272,7 +272,7 @@ if (strcmp((char *)p->data, "quit") == 0)
 		case P_FIRE_3:     
 			
 			player[p_id].ship.health -= 10;
-			//Fire(p_id, r->data[0] - P_FIRE_0);
+			Fire(p_id, r->data[0] - P_FIRE_0);
 			break;
 
 
@@ -505,61 +505,38 @@ int Shift_L(int id, int X){
 //==============================================================================
 int Fire(int id, int wp){
 //==============================================================================
+  int i;
+
+	for( i=0; i < pocet_weapons; i++){		// find first not .alive weapon
+			if(! weapon[i].alive){				// and use this slot 
+					break;
+			}
+	}	
+	if(i == pocet_weapons){				// no not .alive slote
+											// create new one
+		pocet_weapons++;
+	}
 
 	switch(wp){
 		
 		case LASER:
-			if(pocet_laseru < MAX_LASER-1){
-				pocet_laseru++;
-				lasers[pocet_laseru] = RX_laser;
-				lasers[pocet_laseru].angle = player[id].ship.angle;
-				lasers[pocet_laseru].X = player[id].ship.X;;
-				lasers[pocet_laseru].Y = player[id].ship.Y;;
-				lasers[pocet_laseru].strana = player[id].ship.strana;
-			}
-			else{
-
-			}	
+			weapon[i] = RX_laser;
 			break;
 
 		case ROCKET:
-			
-			if(pocet_raket < MAX_ROCKET-1){
-				pocet_raket++;
-				rockets[pocet_raket] = RX_R1;
-				rockets[pocet_raket].angle = player[id].ship.angle;
-				rockets[pocet_raket].X = player[id].ship.X;
-				rockets[pocet_raket].Y = player[id].ship.Y;
-				rockets[pocet_raket].strana = player[id].ship.strana;
-			}
-	}	
+			weapon[i] = RX_R1;
+			break;
+
+	}
+	weapon[i].angle = 	player[id].ship.angle;
+	weapon[i].X = 		player[id].ship.X;
+	weapon[i].Y = 		player[id].ship.Y;
+	weapon[i].strana = 	player[id].ship.strana;
+	weapon[i].alive = 	1;
 
  return OK;
 }
 
-/*
-//==============================================================================
-int Send_ship_state(int i){
-//==============================================================================
-printf(">>> sending ship state <<<\n");
-fflush(stdout);
-	unsigned char *tp = t->data;
-	*tp = P_STATE;
-	tp++;	
-	*( (float *)tp) = player[i].ship.X;
-	//fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));
-	tp += sizeof(float);
-	*( (float *)tp) = player[i].ship.Y;
-	tp += sizeof(float);
-	*( (float *)tp) = player[i].ship.speed;
-	tp += sizeof(float);
-	*( (float *)tp) = player[i].ship.angle;
-
-	UDP_SEND;
-	
-	return OK;
-} 
-*/
 //==============================================================================
 int Send_ship_states(){
 //==============================================================================
@@ -603,6 +580,48 @@ fflush(stdout);
 	
 	return OK;
 }
+//==============================================================================
+int Send_weapon_states(){
+//==============================================================================
+
+
+  Uint8 *tp = t->data;
+
+  memset(t->data, 0xFF ,BUFF_SIZE);
+  *tp = P_WEAPON_STATES;										// OP CODE
+  tp++;
+
+  for(int i=0; i < 4; i++){		
+
+	*tp = i;													// ID
+	tp++;
+	*tp = weapon[i].type;										// TYPE
+	tp++;
+	*tp = weapon[i].strana;										// SUBTYPE
+	tp++;
+
+	*((float *)tp) = weapon[i].X;								// X
+//	fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));	
+	tp += sizeof(float);
+	*((float *)tp) = weapon[i].Y;								// Y
+	tp += sizeof(float);
+	*((float *)tp) = weapon[i].angle;							// ANGLE
+	tp += sizeof(float);
+
+//printf("|| sending ship states ==__ \n");
+fflush(stdout);
+  }
+
+  for(int x = 0; x < players; x++){
+	if(player[x].alive){
+		UDP_CHANNEL_SEND(player[x].channel);
+		fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+	}
+  }
+	
+	return OK;
+}
+
 //==============================================================================
 //==============================================================================
 //=============================================================================
@@ -712,20 +731,16 @@ int Pohybuj_objekty(){
 
   }
 	Send_ship_states();
+	Send_weapon_states();
 
 	// === projectiles movement ===
 	
-	for (int i=0; i<=pocet_laseru; i++){
-	  if(! lasers[i].alive) continue;
-	  lasers[i].X += lasers[i].speed * cos(((float)lasers[i].angle/180)*M_PI);
-	  lasers[i].Y -= lasers[i].speed  * sin(((float)lasers[i].angle/180)*M_PI); 	
+	for (int i=0; i<=pocet_weapons; i++){
+	  if(! weapon[i].alive) continue;
+	  weapon[i].X += weapon[i].speed * cos(((float)weapon[i].angle/180)*M_PI);
+	  weapon[i].Y -= weapon[i].speed  * sin(((float)weapon[i].angle/180)*M_PI); 	
 	}
 	
-	for (int i=0; i<=pocet_raket; i++){
-	  if(! rockets[i].alive) continue;
-	  rockets[i].X += rockets[i].speed * cos(((float)rockets[i].angle/180)*M_PI);
-	  rockets[i].Y -= rockets[i].speed * sin(((float)rockets[i].angle/180)*M_PI); 
-	}
 		
 
  return OK;
@@ -741,15 +756,15 @@ int Detekuj_kolize(){
   	if(! player[x].ship.alive) continue;
 
 	for(int i=0; i <= pocet_raket; i++){
-		if(!rockets[i].alive) continue;
-		if(Collision_detect(&player[x].ship, &rockets[i])){
+		if(!weapon[i].alive) continue;
+		if(Collision_detect(&player[x].ship, &weapon[i])){
 			// DISABLE PROJECTIL
-			rockets[i].alive = 0;
-			rockets[i].X = 0;
-			rockets[i].Y = 0;
-			rockets[i].speed = 0;
+			weapon[i].alive = 0;
+			weapon[i].X = 0;
+			weapon[i].Y = 0;
+			weapon[i].speed = 0;
 			// MAKE DAMAGE
-			player[x].ship.health -= rockets[i].damage;
+			player[x].ship.health -= weapon[i].damage;
 			if(player[x].ship.health <= 0){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				player[x].ship.speed= 0;
@@ -762,15 +777,15 @@ int Detekuj_kolize(){
 	}
 
 	for(int i=0; i <= pocet_laseru; i++){
-		if(!lasers[i].alive) continue;
-		if(Collision_detect(&player[x].ship, &lasers[i])){
+		if(!weapon[i].alive) continue;
+		if(Collision_detect(&player[x].ship, &weapon[i])){
 			// DISABLE PROJECTIL
-			lasers[i].alive = 0;
-			lasers[i].X = 0;
-			lasers[i].Y = 0;
-			lasers[i].speed = 0;
+			weapon[i].alive = 0;
+			weapon[i].X = 0;
+			weapon[i].Y = 0;
+			weapon[i].speed = 0;
 			// MAKE DAMAGE
-			player[x].ship.health -= lasers[i].damage;
+			player[x].ship.health -= weapon[i].damage;
 			if(player[x].ship.health <= 0){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				player[x].ship.speed= 0;

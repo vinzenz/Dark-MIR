@@ -32,8 +32,8 @@ int Shift_L(int);
 
 int Fire(int wp);
 
-int Get_ship_state();
 int Get_ship_states();
+int Get_weapon_states();
 
 
 

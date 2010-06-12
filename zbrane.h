@@ -12,6 +12,7 @@
 #define LASER_rychlost 30
 #define R1_rychlost 6
 
+int pocet_weapons;
 int pocet_laseru;
 int pocet_raket;
 
@@ -41,7 +42,7 @@ struct zbrane rakety[MAX_LASERU];
 T_weapon lasers[MAX_LASER];
 T_weapon rockets[MAX_ROCKET];
 
-T_weapon weapon[MAX_WEAPONS]
+T_weapon weapon[MAX_WEAPONS];
 
 //char strilej[16];	// oznacuje ze kterych zbrani se prave strili
 

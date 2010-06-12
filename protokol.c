@@ -288,11 +288,11 @@ int Get_weapon_states(){
 
 
 
-printf("!!--");			
 
 if(*tp != P_WEAPON_STATES)					// OP_code
   return FAIL;
 
+printf("WEPON STATES:\n");			
   tp++;	
 
 //printf(":||:");			
