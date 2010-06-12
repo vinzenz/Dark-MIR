@@ -52,6 +52,10 @@ int Nacti_obrazky_vesmir()
 	
 	laser = LoadImage(ROOT"images/RED/laser.png", 1); 
 	raketa = LoadImage(ROOT"images/r1.png", 1); 
+
+	r_explosion = LoadImage(ROOT"images/r_explosion.png", 1); 
+	b_explosion = LoadImage(ROOT"images/b_explosion.png", 1); 
+
 	
 	radar = LoadImage(ROOT"images/system/mapa.png", 1); 
 	damage = LoadImage(ROOT"images/system/poskozeni.png", 1); 
@@ -64,7 +68,8 @@ int Nacti_obrazky_vesmir()
 	if (space 		!= NULL && 
 		IMG_RED_RX	!= NULL &&
 		IMG_BLUE_RX	!= NULL &&
-		ship[1].img	!= NULL &&
+		r_explosion != NULL &&
+		b_explosion != NULL &&
 		laser 		!= NULL	&&
 		radar 		!= NULL	&&
 		damage 		!= NULL	&&

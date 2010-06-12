@@ -58,9 +58,10 @@ int Vesmir(){
 
 	// casovani reakci na klavesy
 	
-	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 					// KEYBORD
-//	mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL); 	// MOVE
-//	draw_timer = SDL_AddTimer(50, Redraw_loop, NULL); 					// DRAW
+//	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 					// KEYBORD
+	//mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL); 	// MOVE
+	mv_timer = SDL_AddTimer(2, Timed_loop, NULL); 	// MOVE
+	draw_timer = SDL_AddTimer(30, Redraw_loop, NULL); 					// DRAW
 	
 
 	Inicializuj_objekty();
@@ -70,7 +71,7 @@ int Vesmir(){
 
 		// Recieving position X,Y, angle, speed ... of ship	
 		//Get_ship_state();		// NON blocking function
-		Timed_loop(1, NULL);
+//		Timed_loop(1, NULL);
 
 		while(SDL_PollEvent(&event)){
 			switch(event.type){
@@ -190,7 +191,7 @@ int Vesmir(){
 	
 	SDL_PumpEvents();
 	keys = SDL_GetKeyState(NULL);
-	
+/*	
 	if(keys[SDLK_a]  == SDL_RELEASED && keys[SDLK_d] == SDL_RELEASED){
 		my_ship->shift = 0;
 		//printf("A/D released\n");
@@ -205,6 +206,7 @@ int Vesmir(){
 		acceleration = 0;
 		//printf("SIPKY NAHORU/DOLU released\n");
 	}
+*/
 /*
 	if(keys[SDLK_SPACE] == SDL_RELEASED){
 		strilej[LASER] = 0;
@@ -243,19 +245,19 @@ int Vesmir(){
 //	Detekuj_kolize();
 		
 
-	float T1 = SDL_GetTicks();
+//	float T1 = SDL_GetTicks();
 	
-	Prekresli_vesmir();
+	//Prekresli_vesmir();
 	//SDL_Delay(10);	
 	
 	
-	float T2 = SDL_GetTicks();
+	//float T2 = SDL_GetTicks();
 
 	//float fps = 1000 / (T2 - T1);
 //	printf("%G  FPS: %3.2G	\n",T2 - T1, fps);	
 
-	T1 = 0;
-	T2 = 0;
+//	T1 = 0;
+//	T2 = 0;
 
 
 	} 
@@ -280,32 +282,44 @@ int Vesmir(){
 Uint32 Redraw_loop(Uint32 interval, void *param){
 //==============================================================================
 
-//	printf("TIMER: Redraw_loop()\n");
-	draw_timer = SDL_AddTimer(50, Redraw_loop, NULL); 	// MOVE
+	printf("TIMER: Redraw_loop()\n");
+	//draw_timer = SDL_AddTimer(20, Redraw_loop, NULL); 	// MOVE
 
 	Prekresli_vesmir();
 
- return OK;
+ return interval;
 }
 //==============================================================================
 Uint32 Timed_loop(Uint32 interval, void *param){
 //==============================================================================
 // 50 ms
-//	printf("TIMER: Pohybuj_objekty()\n");
-	mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL); 	// MOVE
+	printf("TIMER: Pohybuj_objekty()\n");
+	//mv_timer = SDL_AddTimer(10, Timed_loop, NULL); 	// MOVE
 
 // SERVER periodical message P_STATE
-	//Get_ship_state();
-	Get_ship_states();
+	
+	if(Get_ship_states() == OK){
+	}
 
-return OK;
+return interval;
 }
 
 
 //==============================================================================
 int Prekresli_vesmir(){
 //==============================================================================
-  
+ 
+  static float T1;
+  static int FPS;
+
+  if(SDL_GetTicks() - T1 >= 1000){
+		  printf("FPS: %d\n",FPS);
+		  FPS = 0;
+		  T1 = SDL_GetTicks();
+  }
+  FPS++;
+
+  SDL_Rect rect;
   int x,y;
   
 	X = my_ship->X;
@@ -436,8 +450,8 @@ int Detekuj_kolize(){
 			rockets[i].Y = 0;
 			rockets[i].speed = 0;
 			// MAKE DAMAGE
-			ship[x].damage += rockets[i].damage;
-			if(ship[x].damage > ship[x].MAX_damage){
+			ship[x].health -= rockets[i].damage;
+			if(ship[x].health <= 0 ){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				ship[x].speed= 0;
 				ship[x].X = 0;
@@ -457,8 +471,8 @@ int Detekuj_kolize(){
 			lasers[i].Y = 0;
 			lasers[i].speed = 0;
 			// MAKE DAMAGE
-			ship[x].damage += lasers[i].damage;
-			if(ship[x].damage > ship[x].MAX_damage){
+			ship[x].health -= lasers[i].damage;
+			if(ship[x].health <= 0){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				ship[x].speed= 0;
 				//ship[x].X = 0;

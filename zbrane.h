@@ -5,6 +5,7 @@
 #define LASER 1
 #define ROCKET 2
 
+#define MAX_WEAPONS 10
 #define MAX_LASER 300
 #define MAX_ROCKET 30
 
@@ -23,7 +24,7 @@ int pocet_raket;
 	float MAX_speed;
 	float acceleration;
 	int delta_angle;
-	int angle;
+	float angle;
 	int damage;
 	float X; //  pozice
 	float Y;
@@ -40,7 +41,9 @@ struct zbrane rakety[MAX_LASERU];
 T_weapon lasers[MAX_LASER];
 T_weapon rockets[MAX_ROCKET];
 
-char strilej[16];	// oznacuje ze kterych zbrani se prave strili
+T_weapon weapon[MAX_WEAPONS]
+
+//char strilej[16];	// oznacuje ze kterych zbrani se prave strili
 
 
 #endif

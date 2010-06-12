@@ -4,17 +4,21 @@
 #include "lod.h"
 #include "zbrane.h"
 
-SDL_Rect rect2;
 
 //==============================================================================
 int Kresli_lod(T_ship *ship){
 //==============================================================================
+static int T;
+static int clk;
 
-	
+SDL_Rect rect = {.x = 0, .y = 0};
+SDL_Rect rect2 = {.x = 0, .y = 0};
+
 		rect.x = (WIDTH/2)  - (ship->img->w/2) + ship->X  - X;
 		rect.y = (HEIGHT/2) - (ship->img->h/2) + ship->Y  - Y;	
-		
-
+	
+		rect2.w = ship->img->w;	
+		rect2.h = ship->img->h;	
 
 	if(ship->speed > 0){
 		SDL_FreeSurface(ship->rot_img);		// free old img
@@ -24,12 +28,22 @@ int Kresli_lod(T_ship *ship){
 		SDL_FreeSurface(ship->rot_img);		// free old img
 		ship->rot_img = rotozoomSurface(ship->img, ship->angle, 1, 0);
 	}
-	if(ship->MAX_damage <= ship->damage){		// crap
-		SDL_FreeSurface(ship->rot_img);		// free old img
-		ship->rot_img = rotozoomSurface(ship->img_c, ship->angle, 1, 0);
+	if(ship->health <= 0){					// crap
+		//SDL_FreeSurface(ship->rot_img);		// free old img
+		//ship->rot_img = rotozoomSurface(ship->img_c, ship->angle, 1, 0);
+
+
+		if(clk++ > 10)
+			T++;
+			
+		rect2.x = ship->img->w * (T % 3);	
+		rect2.y = ship->img->h * (T / 3);	
+		SDL_BlitSurface(r_explosion, &rect2, screen, &rect);
+		return OK;
 	}
 
-	SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
+		SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
+
 
 return OK;
 }
@@ -39,6 +53,10 @@ return OK;
 //==============================================================================
 int Kresli_pristroje(T_ship *my_ship){
 //==============================================================================
+SDL_Rect rect = {.x = 0, .y = 0};
+SDL_Rect rect2 = {.x = 0, .y = 0};
+
+	
 
 	// Radar
 	
@@ -47,23 +65,23 @@ int Kresli_pristroje(T_ship *my_ship){
  	
 	SDL_BlitSurface(radar, NULL, screen, &rect);
 
-	// Ukazatel damage
+	// Ukazatel zdravi
 	
 	rect.x = WIDTH  - 30 - damage->w;
 	rect.y = HEIGHT - 30 - damage->h;
 	
-	rect2.w = (my_ship->MAX_damage / (my_ship->damage+1)) * 100;
+	rect2.w = damage->w * ((float)my_ship->health / (float)(my_ship->MAX_health)) ;
 	rect2.h = damage->h;	
  	
 	SDL_BlitSurface(damage, &rect2, screen, &rect);	
 	
 	
-	// Ukazatel speedi
+	// Ukazatel speed
 	
 	rect.x = WIDTH  - 30 - speed->w;
 	rect.y = 30 + speed->h;
 	
-	rect2.w = ((float)my_ship->speed / (float)my_ship->MAX_speed) * 100;
+	rect2.w = speed->w * ((float)my_ship->speed / (float)my_ship->MAX_speed);
 	rect2.h = speed->h;
 	
 	SDL_BlitSurface(speed, &rect2, screen, &rect);	
@@ -113,6 +131,8 @@ return OK;
 //==============================================================================
 int Draw_weapon(T_weapon *weapon){
 //==============================================================================
+SDL_Rect rect;
+
   switch(weapon->type){
 	case LASER:
 		if(weapon->img == NULL)

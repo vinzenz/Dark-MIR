@@ -177,7 +177,7 @@ int Server(){
 while (1){
 
 
-	usleep(10000);		// free CPU
+	SDL_Delay(1);		// free CPU
 
 /*
 if (SDLNet_UDP_Recv(ussd, p)) {
@@ -270,8 +270,9 @@ if (strcmp((char *)p->data, "quit") == 0)
 		case P_FIRE_1:   
 		case P_FIRE_2:    
 		case P_FIRE_3:     
-
-			Fire(p_id, r->data[0] - P_FIRE_0);
+			
+			player[p_id].ship.health -= 10;
+			//Fire(p_id, r->data[0] - P_FIRE_0);
 			break;
 
 
@@ -306,11 +307,12 @@ if (strcmp((char *)p->data, "quit") == 0)
 //==============================================================================
 Uint32 Timed_loop(Uint32 interval, void *param){
 //==============================================================================
-  mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL);  // MOVE
 
 	Pohybuj_objekty();
 
-	return OK;
+	//Detekuj_kolize();
+
+	return interval;
 }
 //==============================================================================
 //==============================================================================
@@ -387,8 +389,8 @@ int Speed_up(int id, int X){
 //==============================================================================
 	
   //player[id].ship.speed += player[id].ship.acceleration;	
-  if( X == STOP);
-  	//player[id].ship.acceleration = 0;
+  if( X == STOP)
+  	player[id].ship.acceleration = 0;
   else
   	player[id].ship.acceleration = + player[id].ship.MAX_acceleration;	
 
@@ -585,6 +587,8 @@ int Send_ship_states(){
 	tp += sizeof(float);
 	*((float *)tp) = player[i].ship.angle;						// ANGLE
 	tp += sizeof(float);
+	*((int *)tp) = player[i].ship.health;						// DAMAGE
+	tp += sizeof(int);
 
 //printf("|| sending ship states ==__ \n");
 fflush(stdout);
@@ -633,6 +637,7 @@ int Inicializuj_objekty(){
 
 		player[i].ship.X = (MAX_X/2) + (i * 200);
 		player[i].ship.Y = (MAX_Y/2) + (i * 200);
+		player[i].ship.health	= player[i].ship.MAX_health;
 		player[i].ship.speed 	= 0.0;
 		player[i].ship.angle 	= 0;
 		player[i].ship.manevr	= 0;
@@ -653,9 +658,14 @@ int Inicializuj_objekty(){
 int Pohybuj_objekty(){
 //==============================================================================
 //
-	//  === Pohyb lodi ===
+
   for(int i=0; i < players; i++){
 
+	//  === Zdravi lodi ===
+ 	if(player[i].ship.health < 0)
+		  player[i].ship.health = 0;
+
+	//  === Pohyb lodi ===
 	if(! player[i].alive) continue;
 	if(! player[i].ship.alive) continue;
 
@@ -685,7 +695,7 @@ int Pohybuj_objekty(){
 			+ player[i].ship.shift * sin(((float)(player[i].ship.angle+90)/180)*M_PI);	
 
 
-	player[i].ship.shift /= 1.01;
+	player[i].ship.shift /= 1.02;
 
 	// ==== position limits ====
 	// RIGHT  DOWN 
@@ -723,6 +733,7 @@ int Pohybuj_objekty(){
 
 
 //==============================================================================
+//==============================================================================
 int Detekuj_kolize(){
 //==============================================================================
 
@@ -738,8 +749,8 @@ int Detekuj_kolize(){
 			rockets[i].Y = 0;
 			rockets[i].speed = 0;
 			// MAKE DAMAGE
-			player[x].ship.damage += rockets[i].damage;
-			if(player[x].ship.damage > player[x].ship.MAX_damage){
+			player[x].ship.health -= rockets[i].damage;
+			if(player[x].ship.health <= 0){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				player[x].ship.speed= 0;
 				player[x].ship.X = 0;
@@ -759,13 +770,13 @@ int Detekuj_kolize(){
 			lasers[i].Y = 0;
 			lasers[i].speed = 0;
 			// MAKE DAMAGE
-			player[x].ship.damage += lasers[i].damage;
-			if(player[x].ship.damage > player[x].ship.MAX_damage){
+			player[x].ship.health -= lasers[i].damage;
+			if(player[x].ship.health <= 0){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				player[x].ship.speed= 0;
-				//player[x].ship.X = 0;
-				//player[x].ship.Y = 0;
-				//player[x].ship.alive = 0;
+				player[x].ship.X = 0;
+				player[x].ship.Y = 0;
+				player[x].ship.alive = 0;
 			}
 		}
 	}

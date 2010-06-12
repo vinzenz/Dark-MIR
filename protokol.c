@@ -2,6 +2,7 @@
 #include "protokol.h"
 #include "client.h"
 #include "lod.h"
+#include "zbrane.h"
 
 
 //unsigned char tbuff[BUFF_SIZE];
@@ -161,9 +162,9 @@ int Shift_R(int X){
 	tp=t->data;
 
 	if(X == STOP)
-		*tp = P_SHIFT_R;
-	else
 		*tp = P_STOP_SHIFT_R;
+	else
+		*tp = P_SHIFT_R;
 
 	tp++;
 	printf("t->data[0]: 0x%X\n",t->data[0]);
@@ -191,6 +192,7 @@ int Fire(int wp){
 
 
 
+/*
 //==============================================================================
 int Get_ship_state(){
 //==============================================================================
@@ -210,11 +212,10 @@ int Get_ship_state(){
 	//}
 	return OK;
 }
+*/
 //==============================================================================
 int Get_ship_states(){
 //==============================================================================	
-	UDP_RECV;
-	else return OK;
 
 	Uint8 *tp = r->data;
 	Uint8 id = 0;
@@ -223,7 +224,9 @@ int Get_ship_states(){
 
 printf("!!--");			
 
-if(*tp == P_SHIP_STATES){					// OP_code
+if(*tp != P_SHIP_STATES)					// OP_code
+  return FAIL;
+
   tp++;	
 
 printf(":||:");			
@@ -266,13 +269,57 @@ printf(":||:");
 		ship[id].angle = *( (float *)tp);	// ANGLE
 		printf("angle: %f\n", ship[id].angle);
 		tp += sizeof(float);
+		ship[id].health = *( (int *)tp);	// DAMAGE
+		printf("health: %d\n", ship[id].health);
+		tp += sizeof(int);
 
-		POINT(*tp);
-		POINT(ID);
 
 	//}
   }
- }
+ 
+	return OK;
+}
+//==============================================================================
+int Get_weapon_states(){
+//==============================================================================	
+
+	Uint8 *tp = r->data;
+	Uint8 id = 0;
+
+
+
+printf("!!--");			
+
+if(*tp != P_WEAPON_STATES)					// OP_code
+  return FAIL;
+
+  tp++;	
+
+//printf(":||:");			
+
+  for(int i = 0; i < 3; i++){
+
+		id = *(tp);							// ID
+		if(id == 0xFF) break;
+
+		tp++;	
+		weapon[id].type = *(tp);			// TYPE
+		tp++;	
+		weapon[id].strana = *(tp);			// SUBTYPE (strana)
+		tp++;	
+		weapon[id].X = *( (float *)tp);		// X
+		printf("X: %f\n", weapon[id].X);
+		tp += sizeof(float);
+		weapon[id].Y = *( (float *)tp);		// Y
+		printf("Y: %f\n", weapon[id].Y);
+		tp += sizeof(float);
+		weapon[id].angle = *( (float *)tp);	// ANGLE
+		printf("angle: %f\n", weapon[id].angle);
+		tp += sizeof(float);
+
+
+  }
+ 
 	return OK;
 }
 // =============================================================================

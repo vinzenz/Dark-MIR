@@ -40,6 +40,11 @@ SDL_Surface *IMG_BLUE_RX;		//
 SDL_Surface *IMG_BLUE_RX_move;		// 
 SDL_Surface *IMG_BLUE_RX_crap;		// 
 
+// Explosions
+SDL_Surface *r_explosion;
+SDL_Surface *b_explosion;
+
+
 // Zbrane
 SDL_Surface *laser;
 SDL_Surface *raketa;

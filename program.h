@@ -86,7 +86,6 @@ struct R rozliseni[MAX_RES];
 
 char pauza;
 
-SDL_Rect rect;
 double X,Y;
 
 

@@ -1,19 +1,14 @@
 #ifndef LOD_H
  #define LOD_H
-
 #include "program.h"
 
 #define MAX_SHIPS 40
 
-#define LOD_RX_speed 4;
-#define LOD_RX_angle 10;
+#define LOD_RX_speed 4
+#define LOD_RX_angle 10
 
 
-
-//struct st
-
-
-  typedef struct str_ship {
+typedef struct str_ship{
 	SDL_Surface *img;		// img of ship
 	SDL_Surface *img_m;		// img of ship on move
 	SDL_Surface *img_c;		// img of ship crap
@@ -38,8 +33,8 @@
 	float shift;
 	float MAX_shift;
 
-	int damage;
-	int MAX_damage;
+	int health;
+	int MAX_health;
 
 	float X; 			//  position
 	float Y;
@@ -47,6 +42,7 @@
 	int alive;	
 		
   } T_ship;
+
 /*
   typedef struct str_weapon {
 	SDL_Surface *lod;
@@ -60,7 +56,7 @@
 	int angle;
 
 	int poskozeni;
-	int MAX_damage;
+	int MAX_health;
 	
 	float X; //  pozice
 	float Y;
@@ -103,7 +99,7 @@
   float shift;
   int MAX_shift;
 
- // int damage;
-  int MAX_damage;
+ // int health;
+  int MAX_health;
 
 #endif
