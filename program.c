@@ -1,7 +1,7 @@
 /*************************************************************************** 
  *  Dark Mir                                                               *
  *	version 0.01                                                           *
- *   Copyright (C) 2007 by Alexej alexej.x@mail.ru                         *
+ *   Copyright (C) 2007-2010 by Filip 'Alexej' Kesner alexej.x@mail.ru     *
  *                                                                         * 
  *   This program is free software; you can redistribute it and/or modify  * 
  *   it under the terms of the GNU General Public License as published by  * 

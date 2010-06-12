@@ -396,8 +396,11 @@ int Inicializuj_objekty(){
 	// Specifika cizi lodi
 	// ====================
 	ship[1] = SHIP_BLUE_RX;
+	ship[2] = SHIP_RED_RX;
+	ship[3] = SHIP_BLUE_RX;
+	ship[4] = SHIP_RED_RX;
 	
-	pocet_lodi   = 2;
+	pocet_lodi   = 5;
 	pocet_laseru = 0;
 	pocet_raket  = 0;
 

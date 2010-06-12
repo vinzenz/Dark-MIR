@@ -11,7 +11,6 @@
 #include "protokol.h"
 
 #define TTY stdout
-#define MAX_PLAYERS 2
 
 
 
