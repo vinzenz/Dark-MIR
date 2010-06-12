@@ -133,27 +133,40 @@ int Draw_weapon(T_weapon *weapon){
 //==============================================================================
 SDL_Rect rect;
 
+  if(weapon->X < (0 + 50))
+		  return OK;
+  if(weapon->Y < (0 + 50))
+		  return OK;
+  if(weapon->X > (MAX_X - 50))
+		  return OK;
+  if(weapon->Y > (MAX_Y - 50))
+		  return OK;
+
   switch(weapon->type){
 	case LASER:
-		if(weapon->img == NULL)
+		if((weapon->img == NULL) || (weapon->angle2 != weapon->angle)){
+			SDL_FreeSurface(weapon->img);		
 			weapon->img = rotozoomSurface(laser, weapon->angle, 1, 0);
+		}
 		
 		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X /*- lasers[i].sX */ - X;
 		rect.y = (HEIGHT/2) - (weapon->img->h/2) + weapon->Y /*- lasers[i].sY*/ - Y;
 		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
-		//SDL_FreeSurface(weapon->img);
 		break;
 
 	case ROCKET:
-		if(weapon->img == NULL)
+		if((weapon->img == NULL) || (weapon->angle2 != weapon->angle)){
+			SDL_FreeSurface(weapon->img);		
 			weapon->img = rotozoomSurface(raketa, weapon->angle, 1, 0);
+		}
 		
 		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X  - X;
 		rect.y = (HEIGHT/2) - (weapon->img->w/2) + weapon->Y  - Y;
 		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
-		//SDL_FreeSurface(rockets[i].img);
-	break;
+		break;
   }
+
+ weapon->angle2 = weapon->angle;
  return OK;
 }
 // -----------------------------------------------
@@ -162,15 +175,11 @@ int Kresli_strely(){
 //==============================================================================
   int i;
 	
-	// Lasery(plasma)
- 	for(i = 0; i <= pocet_laseru; i++){
-		if(lasers[i].alive) Draw_weapon(&lasers[i]);
+ 	for(i = 0; i <= pocet_weapons; i++){
+		if(weapon[i].alive) Draw_weapon(&weapon[i]);
+		else weapon[i].img = NULL;
 	}
 
-	// Rakety
-	for(i = 0; i <= pocet_raket; i++){
-		if(rockets[i].alive) Draw_weapon(&rockets[i]);
-	}
 
 return OK;
 }

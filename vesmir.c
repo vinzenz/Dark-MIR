@@ -59,9 +59,8 @@ int Vesmir(){
 	// casovani reakci na klavesy
 	
 //	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 					// KEYBORD
-	//mv_timer = SDL_AddTimer(SERVER_TIME_INTERVAL, Timed_loop, NULL); 	// MOVE
-	mv_timer = SDL_AddTimer(1, Timed_loop, NULL); 	// MOVE
-	draw_timer = SDL_AddTimer(30, Redraw_loop, NULL); 					// DRAW
+//	mv_timer = SDL_AddTimer(1, Timed_loop, NULL); 					// MOVE
+	draw_timer = SDL_AddTimer(30, Redraw_loop, NULL); 				// DRAW
 	
 
 	Inicializuj_objekty();
@@ -71,7 +70,7 @@ int Vesmir(){
 
 		// Recieving position X,Y, angle, speed ... of ship	
 		//Get_ship_state();		// NON blocking function
-//		Timed_loop(1, NULL);
+		Timed_loop(1, NULL);
 
 		while(SDL_PollEvent(&event)){
 			switch(event.type){
@@ -293,7 +292,7 @@ Uint32 Redraw_loop(Uint32 interval, void *param){
 Uint32 Timed_loop(Uint32 interval, void *param){
 //==============================================================================
 // 50 ms
-	printf("TIMER: UDP_RECV()\n");
+	//printf("TIMER: UDP_RECV()\n");
 	//mv_timer = SDL_AddTimer(10, Timed_loop, NULL); 	// MOVE
 
 // SERVER periodical message P_STATE

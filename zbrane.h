@@ -5,7 +5,7 @@
 #define LASER 1
 #define ROCKET 2
 
-#define MAX_WEAPONS 10
+#define MAX_WEAPONS 1000
 #define MAX_LASER 300
 #define MAX_ROCKET 30
 
@@ -26,6 +26,7 @@ int pocet_raket;
 	float acceleration;
 	int delta_angle;
 	float angle;
+	float angle2;
 	int damage;
 	float X; //  pozice
 	float Y;

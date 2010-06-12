@@ -220,12 +220,10 @@ int Get_ship_states(){
 	Uint8 *tp = r->data;
 	Uint8 id = 0;
 
-
-
 printf("!!--");			
 
-if(*tp != P_SHIP_STATES)					// OP_code
-  return FAIL;
+  if(*tp != P_SHIP_STATES)					// OP_code
+    return FAIL;
 
   tp++;	
 
@@ -233,23 +231,7 @@ printf(":||:");
 
   for(int i = 0; i < 3; i++){
 
-	//if(*tp == ID){							// ID
 		printf("__==");			
-/*
-		tp++;	
-		my_ship->type = *(tp);				// TYPE
-		tp++;	
-		my_ship->X = *( (float *)tp);		// X
-		printf("X: %f\n", (double)my_ship->X);
-		tp += sizeof(float);
-		my_ship->Y = *( (float *)tp);		// Y
-		tp += sizeof(float);
-		my_ship->speed = *( (float *)tp);	// SPEED
-		tp += sizeof(float);
-		my_ship->angle = *( (float *)tp);	// ANGLE
-		tp += sizeof(float);
-*/		
-	//}else{
 
 		id = *(tp);							// ID
 		if(id == 0xFF) break;
@@ -273,8 +255,6 @@ printf(":||:");
 		printf("health: %d\n", ship[id].health);
 		tp += sizeof(int);
 
-
-	//}
   }
  
 	return OK;
@@ -287,15 +267,11 @@ int Get_weapon_states(){
 	Uint8 id = 0;
 
 
-
-
-if(*tp != P_WEAPON_STATES)					// OP_code
-  return FAIL;
+  if(*tp != P_WEAPON_STATES)					// OP_code
+    return FAIL;
 
 printf("WEPON STATES:\n");			
   tp++;	
-
-//printf(":||:");			
 
   for(int i = 0; i < 3; i++){
 
@@ -316,8 +292,11 @@ printf("WEPON STATES:\n");
 		weapon[id].angle = *( (float *)tp);	// ANGLE
 		printf("angle: %f\n", weapon[id].angle);
 		tp += sizeof(float);
+		
+		weapon[id].alive = 1;
 
-
+		if(id >= pocet_weapons)
+			pocet_weapons++;
   }
  
 	return OK;

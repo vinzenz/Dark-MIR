@@ -38,8 +38,8 @@ T_ship lode[MAX_LODI];
 // SERVER TIME INTERVAL = 20 ms
 
 T_ship SHIP_RED_RX = {
-   .MAX_health 			= 100,	
-   .MAX_speed 			= 18.00,
+   .MAX_health 			= 120,	
+   .MAX_speed 			= 8.00,
    .MAX_shift 			= 5.00,
    .MAX_acceleration 	= 0.2,
    .MAX_manevr= 1.0,
@@ -48,9 +48,9 @@ T_ship SHIP_RED_RX = {
 
 T_ship SHIP_BLUE_RX = {
    .MAX_health = 70,	
-   .MAX_speed 	= 15.00,
+   .MAX_speed 	= 10.00,
    .MAX_shift 	= 5.00,
-   .MAX_acceleration = 0.2,
+   .MAX_acceleration = 0.3,
    .MAX_manevr 	= 2.0,
    .alive = 1,
 };
