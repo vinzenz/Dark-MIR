@@ -536,14 +536,24 @@ int Fire(int id, int wp){
 int Send_ship_states(){
 //==============================================================================
 
-
   Uint8 *tp = t->data;
+  tp = t->data + BUFF_SIZE;
 
-  memset(t->data, 0xFF ,BUFF_SIZE);
-  *tp = P_SHIP_STATES;											// OP CODE
-  tp++;
 
   for(int i=0; i < players; i++){		
+
+	if(tp - t->data >= BUFF_SIZE-1) {	
+  	  for(int x = 0; x < players; x++){
+		if(player[x].alive){
+		UDP_CHANNEL_SEND(player[x].channel);
+		fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+		}
+  	  }
+	  tp = t->data;
+	  memset(t->data, 0xFF ,BUFF_SIZE);
+  	  *tp = P_SHIP_STATES;											// OP CODE
+  	  tp++;
+	}
 
 	*tp = i;													// ID
 	tp++;
@@ -562,8 +572,6 @@ int Send_ship_states(){
 	*((int *)tp) = player[i].ship.health;						// DAMAGE
 	tp += sizeof(int);
 
-//printf("|| sending ship states ==__ \n");
-fflush(stdout);
   }
 
   for(int x = 0; x < players; x++){
@@ -580,20 +588,19 @@ int Send_weapon_states(){
 //==============================================================================
 
   Uint8 *tp = NULL;
-  int i = 0;
+  tp = t->data + BUFF_SIZE;
 
   for(unsigned int a = 0; a < pocet_weapons; a++){
 	if(! weapon[a].alive)	continue;  
  	
 
 	// New packet needed
-	if((i % 3) == 0) {		
+	if(tp - t->data >= BUFF_SIZE-1) {	
 		tp = t->data;
 		memset(t->data, 0xFF ,BUFF_SIZE);
   		*tp = P_WEAPON_STATES;										// OP CODE
   		tp++;
 	}
-		i++;
 
 		*tp = (Uint8) a;											// ID
 		tp++;
@@ -609,13 +616,23 @@ int Send_weapon_states(){
 		*((float *)tp) = weapon[a].angle;							// ANGLE
 		tp += sizeof(float);
 
-    for(int x = 0; x < players; x++){
-	  if(player[x].alive){
+  	if(tp - t->data >= BUFF_SIZE-1) {	
+	  a--;		
+	  for(int x = 0; x < players; x++){
+	    if(! player[x].alive) continue;
 		UDP_CHANNEL_SEND(player[x].channel);
 		fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
-	  }
-    }
+      }
+	}
   }
+  
+	// send the rest of it	
+	for(int x = 0; x < players; x++){
+	    if(! player[x].alive) continue;
+		UDP_CHANNEL_SEND(player[x].channel);
+		fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+    }
+
 	return OK;
 }
 

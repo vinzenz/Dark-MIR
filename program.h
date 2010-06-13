@@ -104,11 +104,15 @@ int Vesmir();
 #define HELP_MSG "\
 GROZA RTS v 0.1\n\
 2008 copyright by (c) Alexej alexej.x@mail.ru GNU GPL-3 \n\
+ ./mir [-r N] [-f] < IP_address of server / domain name >\n\
     	-h		show this help    \n\
     	-f		fullscreen    \n\
-    	-r NUM		resolution(default 1) 0 = 800x600; 1 = 1024x768; 2 = 1280x1024;\n\
-    	-l LANG		language (LANG: cs,sk,ru,en ) \n\
-    	-e		map editor    \n\
+    	-r NUM		resolution(default 1) 	\n\
+			0 = 800x600;\n\
+		  	1 = 1024x768;\n\
+			2 = 1280x1024;\n\
+			3 = 1280x800;\n\
+			4 = 1440x900;\n\
 "
 
 #define POINT(N) printf("POINT: %3d\n",(N)); fflush(stdout);

@@ -229,7 +229,7 @@ printf("!!--");
 
 printf(":||:");			
 
-  for(int i = 0; i < 3; i++){
+  while(tp - r->data < BUFF_SIZE - 6 * sizeof(float)){
 
 		printf("__==");			
 
@@ -273,8 +273,8 @@ int Get_weapon_states(){
 printf("WEPON STATES:\n");			
   tp++;	
 
-  for(int i = 0; i < 3; i++){
 
+  while(tp - r->data < BUFF_SIZE - 4 * sizeof(float)){
 		id = *(tp);							// ID
 		if(id == 0xFF) break;
 
