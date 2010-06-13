@@ -26,7 +26,7 @@
 // NEW speeds
 T_weapon RX_laser = {
 	.type = LASER,
-	.speed = 20,
+	.speed = 30,
 	.damage = 10,
 	.alive = 1,
 
