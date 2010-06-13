@@ -42,7 +42,7 @@ T_ship SHIP_RED_RX = {
    .MAX_speed 			= 8.00,
    .MAX_shift 			= 5.00,
    .MAX_acceleration 	= 0.2,
-   .MAX_manevr= 1.0,
+   .MAX_manevr= 2.0,
    .alive = 1,
 };
 
@@ -51,7 +51,7 @@ T_ship SHIP_BLUE_RX = {
    .MAX_speed 	= 10.00,
    .MAX_shift 	= 5.00,
    .MAX_acceleration = 0.3,
-   .MAX_manevr 	= 2.0,
+   .MAX_manevr 	= 3.0,
    .alive = 1,
 };
 
