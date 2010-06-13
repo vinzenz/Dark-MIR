@@ -667,11 +667,12 @@ int Inicializuj_objekty(){
 	
 	
 	for(int i=0; i < MAX_PLAYERS; i++){
-		if(i % 2)
-			player[i].ship = SHIP_BLUE_RX;
-		else
-			//player[i].ship = SHIP_RED_RX;
+		if(i % 3 == 0)
 			player[i].ship = SHIP_GREEN_ZX;
+		else if(i % 3 == 1)
+			player[i].ship = SHIP_BLUE_RX;
+		else if(i % 3 == 2)
+			player[i].ship = SHIP_RED_RX;
 
 		player[i].ship.X = (MAX_X/2) + (i * 200);
 		player[i].ship.Y = (MAX_Y/2) + (i * 200);

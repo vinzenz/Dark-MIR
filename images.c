@@ -62,7 +62,7 @@ int Nacti_obrazky_vesmir()
 	
 	radar = LoadImage(ROOT"images/system/mapa.png", 1); 
 	radar_point_r = LoadImage(ROOT"images/system/radar_point_r.png", 1); 
-	radar_point_b = LoadImage(ROOT"images/system/radar_point_b.png", 1); 
+	radar_point_g = LoadImage(ROOT"images/system/radar_point_g.png", 1); 
 
 
 	damage = LoadImage(ROOT"images/system/poskozeni.png", 1); 

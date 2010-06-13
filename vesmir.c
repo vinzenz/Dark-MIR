@@ -397,18 +397,16 @@ int Inicializuj_objekty(){
 	SHIP_GREEN_ZX.img_c = IMG_GREEN_ZX_crap;
 	SHIP_GREEN_ZX.strana = GREEN;
 
-	ship[0] = SHIP_GREEN_ZX;
 	//ship[0] = SHIP_RED_RX;
 	//ship[0] = SHIP_BLUE_RX;
 	
 	my_ship = &ship[ID];	
 	
-	// Specifika cizi lodi
-	// ====================
+	ship[0] = SHIP_GREEN_ZX;
 	ship[1] = SHIP_BLUE_RX;
 	ship[2] = SHIP_RED_RX;
-	ship[3] = SHIP_BLUE_RX;
-	ship[4] = SHIP_RED_RX;
+	ship[3] = SHIP_GREEN_ZX;
+	ship[4] = SHIP_BLUE_RX;
 	
 	pocet_lodi   = 5;
 	pocet_laseru = 0;

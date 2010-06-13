@@ -3,6 +3,7 @@
 #include "images.h"
 #include "lod.h"
 #include "zbrane.h"
+#include "client.h"
 
 
 //==============================================================================
@@ -55,7 +56,8 @@ int Kresli_pristroje(T_ship *my_ship){
 //==============================================================================
 SDL_Rect rect = {.x = 0, .y = 0};
 SDL_Rect rect2 = {.x = 0, .y = 0};
-
+SDL_Surface *GP = NULL;
+SDL_Surface *RP = NULL;
 
 	// Radar
 	
@@ -64,16 +66,31 @@ SDL_Rect rect2 = {.x = 0, .y = 0};
 
 	int R_X = rect.x + radar->w/2;
 	int R_Y = rect.y + radar->h/2;
- /*	
+ 	
 	SDL_BlitSurface(radar, NULL, screen, &rect);
 
-	for(int = 0; i < pocet_lodi; i++){
+	for(int i= 0; i < pocet_lodi; i++){
 		if(! ship[i].alive) continue;
+		if(ship[i].X == 0) continue;
+		if(ship[i].Y == 0) continue;
 
-	rect.x = X - ship[i].X
-	SDL_BlitSurface(radar_point_r, NULL, screen, &rect);
+		rect.x = R_X + (radar->w/2 * (ship[i].X - ship[ID].X)) / MAX_X;
+		rect.y = R_Y + (radar->h/2 * (ship[i].Y - ship[ID].Y )) / MAX_Y;
 
-*/
+		//printf("SHIP: %d R:X: %3d R:Y: %3d\n",i, rect.x, rect.y);
+
+		if(ship[i].strana == ship[ID].strana){	// FRIEND
+			GP = rotozoomSurface(radar_point_g, 0, 1, 0);
+			SDL_BlitSurface(GP, NULL, screen, &rect);
+			SDL_FreeSurface(GP);
+		}
+		else{									// ENEMY
+			RP = rotozoomSurface(radar_point_r, 0, 1, 0);
+			SDL_BlitSurface(RP, NULL, screen, &rect);
+			SDL_FreeSurface(RP);
+		}
+	}
+
 	// Ukazatel zdravi
 	
 	rect.x = WIDTH  - 30 - damage->w;

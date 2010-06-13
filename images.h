@@ -59,7 +59,7 @@ SDL_Surface *raketa;
 // Pristroje
 SDL_Surface *radar;
 SDL_Surface *radar_point_r;
-SDL_Surface *radar_point_b;
+SDL_Surface *radar_point_g;
 
 
 SDL_Surface *damage;
