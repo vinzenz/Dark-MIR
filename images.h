@@ -40,9 +40,16 @@ SDL_Surface *IMG_BLUE_RX;		//
 SDL_Surface *IMG_BLUE_RX_move;		// 
 SDL_Surface *IMG_BLUE_RX_crap;		// 
 
+SDL_Surface *IMG_GREEN_ZX;		// 
+SDL_Surface *IMG_GREEN_ZX_move;		// 
+SDL_Surface *IMG_GREEN_ZX_crap;		// 
+
 // Explosions
 SDL_Surface *r_explosion;
 SDL_Surface *b_explosion;
+
+
+SDL_Surface *CENTER;
 
 
 // Zbrane
@@ -51,6 +58,10 @@ SDL_Surface *raketa;
 
 // Pristroje
 SDL_Surface *radar;
+SDL_Surface *radar_point_r;
+SDL_Surface *radar_point_b;
+
+
 SDL_Surface *damage;
 SDL_Surface *speed;
 SDL_Surface *position_x;

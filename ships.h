@@ -55,6 +55,16 @@ T_ship SHIP_BLUE_RX = {
    .alive = 1,
 };
 
+T_ship SHIP_GREEN_ZX = {
+   .MAX_health = 40,	
+   .MAX_speed 	= 20.00,
+   .MAX_shift 	= 5.00,
+   .MAX_acceleration = 0.5,
+   .MAX_manevr 	= 5.0,
+   .alive = 1,
+};
+
+
 // =============================================================================
 
 /*

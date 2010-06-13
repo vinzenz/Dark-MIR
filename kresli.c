@@ -56,15 +56,24 @@ int Kresli_pristroje(T_ship *my_ship){
 SDL_Rect rect = {.x = 0, .y = 0};
 SDL_Rect rect2 = {.x = 0, .y = 0};
 
-	
 
 	// Radar
 	
 	rect.x = 20;
 	rect.y = HEIGHT - 20 - radar->h;
- 	
+
+	int R_X = rect.x + radar->w/2;
+	int R_Y = rect.y + radar->h/2;
+ /*	
 	SDL_BlitSurface(radar, NULL, screen, &rect);
 
+	for(int = 0; i < pocet_lodi; i++){
+		if(! ship[i].alive) continue;
+
+	rect.x = X - ship[i].X
+	SDL_BlitSurface(radar_point_r, NULL, screen, &rect);
+
+*/
 	// Ukazatel zdravi
 	
 	rect.x = WIDTH  - 30 - damage->w;

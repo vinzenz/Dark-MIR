@@ -343,8 +343,12 @@ int Prekresli_vesmir(){
 		SDL_BlitSurface(space, NULL, screen, &rect);
 	    }
 	}
-	
-	
+/*	
+	rect.x = (WIDTH/2) - (CENTER->w/2) + MAX_X/2 - X;
+	rect.y = (HEIGHT/2) - (CENTER->h/2) + MAX_Y/2 - Y;
+	SDL_BlitSurface(CENTER, NULL, screen, &rect);
+*/
+
 	// === Strely === 
 	
 	Kresli_strely();
@@ -388,7 +392,13 @@ int Inicializuj_objekty(){
 	SHIP_BLUE_RX.img_c = IMG_BLUE_RX_crap;
 	SHIP_BLUE_RX.strana = BLUE;
 
-	ship[0] = SHIP_RED_RX;
+	SHIP_GREEN_ZX.img = IMG_GREEN_ZX;
+	SHIP_GREEN_ZX.img_m = IMG_GREEN_ZX_move;
+	SHIP_GREEN_ZX.img_c = IMG_GREEN_ZX_crap;
+	SHIP_GREEN_ZX.strana = GREEN;
+
+	ship[0] = SHIP_GREEN_ZX;
+	//ship[0] = SHIP_RED_RX;
 	//ship[0] = SHIP_BLUE_RX;
 	
 	my_ship = &ship[ID];	

@@ -49,6 +49,9 @@ int Nacti_obrazky_vesmir()
 	IMG_BLUE_RX	= LoadImage(ROOT"images/B_RX.png", 1); 
 	IMG_BLUE_RX_move= LoadImage(ROOT"images/B_RX_move.png", 1); 
 	IMG_BLUE_RX_crap= LoadImage(ROOT"images/B_RX_crap.png", 1); 
+	IMG_GREEN_ZX = LoadImage(ROOT"images/G_ZX.png", 1); 
+	IMG_GREEN_ZX_move= LoadImage(ROOT"images/G_ZX_move.png", 1); 
+	IMG_GREEN_ZX_crap= LoadImage(ROOT"images/G_ZX.png", 1); 
 	
 	laser = LoadImage(ROOT"images/RED/laser.png", 1); 
 	raketa = LoadImage(ROOT"images/r1.png", 1); 
@@ -58,16 +61,26 @@ int Nacti_obrazky_vesmir()
 
 	
 	radar = LoadImage(ROOT"images/system/mapa.png", 1); 
+	radar_point_r = LoadImage(ROOT"images/system/radar_point_r.png", 1); 
+	radar_point_b = LoadImage(ROOT"images/system/radar_point_b.png", 1); 
+
+
 	damage = LoadImage(ROOT"images/system/poskozeni.png", 1); 
 	speed = LoadImage(ROOT"images/system/rychlost.png", 1); 
 	position_x = LoadImage(ROOT"images/system/poloha_x.png", 1); 
 	position_y = LoadImage(ROOT"images/system/poloha_y.png", 1); 
 	position_ptr_x = LoadImage(ROOT"images/system/ptr.png", 1); 
 	position_ptr_y = LoadImage(ROOT"images/system/ptr_y.png", 1); 
+
+	CENTER = LoadImage(ROOT"images/center.png", 1); 
 	
 	if (space 		!= NULL && 
 		IMG_RED_RX	!= NULL &&
+		IMG_RED_RX_move	!= NULL &&
+		IMG_RED_RX_crap	!= NULL &&
 		IMG_BLUE_RX	!= NULL &&
+		IMG_BLUE_RX_move	!= NULL &&
+		IMG_BLUE_RX_crap	!= NULL &&
 		r_explosion != NULL &&
 		b_explosion != NULL &&
 		laser 		!= NULL	&&

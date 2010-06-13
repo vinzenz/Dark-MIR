@@ -660,13 +660,18 @@ int Inicializuj_objekty(){
 	SHIP_BLUE_RX.img_c = IMG_BLUE_RX_crap;
 	SHIP_BLUE_RX.strana = BLUE;
 
+	SHIP_BLUE_RX.img = IMG_GREEN_ZX_move;
+	SHIP_BLUE_RX.img_m = IMG_GREEN_ZX_move;
+	SHIP_BLUE_RX.img_c = IMG_GREEN_ZX_crap;
+	SHIP_BLUE_RX.strana = GREEN;
 	
 	
 	for(int i=0; i < MAX_PLAYERS; i++){
 		if(i % 2)
 			player[i].ship = SHIP_BLUE_RX;
 		else
-			player[i].ship = SHIP_RED_RX;
+			//player[i].ship = SHIP_RED_RX;
+			player[i].ship = SHIP_GREEN_ZX;
 
 		player[i].ship.X = (MAX_X/2) + (i * 200);
 		player[i].ship.Y = (MAX_Y/2) + (i * 200);
