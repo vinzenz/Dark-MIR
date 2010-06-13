@@ -87,6 +87,7 @@ int Detekuj_kolize();
   unsigned char *tp;		// r->data pointer
   int len=0;
   int p_id = 0;
+
 // ==============================================================================
 // ==============================================================================
 int main(int argc, char **argv){
@@ -188,13 +189,7 @@ if (SDLNet_UDP_Recv(ussd, p)) {
 	printf("\tStatus:  %d\n", p->status);
 	printf("\tAddress: %x %x\n", p->address.host, p->address.port);
 
-// Quit if packet contains "quit" 
-if (strcmp((char *)p->data, "quit") == 0)
-	quit = 1;
-
-	//continue; // ------ ^
-*/
-		
+*/	
  
  // ===== ---- ===== ---- ===== ---- ===== ---- ===== 
 
@@ -753,10 +748,8 @@ int Pohybuj_objekty(){
 	  if(weapon[i].Y < 0) 
 			weapon[i].alive = 0;
 
-	  POINT(88);
   }
 	Send_weapon_states();
-	  POINT(11);
 
  return OK;
 }
@@ -787,6 +780,14 @@ int Detekuj_kolize(){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				//player[x].ship.speed= 0;
 				player[x].ship.alive = 0;
+				player[x].score -= 1;
+
+				//Respawn(&player[x]);
+				player[x].ship.X = random() % MAX_X;
+				player[x].ship.Y = random() % MAX_Y;
+				player[x].ship.alive = 1;
+				player[x].ship.health = player[x].ship.MAX_health;
+				player[x].ship.speed = 0;
 			}
 
 		}
