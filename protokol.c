@@ -31,7 +31,7 @@ int New_client(){
 
   for(int i=0; i < 100; i++){
 
-	usleep(2000);	  
+	SDL_Delay(2000);	  
 		  
 	UDP_RECV;
 	else continue;
