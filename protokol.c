@@ -29,9 +29,9 @@ int New_client(){
 	UDP_SEND;
 
 
-  for(int i=0; i < 100; i++){
+  for(int i=0; i < 3; i++){
 
-	SDL_Delay(2000);	  
+	SDL_Delay(500);	  
 		  
 	UDP_RECV;
 	else continue;
@@ -41,8 +41,13 @@ int New_client(){
 		printf("ID: %2d\n", ID);
   		return OK;
 	}
-  }
+	if(r->data[0] == P_LOGOUT){
 		printf("SERVER IS FULL\n");		
+  		exit(EXIT_FAILURE);
+	}
+
+  }
+		printf("SERVER IS NOT RUNNING\n");		
   		exit(EXIT_FAILURE);
 }
 

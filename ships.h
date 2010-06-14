@@ -60,7 +60,7 @@ T_ship SHIP_GREEN_ZX = {
    .MAX_speed 	= 20.00,
    .MAX_shift 	= 15.00,
    .MAX_acceleration = 0.5,
-   .MAX_manevr 	= 5.0,
+   .MAX_manevr 	= 3.0,
    .alive = 1,
 };
 
