@@ -557,6 +557,8 @@ int Send_ship_states(){
 	  memset(t->data, 0xFF ,BUFF_SIZE);
   	  *tp = P_SHIP_STATES;											// OP CODE
   	  tp++;
+	  *tp = PACKET_NUMBER++;										// PACKET_NUMBER
+	  tp++;
 	}
 
 	*tp = i;													// ID

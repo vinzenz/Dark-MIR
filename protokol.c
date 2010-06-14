@@ -226,8 +226,14 @@ printf("!!--");
     return FAIL;
 
   tp++;	
+ 										
+  if(fabs(*(tp) - PACKET_NUMBER) > 10)				// PACKET_NUMBER
+	PACKET_NUMBER = *(tp);	// overflow correction
+  if(*(tp) < PACKET_NUMBER)
+	return FAIL;	  		// not right deliver order
 
-printf(":||:");			
+  tp++;	
+
 
   while(tp - r->data < BUFF_SIZE - 6 * sizeof(float)){
 

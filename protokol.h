@@ -157,4 +157,6 @@ typedef struct str_player{
 
 int print_ip();
 // =============================================================================
+Uint8 PACKET_NUMBER;
+
 #endif
