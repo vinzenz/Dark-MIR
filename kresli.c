@@ -74,6 +74,9 @@ SDL_Surface *RP = NULL;
 		if(ship[i].X == 0) continue;
 		if(ship[i].Y == 0) continue;
 
+
+		if(ship[i].strana == GREEN && ship[i].speed == 0) continue;
+
 		rect.x = R_X + (radar->w/2 * (ship[i].X - ship[ID].X)) / MAX_X;
 		rect.y = R_Y + (radar->h/2 * (ship[i].Y - ship[ID].Y )) / MAX_Y;
 
