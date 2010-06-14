@@ -227,8 +227,9 @@ printf("!!--");
 
   tp++;	
  										
-  if(fabs(*(tp) - PACKET_NUMBER) > 10)				// PACKET_NUMBER
+  if(fabs(*(tp) - PACKET_NUMBER) > 100)				// PACKET_NUMBER
 	PACKET_NUMBER = *(tp);	// overflow correction
+
   if(*(tp) < PACKET_NUMBER)
 	return FAIL;	  		// not right deliver order
 

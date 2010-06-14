@@ -1,0 +1,40 @@
+================================================================================
+DARK MIR PROJECT README
+
+================================================================================
+INSTALL:
+	(possibly done)
+	svn co http://abadon.no-ip.org/svn/dark_mir/ DarkMIR
+	cd DarkMIR
+
+	(so start here)
+	make
+	make run
+	
+	./mir -r [number_for_resolution] [-f] abadon.no-ip.org
+
+================================================================================
+USE:
+	./mir -h	help
+
+================================================================================
+CONTROLS:
+
+	UP		speed up
+	DOWN	slow down
+	LEFT	rotate left
+	RIGHT	rotate right
+	
+	A		shift left
+	D		shift right
+
+	CTRL	fire missile
+	ALT		fire laser
+	SPACE	fire laser
+
+
+================================================================================
+Thanks for playing this Czech game.
+
+email: alexej.x@mail.ru
+
