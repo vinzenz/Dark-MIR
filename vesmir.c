@@ -125,16 +125,19 @@ int Vesmir(){
 				 
 				 case SDLK_LALT:			// MODIFIKATOR = FIRE 1
 				 case SDLK_SPACE:
-					Fire(LASER);
-				 	//Vystrel(LASER, my_ship);	
-					//strilej[LASER] = 1;		// HOLD and FIRE
+					if(ship[ID].strana == GREEN)
+						Fire(ENERGY_LASER);
+					else
+						Fire(LASER);
 				 	
 					break;
 				 
 				 case SDLK_RCTRL:
 				 case SDLK_LCTRL:
-					Fire(ROCKET);
-				 	//Vystrel(ROCKET, my_ship);	// FIRE 1
+					if(ship[ID].strana == GREEN);
+						//Fire(ROCKET);
+					else
+						Fire(ROCKET);
 					break;
 				 
 				 

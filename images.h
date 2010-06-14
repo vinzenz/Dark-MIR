@@ -55,6 +55,8 @@ SDL_Surface *CENTER;
 // Zbrane
 SDL_Surface *laser;
 SDL_Surface *raketa;
+SDL_Surface *energy_laser;
+SDL_Surface *energy_plasma;
 
 // Pristroje
 SDL_Surface *radar;

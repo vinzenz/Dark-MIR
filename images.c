@@ -55,6 +55,10 @@ int Nacti_obrazky_vesmir()
 	
 	laser = LoadImage(ROOT"images/RED/laser.png", 1); 
 	raketa = LoadImage(ROOT"images/r1.png", 1); 
+	//raketa = LoadImage(ROOT"images/G_Q1.png", 1); 
+
+	energy_laser =  LoadImage(ROOT"images/G_Q1.png", 1); 
+	energy_plasma =  LoadImage(ROOT"images/G_Q2.png", 1); 
 
 	r_explosion = LoadImage(ROOT"images/r_explosion.png", 1); 
 	b_explosion = LoadImage(ROOT"images/b_explosion.png", 1); 

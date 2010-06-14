@@ -102,8 +102,8 @@ int Vesmir();
 
 
 #define HELP_MSG "\
-GROZA RTS v 0.1\n\
-2008 copyright by (c) Alexej alexej.x@mail.ru GNU GPL-3 \n\
+DARK MIR v 0.01\n\
+2007-2010 copyright by (c) Alexej alexej.x@mail.ru GNU GPL-2 \n\
  ./mir [-r N] [-f] < IP_address of server / domain name >\n\
     	-h		show this help    \n\
     	-f		fullscreen    \n\
@@ -115,6 +115,8 @@ GROZA RTS v 0.1\n\
 			4 = 1440x900;\n\
 "
 
+
+// DEBUG PURPOSE MESSAGES
 #define POINT(N) printf("POINT: %3d\n",(N)); fflush(stdout);
 
 

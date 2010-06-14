@@ -80,11 +80,15 @@ SDL_Surface *RP = NULL;
 		//printf("SHIP: %d R:X: %3d R:Y: %3d\n",i, rect.x, rect.y);
 
 		if(ship[i].strana == ship[ID].strana){	// FRIEND
+			rect.x -= radar_point_g->w/2;	
+			rect.y -= radar_point_g->h/2;	
 			GP = rotozoomSurface(radar_point_g, 0, 1, 0);
 			SDL_BlitSurface(GP, NULL, screen, &rect);
 			SDL_FreeSurface(GP);
 		}
 		else{									// ENEMY
+			rect.x -= radar_point_r->w/2;	
+			rect.y -= radar_point_r->h/2;	
 			RP = rotozoomSurface(radar_point_r, 0, 1, 0);
 			SDL_BlitSurface(RP, NULL, screen, &rect);
 			SDL_FreeSurface(RP);
@@ -190,7 +194,18 @@ SDL_Rect rect;
 		rect.y = (HEIGHT/2) - (weapon->img->w/2) + weapon->Y  - Y;
 		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
 		break;
-  }
+
+	case ENERGY_LASER:
+		if((weapon->img == NULL) || (weapon->angle2 != weapon->angle)){
+			SDL_FreeSurface(weapon->img);		
+			weapon->img = rotozoomSurface(energy_laser, weapon->angle, 1, 0);
+		}
+		
+		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X /*- lasers[i].sX */ - X;
+		rect.y = (HEIGHT/2) - (weapon->img->h/2) + weapon->Y /*- lasers[i].sY*/ - Y;
+		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
+		break;
+  }	
 
  weapon->angle2 = weapon->angle;
  return OK;

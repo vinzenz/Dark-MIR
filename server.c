@@ -518,6 +518,10 @@ int Fire(int id, int wp){
 			weapon[i] = RX_laser;
 			break;
 
+		case ENERGY_LASER:
+			weapon[i] = ZX_Q1;
+			break;
+
 		case ROCKET:
 			weapon[i] = RX_R1;
 			break;

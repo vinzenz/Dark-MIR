@@ -41,6 +41,15 @@ T_weapon RX_R1 = {
 };
 
 
+T_weapon ZX_Q1 = {
+	.type = ENERGY_LASER,
+	.speed = 40,
+	.damage = 20,
+	.alive = 1,
+
+};
+
+
 /*
 // OLD speeds
 T_weapon RX_laser = {

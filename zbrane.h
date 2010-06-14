@@ -5,12 +5,13 @@
 #define LASER 1
 #define ROCKET 2
 
+#define ENERGY_LASER 3
+
+// ==========================================
 #define MAX_WEAPONS 1000
 #define MAX_LASER 300
 #define MAX_ROCKET 30
 
-#define LASER_rychlost 30
-#define R1_rychlost 6
 
 int pocet_weapons;
 int pocet_laseru;
