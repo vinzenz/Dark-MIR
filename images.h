@@ -80,6 +80,7 @@ SDL_Surface *space;			// vesmirne pozadi
 
 SDL_Surface *console;
 SDL_Surface *console_line;
+SDL_Surface *console_bg;
 TTF_Font *console_font;
 
 

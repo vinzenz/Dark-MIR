@@ -41,6 +41,10 @@ SDL_Surface *LoadImage(const char *filename, int alpha)
 int Nacti_obrazky_vesmir()
 //==============================================================================
 {
+	fg_color.r=255; 
+	fg_color.g=255; 
+	fg_color.b=255;
+
 	space  	= LoadImage(ROOT"images/space.png", 1); 
 	
 	IMG_RED_RX	= LoadImage(ROOT"images/R_RX.png", 1); 		
@@ -82,6 +86,8 @@ int Nacti_obrazky_vesmir()
 	position_ptr_y = LoadImage(ROOT"images/system/ptr_y.png", 1); 
 
 	CENTER = LoadImage(ROOT"images/center.png", 1); 
+	console = LoadImage(ROOT"images/system/console.png", 1); 
+	console_bg = LoadImage(ROOT"images/system/console.png", 1); 
 	
 	if (space 		!= NULL && 
 		IMG_RED_RX	!= NULL &&
@@ -99,7 +105,8 @@ int Nacti_obrazky_vesmir()
 		position_y 	!= NULL	&&
 		position_ptr_x 	!= NULL	&&
 		position_ptr_y 	!= NULL	&&
-		speed 		!= NULL	
+		speed 		!= NULL	&&
+		console_bg	!= NULL	
 		)
 		return OK;
 	

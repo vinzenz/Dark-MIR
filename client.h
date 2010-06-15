@@ -16,7 +16,9 @@
    char hostname[HOSTNAME_MAX];
    char nick[NICKNAME_MAX];
 
-   Uint8 ID;
+  Uint8 ID;
+
+  char player_list[MAX_PLAYERS][80];
 
 // FUNCTIONS
 // =============================================================================
@@ -36,6 +38,7 @@ int Fire(int wp);
 int Get_ship_states();
 int Get_weapon_states();
 int Get_player_list();
+int Request_player_list();
 
 
 

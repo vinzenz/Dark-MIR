@@ -158,13 +158,19 @@ SDL_Surface *RP = NULL;
 
 	// Console
 	// -------------------------------------------------------------------
-				
 	rect.x = 20;				
-	rect.y = 20;				
-	fg_color.r=255; 
-	fg_color.g=255; 
-	fg_color.b=255;
+	rect.y = 0;
 
+	SDL_BlitSurface(console_bg, NULL, console, NULL);	
+
+	for(int i=0; i < MAX_PLAYERS; i++){
+		console_line = TTF_RenderText_Solid(console_font, player_list[i] ,fg_color);
+
+		SDL_BlitSurface(console_line, NULL, console, &rect);	
+		SDL_FreeSurface(console_line);
+		rect.y += 20;
+	}
+	rect.y = 20;
 	SDL_BlitSurface(console, NULL, screen, &rect);	
 
 

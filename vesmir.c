@@ -144,6 +144,9 @@ int Vesmir(){
 						Fire(ROCKET);
 					break;
 				 
+				 case SDLK_TAB:			// PLAYER LIST
+					Request_player_list();	
+					break;
 				 
 				  default:break;
 									

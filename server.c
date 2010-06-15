@@ -60,6 +60,8 @@ int Turbo		(int id, int X);
 int Fire(int id, int wp);
 
 int Send_ship_states();
+int Send_weapon_states();
+int Send_player_list();
 
 Uint32 Timed_loop(Uint32 interval, void *param);
 
@@ -276,8 +278,11 @@ if (SDLNet_UDP_Recv(ussd, p)) {
 			Fire(p_id, r->data[0] - P_FIRE_0);
 			break;
 
+		case P_PLAYER_LIST:
+			Send_player_list(p_id);
+			break;
 
-	  case P_LOGOUT: 	
+	  	case P_LOGOUT: 	
 			Free_client(p_id);
 	//		quit = 1;
 			break;
