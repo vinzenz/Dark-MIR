@@ -1,0 +1,21 @@
+README
+ DATA FILES
+   This directory can be manualy edited for adding new extensions, like ships, weapons, missions ....
+
+   Structure of .xt files  // NEED WORK
+
+struct zbrane{
+	SDL_Surface *zbran;
+	float X; //  pozice
+	float Y;
+	int sX;	 // pocatecni pozice
+	int sY;
+	int x;   // rect vykreslovaci pozice
+	int y;
+	int uhel;
+}; 
+
+
+
+
+
