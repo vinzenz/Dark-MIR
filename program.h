@@ -61,7 +61,7 @@
 
 
 
-
+#define FONT_SIZE 12
 
 
 // Global vriables

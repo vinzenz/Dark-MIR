@@ -73,5 +73,12 @@ SDL_Surface *position_ptr_y;
 
 SDL_Surface *space;			// vesmirne pozadi
 
+SDL_Surface *console;
+SDL_Surface *console_line;
+TTF_Font *console_font;
+
+
+SDL_Color fg_color;
+SDL_Color bg_color;
 
 #endif

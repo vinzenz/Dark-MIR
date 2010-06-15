@@ -59,7 +59,7 @@ int main(int argc,char *argv[]){
   // === GAME LOOP === 
 	Vesmir();	 
 	 
-
+	TTF_Quit();
 	SDL_Quit();
 
 	return OK;
@@ -153,6 +153,15 @@ int	Init(int w, int h, int bits, int full){
     	printf("Nepodarilo se inicializovat SDL_ttf: %s\n", TTF_GetError());
     	return FAIL;
     }
+
+	console_font = TTF_OpenFont(ROOT"data/console.ttf", FONT_SIZE);
+	if(!console_font){
+			  printf("Unable to open font: %s\n", TTF_GetError());
+			  return FAIL;
+	}
+	TTF_SetFontStyle(console_font, TTF_STYLE_NORMAL);
+
+
 
 	if(F==1)SDL_WM_ToggleFullScreen(screen);	
 

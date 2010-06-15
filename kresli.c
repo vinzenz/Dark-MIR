@@ -155,6 +155,20 @@ SDL_Surface *RP = NULL;
 
 	// raficka polohy
 
+
+	// Console
+	// -------------------------------------------------------------------
+				
+	rect.x = 20;				
+	rect.y = 20;				
+	fg_color.r=255; 
+	fg_color.g=255; 
+	fg_color.b=255;
+
+	SDL_BlitSurface(console, NULL, screen, &rect);	
+
+
+
 return OK;
 }
 

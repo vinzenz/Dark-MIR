@@ -4,6 +4,7 @@
 #include "lod.h"
 #include "zbrane.h"
 
+#include "images.h"
 
 //unsigned char tbuff[BUFF_SIZE];
 //unsigned char rbuff[BUFF_SIZE];
@@ -298,6 +299,7 @@ int Get_player_list(){
 //==============================================================================	
   Sint16 score = 0;
   char nick[NICKNAME_MAX];
+  char tmp[256];
 
 	Uint8 *tp = r->data;
 	Uint8 id = 0;
@@ -324,7 +326,11 @@ int Get_player_list(){
 		strncpy(nick, (char *) tp, NICKNAME_MAX-1);	// NICK
 		tp += NICKNAME_MAX;
 
-		printf("| %2d | %32s | %3d |\n", id, nick, score);		
+		sprintf(tmp, "| %2d | %32s | %3d |", id, nick, score);		
+		console = TTF_RenderText_Solid(console_font, tmp, fg_color);
+
+		//SDL_BlitSurface(console_line, NULL, console, &rect);	
+		
 
   }
  
