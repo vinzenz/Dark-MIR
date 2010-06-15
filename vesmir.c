@@ -122,7 +122,11 @@ int Vesmir(){
 					break;
 
 
-				 
+				 case SDLK_LSHIFT:			// TURBO
+				 case SDLK_RSHIFT:			
+					Turbo(START);
+				 	break;
+
 				 case SDLK_LALT:			// MODIFIKATOR = FIRE 1
 				 case SDLK_SPACE:
 					if(ship[ID].strana == GREEN)
@@ -174,6 +178,11 @@ int Vesmir(){
 				 case SDLK_d:
 					Shift_R(STOP);
 					break;
+
+				 case SDLK_LSHIFT:			// TURBO
+				 case SDLK_RSHIFT:			
+					Turbo(STOP);
+				 	break;
 						
 				 default: break;
 				}
@@ -392,6 +401,10 @@ int Inicializuj_objekty(){
 	SHIP_RED_RX.img_c = IMG_RED_RX_crap;
 	SHIP_RED_RX.strana = RED;
 
+	SHIP_RED_EX.img = IMG_RED_EX;
+	SHIP_RED_EX.img_m = IMG_RED_EX_move;
+	SHIP_RED_EX.img_c = IMG_RED_EX_crap;
+	SHIP_RED_EX.strana = RED;
 
 	SHIP_BLUE_RX.img = IMG_BLUE_RX;
 	SHIP_BLUE_RX.img_m = IMG_BLUE_RX_move;
@@ -410,7 +423,7 @@ int Inicializuj_objekty(){
 	
 	ship[0] = SHIP_GREEN_ZX;
 	ship[1] = SHIP_BLUE_RX;
-	ship[2] = SHIP_RED_RX;
+	ship[2] = SHIP_RED_EX;
 	ship[3] = SHIP_GREEN_ZX;
 	ship[4] = SHIP_BLUE_RX;
 	

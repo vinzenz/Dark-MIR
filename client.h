@@ -29,6 +29,7 @@ int Rotate_R(int);
 int Rotate_L(int);
 int Shift_R(int);
 int Shift_L(int);
+int Turbo(int);
 
 int Fire(int wp);
 

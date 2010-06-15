@@ -36,6 +36,11 @@ SDL_Surface *lod_d;			// hracohracova kosmicka lod digger
 SDL_Surface *IMG_RED_RX;		// 
 SDL_Surface *IMG_RED_RX_move;		// 
 SDL_Surface *IMG_RED_RX_crap;		// 
+SDL_Surface *IMG_RED_EX;		// 
+SDL_Surface *IMG_RED_EX_move;		// 
+SDL_Surface *IMG_RED_EX_crap;		// 
+
+
 SDL_Surface *IMG_BLUE_RX;		// 
 SDL_Surface *IMG_BLUE_RX_move;		// 
 SDL_Surface *IMG_BLUE_RX_crap;		// 

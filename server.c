@@ -55,10 +55,10 @@ int Rotate_R	(int id, int X);
 int Rotate_L	(int id, int X);
 int Shift_R		(int id, int X);
 int Shift_L		(int id, int X);
+int Turbo		(int id, int X);
 
 int Fire(int id, int wp);
 
-int Send_ship_state();
 int Send_ship_states();
 
 Uint32 Timed_loop(Uint32 interval, void *param);
@@ -261,6 +261,13 @@ if (SDLNet_UDP_Recv(ussd, p)) {
 			Shift_L(p_id, STOP);
 			break;
 			
+		case P_TURBO: 
+			Turbo(p_id, START);
+			break;
+		case P_STOP_TURBO: 
+			Turbo(p_id, STOP);
+			break;
+
 		case P_FIRE_0:   
 		case P_FIRE_1:   
 		case P_FIRE_2:    
@@ -495,6 +502,25 @@ int Shift_L(int id, int X){
 }
 
 //==============================================================================
+int Turbo(int id, int X){
+//==============================================================================
+	
+  if(X == STOP)		
+  	player[id].ship.turbo = 0;
+  else
+  	player[id].ship.turbo = 1;
+/*
+  tp = t->data;
+  *tp =  P_SHIFT_L;
+  tp++;
+  memcpy(tp, &player[id].ship.shift, sizeof(float));
+
+//  UDP_SEND;
+*/
+ return OK;
+}
+
+//==============================================================================
 
 //==============================================================================
 int Fire(int id, int wp){
@@ -540,9 +566,10 @@ int Fire(int id, int wp){
 //==============================================================================
 int Send_ship_states(){
 //==============================================================================
-
+// WARNING possible resending incorect one incorrect paket every running this function
   Uint8 *tp = t->data;
   tp = t->data + BUFF_SIZE;
+   memset(t->data, 0xFF ,BUFF_SIZE);
 
 
   for(int i=0; i < players; i++){		
@@ -700,6 +727,8 @@ int Inicializuj_objekty(){
 	SHIP_RED_RX.img_c = IMG_RED_RX_crap;
 	SHIP_RED_RX.strana = RED;
 
+	SHIP_RED_EX.strana = RED;
+
 
 	SHIP_BLUE_RX.img = IMG_BLUE_RX;
 	SHIP_BLUE_RX.img_m = IMG_BLUE_RX_move;
@@ -718,7 +747,7 @@ int Inicializuj_objekty(){
 		else if(i % 3 == 1)
 			player[i].ship = SHIP_BLUE_RX;
 		else if(i % 3 == 2)
-			player[i].ship = SHIP_RED_RX;
+			player[i].ship = SHIP_RED_EX;
 
 		player[i].ship.X = (MAX_X/2) + (i * 200);
 		player[i].ship.Y = (MAX_Y/2) + (i * 200);
@@ -757,13 +786,16 @@ int Pohybuj_objekty(){
 	player[i].ship.angle += player[i].ship.manevr;
 	printf("angle: %f\n", (double) player[i].ship.angle);
 
-	player[i].ship.speed += player[i].ship.acceleration;	
+	player[i].ship.speed += player[i].ship.acceleration + 
+			2 * player[i].ship.turbo * player[i].ship.acceleration ;
 	
 	// ==== speed limit ====
  	if(player[i].ship.speed < 0)
 		  player[i].ship.speed = 0;
-	if(player[i].ship.speed > player[i].ship.MAX_speed) 
-			player[i].ship.speed =  player[i].ship.MAX_speed;
+	if(player[i].ship.speed > (player[i].ship.MAX_speed + 
+	player[i].ship.turbo * player[i].ship.MAX_speed) )
+			player[i].ship.speed =  player[i].ship.MAX_speed + 
+			player[i].ship.turbo * player[i].ship.MAX_speed ;
 
 		
 	// ==== angle limit ====

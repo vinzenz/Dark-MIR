@@ -82,6 +82,7 @@ typedef struct str_player{
 #define P_SHIFT_R		0x15
 #define P_SHIFT_L		0x16
 
+#define P_TURBO			0x17
 
 #define P_STOP_ROTATE_R		0x91
 #define P_STOP_ROTATE_L		0x92
@@ -89,6 +90,7 @@ typedef struct str_player{
 #define P_STOP_SLOW_DOWN	0x94
 #define P_STOP_SHIFT_R		0x95
 #define P_STOP_SHIFT_L		0x96
+#define P_STOP_TURBO		0x97
 //______________________________________________________________________________
 //  State:	OP_code | X | Y | speed |  angle 
 #define P_POSITION		0x21

@@ -17,7 +17,9 @@ typedef struct str_ship{
 	Uint8 strana;
 	Uint8 type;
 	Uint8 model;
-	
+
+	Uint8 turbo;
+
 	float speed;
 	float MAX_speed;
 

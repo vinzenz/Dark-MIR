@@ -43,12 +43,17 @@ int Nacti_obrazky_vesmir()
 {
 	space  	= LoadImage(ROOT"images/space.png", 1); 
 	
-	IMG_RED_RX	= LoadImage(ROOT"images/R_RX.png", 1); 		// Moje lod
-	IMG_RED_RX_move	= LoadImage(ROOT"images/R_RX_move.png", 1); 	// Moje lod
-	IMG_RED_RX_crap = LoadImage(ROOT"images/R_RX_crap.png", 1); 	// Moje lod
+	IMG_RED_RX	= LoadImage(ROOT"images/R_RX.png", 1); 		
+	IMG_RED_RX_move	= LoadImage(ROOT"images/R_RX_move.png", 1); 	
+	IMG_RED_RX_crap = LoadImage(ROOT"images/R_RX_crap.png", 1); 	
+	IMG_RED_EX	= LoadImage(ROOT"images/R_EX.png", 1); 	
+	IMG_RED_EX_move	= LoadImage(ROOT"images/R_EX_move.png", 1);
+	IMG_RED_EX_crap = LoadImage(ROOT"images/R_EX_crap.png", 1); 
+
 	IMG_BLUE_RX	= LoadImage(ROOT"images/B_RX.png", 1); 
 	IMG_BLUE_RX_move= LoadImage(ROOT"images/B_RX_move.png", 1); 
 	IMG_BLUE_RX_crap= LoadImage(ROOT"images/B_RX_crap.png", 1); 
+
 	IMG_GREEN_ZX = LoadImage(ROOT"images/G_ZX.png", 1); 
 	IMG_GREEN_ZX_move= LoadImage(ROOT"images/G_ZX_move.png", 1); 
 	IMG_GREEN_ZX_crap= LoadImage(ROOT"images/G_ZX.png", 1); 
