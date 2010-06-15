@@ -643,6 +643,8 @@ int Send_weapon_states(){
 	return OK;
 }
 
+
+// WARNING nektera zasilaci funkce zpusobuje nove vyslani naposledy vyslaneho paketu
 //==============================================================================
 int Send_player_list(){
 //==============================================================================	
@@ -676,6 +678,7 @@ Uint8 *tp;
     }
   }
  
+   	memset(t->data, 0xFF ,BUFF_SIZE);
 	return OK;
 }
 
