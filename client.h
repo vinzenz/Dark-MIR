@@ -34,6 +34,7 @@ int Fire(int wp);
 
 int Get_ship_states();
 int Get_weapon_states();
+int Get_player_list();
 
 
 

@@ -70,6 +70,8 @@ typedef struct str_player{
 // =============================================================================
 #define P_NEW_PLAYER 	0x01
 #define P_LOGOUT 		0xFF
+
+#define P_PLAYER_LIST	0x0A
 // ----------------------------
 #define P_ROTATE_R 		0x11
 #define P_ROTATE_L 		0x12
@@ -145,6 +147,8 @@ typedef struct str_player{
 		SDLNet_UDP_Send(usd, -1, t);\
 		memset(t->data, 0xFF ,BUFF_SIZE);
 
+
+// WARNING: je potreba proverit funkci hodnoty channel == 0
 #define UDP_CHANNEL_SEND(C) \
 		SDLNet_UDP_Send(usd, (C), t);\
 

@@ -17,13 +17,14 @@
 typedef struct str_player{
 	IPaddress  ip;	
 	char nick[32];
+	Sint16 score;
 	
-	int score;
 	T_ship ship;
 //	TCPsocket sd;	
 //  UDPsocket usd;
 	Uint8 channel;
 	Uint8 alive;
+
 
 } T_player;
 
@@ -349,7 +350,7 @@ int New_client(T_player *p){
 		p->channel = SDLNet_UDP_Bind(usd, id, &r->address);
 		p->alive = 1;
 		p->score = 0;
-		strncpy(p->nick, (char *)r->data, 32);
+		strncpy(p->nick, ((char *)r->data)+1, 32);
 
 	}
 	UDP_CHANNEL_SEND(p->channel);
@@ -643,6 +644,42 @@ int Send_weapon_states(){
 }
 
 //==============================================================================
+int Send_player_list(){
+//==============================================================================	
+Uint8 *tp; 
+
+  for(int id = 0; id < players; id++){
+	    if(! player[id].alive) continue;
+
+		printf(">list %d\n", id);
+     	tp = t->data;
+    	memset(t->data, 0xFF ,BUFF_SIZE);
+
+    	*tp = P_PLAYER_LIST;					// OP_code
+    	tp++;	
+
+		*(tp) = id;							// ID
+		tp++;	
+		 *(tp) = player[id].ship.type;				// TYPE
+		tp++;	
+		*((Sint16 *)tp) = player[id].score;			// SCORE 
+		tp++;
+		tp++;
+		strncpy((char *)tp, player[id].nick,  NICKNAME_MAX-1);	// NICK
+		tp += NICKNAME_MAX;
+
+  	
+  	for(int x = 0; x < players; x++){
+	    if(! player[x].alive) continue;
+		UDP_CHANNEL_SEND(player[x].channel);
+		fprintf(TTY, "> player_list: player: %d channel: %d\n", x, player[x].channel);
+    }
+  }
+ 
+	return OK;
+}
+
+//==============================================================================
 //==============================================================================
 //=============================================================================
 //
@@ -810,6 +847,14 @@ int Detekuj_kolize(){
 				//player[x].ship.speed= 0;
 				player[x].ship.alive = 0;
 				player[x].score -= 1;
+				
+				for(int z=0; z < players; z++){
+					if(weapon[i].strana == player[z].ship.strana)
+						player[z].score += 1;
+
+				}
+
+				Send_player_list();
 
 				//Respawn(&player[x]);
 				player[x].ship.X = random() % MAX_X;

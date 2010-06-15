@@ -23,8 +23,8 @@ int New_client(){
 	tp++;
 	strncpy((char *) tp, (char *) nick, NICKNAME_MAX);
 
-	printf("t->data[0]: 0x%X\n",t->data[0]);
-	printf("t->data+1: %s\n", tp);
+//	printf("t->data[0]: 0x%X\n",t->data[0]);
+//	printf("t->data+1: %s\n", tp);
 
 	UDP_SEND;
 
@@ -61,8 +61,8 @@ int Logout(){
 	tp++;
 	strcpy((char *) tp, "... leaving ...\n");
 
-	printf("t->data[0]: 0x%X\n",t->data[0]);
-	printf("t->data+1: %s\n", tp);
+//	printf("t->data[0]: 0x%X\n",t->data[0]);
+//	printf("t->data+1: %s\n", tp);
 
 	UDP_SEND;
 
@@ -82,7 +82,7 @@ int Speed_up(int X){
 
 	tp++;
 
-	printf("t->data[0]: 0x%X\n",t->data[0]);
+//	printf("t->data[0]: 0x%X\n",t->data[0]);
 
 	UDP_SEND;
 	return OK;
@@ -100,7 +100,7 @@ int Slow_down(int X){
 		*tp = P_SLOW_DOWN;
 
 	tp++;
-	printf("t->data[0]: 0x%X\n",t->data[0]);
+//	printf("t->data[0]: 0x%X\n",t->data[0]);
 
 	UDP_SEND;
 	return OK;
@@ -118,7 +118,7 @@ int Rotate_L(int X){
 		*tp = P_ROTATE_L;
 
 	tp++;
-	printf("t->data[0]: 0x%X\n",t->data[0]);
+//	printf("t->data[0]: 0x%X\n",t->data[0]);
 
 	UDP_SEND;
 	return OK;
@@ -136,7 +136,7 @@ int Rotate_R(int X){
 		*tp = P_ROTATE_R;
 
 	tp++;
-	printf("t->data[0]: 0x%X\n",t->data[0]);
+//	printf("t->data[0]: 0x%X\n",t->data[0]);
 
 	UDP_SEND;
 	return OK;
@@ -155,7 +155,7 @@ int Shift_L(int X){
 		*tp = P_SHIFT_L;
 
 	tp++;
-	printf("t->data[0]: 0x%X\n",t->data[0]);
+//	printf("t->data[0]: 0x%X\n",t->data[0]);
 
 	UDP_SEND;
 	return OK;
@@ -172,7 +172,7 @@ int Shift_R(int X){
 		*tp = P_SHIFT_R;
 
 	tp++;
-	printf("t->data[0]: 0x%X\n",t->data[0]);
+//	printf("t->data[0]: 0x%X\n",t->data[0]);
 
 	UDP_SEND;
 	return OK;
@@ -188,7 +188,7 @@ int Fire(int wp){
 	*tp = P_FIRE_0 + wp;	
 	tp++;
 
-	printf("t->data[0]: 0x%X\n",t->data[0]);
+//	printf("t->data[0]: 0x%X\n",t->data[0]);
 
 	UDP_SEND;
 	return OK;
@@ -197,27 +197,6 @@ int Fire(int wp){
 
 
 
-/*
-//==============================================================================
-int Get_ship_state(){
-//==============================================================================
-	UDP_RECV;
-
-	unsigned char *tp = r->data;
-	//if(*tp == P_STATE){
-		tp++;	
-		my_ship->X = *( (float *)tp);
-		tp += sizeof(float);
-		my_ship->Y = *( (float *)tp);
-		tp += sizeof(float);
-		my_ship->speed = *( (float *)tp);
-		tp += sizeof(float);
-		my_ship->angle = *( (float *)tp);
-	printf("STATE RECIVED\n");			
-	//}
-	return OK;
-}
-*/
 //==============================================================================
 int Get_ship_states(){
 //==============================================================================	
@@ -225,7 +204,7 @@ int Get_ship_states(){
 	Uint8 *tp = r->data;
 	Uint8 id = 0;
 
-printf("!!--");			
+//printf("!!--");			
 
   if(*tp != P_SHIP_STATES)					// OP_code
     return FAIL;
@@ -243,7 +222,7 @@ printf("!!--");
 
   while(tp - r->data < BUFF_SIZE - 6 * sizeof(float)){
 
-		printf("__==");			
+//		printf("__==");			
 
 		id = *(tp);							// ID
 		if(id == 0xFF) break;
@@ -252,19 +231,19 @@ printf("!!--");
 		ship[id].type = *(tp);				// TYPE
 		tp++;	
 		ship[id].X = *( (float *)tp);		// X
-		printf("X: %f\n", ship[id].X);
+//		printf("X: %f\n", ship[id].X);
 		tp += sizeof(float);
 		ship[id].Y = *( (float *)tp);		// Y
-		printf("Y: %f\n", ship[id].Y);
+//		printf("Y: %f\n", ship[id].Y);
 		tp += sizeof(float);
 		ship[id].speed = *( (float *)tp);	// SPEED
-		printf("speed: %f\n", ship[id].speed);
+//		printf("speed: %f\n", ship[id].speed);
 		tp += sizeof(float);
 		ship[id].angle = *( (float *)tp);	// ANGLE
-		printf("angle: %f\n", ship[id].angle);
+//		printf("angle: %f\n", ship[id].angle);
 		tp += sizeof(float);
 		ship[id].health = *( (int *)tp);	// DAMAGE
-		printf("health: %d\n", ship[id].health);
+//		printf("health: %d\n", ship[id].health);
 		tp += sizeof(int);
 
   }
@@ -282,7 +261,7 @@ int Get_weapon_states(){
   if(*tp != P_WEAPON_STATES)					// OP_code
     return FAIL;
 
-printf("WEPON STATES:\n");			
+//printf("WEPON STATES:\n");			
   tp++;	
 
 
@@ -296,13 +275,13 @@ printf("WEPON STATES:\n");
 		weapon[id].strana = *(tp);			// SUBTYPE (strana)
 		tp++;	
 		weapon[id].X = *( (float *)tp);		// X
-		printf("X: %f\n", weapon[id].X);
+//		printf("X: %f\n", weapon[id].X);
 		tp += sizeof(float);
 		weapon[id].Y = *( (float *)tp);		// Y
-		printf("Y: %f\n", weapon[id].Y);
+//		printf("Y: %f\n", weapon[id].Y);
 		tp += sizeof(float);
 		weapon[id].angle = *( (float *)tp);	// ANGLE
-		printf("angle: %f\n", weapon[id].angle);
+//		printf("angle: %f\n", weapon[id].angle);
 		tp += sizeof(float);
 		
 		weapon[id].alive = 1;
@@ -313,6 +292,45 @@ printf("WEPON STATES:\n");
  
 	return OK;
 }
+
+//==============================================================================
+int Get_player_list(){
+//==============================================================================	
+  Sint16 score = 0;
+  char nick[NICKNAME_MAX];
+
+	Uint8 *tp = r->data;
+	Uint8 id = 0;
+
+//printf("!!--");			
+
+  if(*tp != P_PLAYER_LIST)					// OP_code
+    return FAIL;
+
+  tp++;	
+
+  //while(tp - r->data < BUFF_SIZE - NICKNAME_MAX - 4 ){
+  {
+
+		id = *(tp);							// ID
+		//if(id == 0xFF) break;
+
+		tp++;	
+		ship[id].type = *(tp);				// TYPE
+		tp++;	
+		score = *((Sint16 *)tp);			// SCORE 
+		tp++;
+		tp++;
+		strncpy(nick, (char *) tp, NICKNAME_MAX-1);	// NICK
+		tp += NICKNAME_MAX;
+
+		printf("| %2d | %32s | %3d |\n", id, nick, score);		
+
+  }
+ 
+	return OK;
+}
+
 // =============================================================================
 // =============================================================================
 int  print_ip(){

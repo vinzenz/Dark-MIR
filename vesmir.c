@@ -284,7 +284,7 @@ int Vesmir(){
 Uint32 Redraw_loop(Uint32 interval, void *param){
 //==============================================================================
 
-	printf("TIMER: Redraw_loop()\n");
+//	printf("TIMER: Redraw_loop()\n");
 	//draw_timer = SDL_AddTimer(20, Redraw_loop, NULL); 	// MOVE
 
 	Prekresli_vesmir();
@@ -311,6 +311,9 @@ Uint32 Timed_loop(Uint32 interval, void *param){
 		case P_WEAPON_STATES:
 			Get_weapon_states(); 
 			break;
+		case P_PLAYER_LIST:
+			Get_player_list(); 
+			break;
 
 	}
 
@@ -326,7 +329,7 @@ int Prekresli_vesmir(){
   static int FPS;
 
   if(SDL_GetTicks() - T1 >= 1000){
-		  printf("FPS: %d\n",FPS);
+//		  printf("FPS: %d\n",FPS);
 		  FPS = 0;
 		  T1 = SDL_GetTicks();
   }
@@ -418,6 +421,7 @@ int Inicializuj_objekty(){
  return OK;
 }
 
+/*
 //==============================================================================
 int Pohybuj_objekty(){
 //==============================================================================
@@ -456,8 +460,8 @@ int Pohybuj_objekty(){
 
  return OK;
 }
-
-
+*/
+/*
 //==============================================================================
 int Detekuj_kolize(){
 //==============================================================================
@@ -509,7 +513,7 @@ int Detekuj_kolize(){
 
 return OK;
 }
-
+*/
 //==============================================================================
 int Collision_detect(T_ship *ship, T_weapon *weapon ){
 //==============================================================================
