@@ -77,26 +77,13 @@ int	Get_Opts(int argc, char **argv){
 
 	// argumenty 
     while (1) {
-	 int c = getopt(argc, argv, "hfer:l:");
+	 int c = getopt(argc, argv, "hfer:l:n:");
 	 if (c == -1) {
 	      break;
 	    } else
      switch (c) {
 	  case 'h':
 		printf("%s\n", HELP_MSG);
-	/*	  
-	    printf("GROZA RTS v %s \n", VERSION);
-	    printf("GNU GPL-3 \n");
-	    printf("2008 copyright by\n");
-	    printf("(c) Alexej alexej.x@mail.ru  \n");
-	    //printf("(c) NiO jurajg@gmail.com \n\n");
-	    printf("	-h		show this help    \n");
-	    printf("	-f		fullscreen    \n");
-	    printf("	-r NUM	resolution(default 1) 0 = 800x600; 1 = 1024x768; 2 = 1280x1024;\n"); 
-	    printf("	-l LANG	language (LANG: cs,sk,ru,en ) \n");  	  
-	    printf("	-e		map editor    \n");
-	  	printf("\n");
-		*/
 	    return OK;
         break;
 	  
@@ -116,6 +103,9 @@ int	Get_Opts(int argc, char **argv){
 	  	p_lang = optarg;
 	    
 	    break; 
+
+	  case 'n':
+		strncpy(nick, optarg, NICKNAME_MAX);
 	  
 	  
 	  

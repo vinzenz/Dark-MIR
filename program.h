@@ -104,9 +104,10 @@ int Vesmir();
 #define HELP_MSG "\
 DARK MIR v 0.01\n\
 2007-2010 copyright by (c) Alexej alexej.x@mail.ru GNU GPL-2 \n\
- ./mir [-r N] [-f] < IP_address of server / domain name >\n\
-    	-h		show this help    \n\
-    	-f		fullscreen    \n\
+ ./mir [-r N] [-f] [-n NICK] < IP_address of server / domain name >\n\
+    	-h		show this help    	\n\
+		-n NICK	sets your nickname	\n\
+    	-f		fullscreen    		\n\
     	-r NUM		resolution(default 1) 	\n\
 			0 = 800x600;\n\
 		  	1 = 1024x768;\n\
