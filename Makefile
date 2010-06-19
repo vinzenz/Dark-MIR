@@ -8,10 +8,12 @@
 TARGET = mir
 SERVER_TARGET = server
 CFLAGS = --std=c99 -Wall -pedantic  $(shell sdl-config --cflags)  -O2 -DDEBUG 
-LDFLAGS = $(shell sdl-config --libs) -lSDL_image -lSDL_ttf  -lSDL_gfx -lSDL_net -lm
+LDFLAGS = $(shell sdl-config --libs) -lSDL_image -lSDL_ttf -lSDL_net -lm -lSDL_gfx
 OPTIMALIZE = -O2
 
-CC = gcc
+CC=$(CROSS)gcc
+LD=$(CROSS)ld
+AR=$(CROSS)ar
 
 MODULES = program.o images.o vesmir.o kresli.o lod.o protokol.o
 SERVER_MODULES = server.o
@@ -22,7 +24,10 @@ SERVER_MODULES = server.o
 .PHONY: all run clean ci
 
 #===============================================================================
-all: $(MODULES)  $(SERVER_TARGET) udp_client
+all: $(TARGET)   $(SERVER_TARGET) 
+	$(CC) $(CFLAGS) $(LDFLAGS)  -o $(TARGET) $(MODULES)
+
+$(TARGET): $(MODULES)
 	$(CC) $(CFLAGS) $(LDFLAGS)  -o $(TARGET) $(MODULES)
 
 program.o: program.c program.h images.h client.h
@@ -41,7 +46,7 @@ udp_client.o: udp_client.c server.h program.h protokol.h
 #client.o: client.c server.h program.h protokol.h		# TCP
 
 #===============================================================================
-server: $(SERVER_MODULES)
+$(SERVER_TARGET): $(SERVER_MODULES)
 	$(CC) $(CFLAGS) $(LDFLAGS)  -o $(SERVER_TARGET) $(SERVER_MODULES)
 
 server.o: server.c server.h program.h protokol.h lod.h ships.h zbrane.h weapons.h

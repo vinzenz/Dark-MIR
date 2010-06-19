@@ -8,15 +8,14 @@
 #include <stdlib.h> 
 #include <unistd.h> 
 
-#include <SDL/SDL.h>  
-#include <SDL/SDL_image.h>  
-#include <SDL/SDL_ttf.h>  
-#include <SDL/SDL_thread.h> 
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_thread.h>
 #include <SDL/SDL_opengl.h>
-#include <SDL/SDL_rotozoom.h>
-#include <SDL/SDL_net.h>  
+#include <SDL/SDL_net.h>
 
-#include <math.h> 
+#include <math.h>
 
 #define OK 0 
 #define FAIL -1 

@@ -5,6 +5,7 @@
 #include "zbrane.h"
 #include "client.h"
 
+#include <SDL/SDL_rotozoom.h>
 
 //==============================================================================
 int Kresli_lod(T_ship *ship){

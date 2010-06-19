@@ -1,4 +1,4 @@
-
+#include <math.h>
 
 #include "program.h"
 #include "vesmir.h"
@@ -11,6 +11,7 @@
 #include "protokol.h"
 
 #define TTY stdout
+#define SEED 1
 
 
 
@@ -108,6 +109,8 @@ int main(int argc, char **argv){
 // ==============================================================================
 int Init(){
 // ==============================================================================
+	
+	srand(SEED);
 
 	if (SDL_Init(SDL_SERVER_SUBSYSTEMS)==-1){
 		fprintf(stderr, "ERROR:  SDL subsystems init: %s\n", SDL_GetError());
@@ -897,8 +900,8 @@ int Detekuj_kolize(){
 				Send_player_list();
 
 				//Respawn(&player[x]);
-				player[x].ship.X = random() % MAX_X;
-				player[x].ship.Y = random() % MAX_Y;
+				player[x].ship.X = rand() % MAX_X;
+				player[x].ship.Y = rand() % MAX_Y;
 				player[x].ship.alive = 1;
 				player[x].ship.health = player[x].ship.MAX_health;
 				player[x].ship.speed = 0;

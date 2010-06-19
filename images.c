@@ -10,7 +10,7 @@
  * na stejny pixel format, jako ma okno (framebuffer)
  */
 
-SDL_Surface *LoadImage(const char *filename, int alpha)
+SDL_Surface *MIR_LoadImage(const char *filename, int alpha)
 {
 	SDL_Surface *tmp;// Pomocny
 	SDL_Surface *ret;// Bude vracen
@@ -45,49 +45,49 @@ int Nacti_obrazky_vesmir()
 	fg_color.g=255; 
 	fg_color.b=255;
 
-	space  	= LoadImage(ROOT"images/space.png", 1); 
+	space  	= MIR_LoadImage(ROOT"images/space.png", 1); 
 	
-	IMG_RED_RX	= LoadImage(ROOT"images/R_RX.png", 1); 		
-	IMG_RED_RX_move	= LoadImage(ROOT"images/R_RX_move.png", 1); 	
-	IMG_RED_RX_crap = LoadImage(ROOT"images/R_RX_crap.png", 1); 	
-	IMG_RED_EX	= LoadImage(ROOT"images/R_EX.png", 1); 	
-	IMG_RED_EX_move	= LoadImage(ROOT"images/R_EX_move.png", 1);
-	IMG_RED_EX_crap = LoadImage(ROOT"images/R_EX_crap.png", 1); 
+	IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX.png", 1); 		
+	IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_move.png", 1); 	
+	IMG_RED_RX_crap = MIR_LoadImage(ROOT"images/R_RX_crap.png", 1); 	
+	IMG_RED_EX	= MIR_LoadImage(ROOT"images/R_EX.png", 1); 	
+	IMG_RED_EX_move	= MIR_LoadImage(ROOT"images/R_EX_move.png", 1);
+	IMG_RED_EX_crap = MIR_LoadImage(ROOT"images/R_EX_crap.png", 1); 
 
-	IMG_BLUE_RX	= LoadImage(ROOT"images/B_RX.png", 1); 
-	IMG_BLUE_RX_move= LoadImage(ROOT"images/B_RX_move.png", 1); 
-	IMG_BLUE_RX_crap= LoadImage(ROOT"images/B_RX_crap.png", 1); 
+	IMG_BLUE_RX	= MIR_LoadImage(ROOT"images/B_RX.png", 1); 
+	IMG_BLUE_RX_move= MIR_LoadImage(ROOT"images/B_RX_move.png", 1); 
+	IMG_BLUE_RX_crap= MIR_LoadImage(ROOT"images/B_RX_crap.png", 1); 
 
-	IMG_GREEN_ZX = LoadImage(ROOT"images/G_ZX.png", 1); 
-	IMG_GREEN_ZX_move= LoadImage(ROOT"images/G_ZX_move.png", 1); 
-	IMG_GREEN_ZX_crap= LoadImage(ROOT"images/G_ZX.png", 1); 
+	IMG_GREEN_ZX = MIR_LoadImage(ROOT"images/G_ZX.png", 1); 
+	IMG_GREEN_ZX_move= MIR_LoadImage(ROOT"images/G_ZX_move.png", 1); 
+	IMG_GREEN_ZX_crap= MIR_LoadImage(ROOT"images/G_ZX.png", 1); 
 	
-	laser = LoadImage(ROOT"images/RED/laser.png", 1); 
-	raketa = LoadImage(ROOT"images/r1.png", 1); 
-	//raketa = LoadImage(ROOT"images/G_Q1.png", 1); 
+	laser = MIR_LoadImage(ROOT"images/RED/laser.png", 1); 
+	raketa = MIR_LoadImage(ROOT"images/r1.png", 1); 
+	//raketa = MIR_LoadImage(ROOT"images/G_Q1.png", 1); 
 
-	energy_laser =  LoadImage(ROOT"images/G_Q1.png", 1); 
-	energy_plasma =  LoadImage(ROOT"images/G_Q2.png", 1); 
+	energy_laser =  MIR_LoadImage(ROOT"images/G_Q1.png", 1); 
+	energy_plasma =  MIR_LoadImage(ROOT"images/G_Q2.png", 1); 
 
-	r_explosion = LoadImage(ROOT"images/r_explosion.png", 1); 
-	b_explosion = LoadImage(ROOT"images/b_explosion.png", 1); 
+	r_explosion = MIR_LoadImage(ROOT"images/r_explosion.png", 1); 
+	b_explosion = MIR_LoadImage(ROOT"images/b_explosion.png", 1); 
 
 	
-	radar = LoadImage(ROOT"images/system/mapa.png", 1); 
-	radar_point_r = LoadImage(ROOT"images/system/radar_point_r.png", 1); 
-	radar_point_g = LoadImage(ROOT"images/system/radar_point_g.png", 1); 
+	radar = MIR_LoadImage(ROOT"images/system/mapa.png", 1); 
+	radar_point_r = MIR_LoadImage(ROOT"images/system/radar_point_r.png", 1); 
+	radar_point_g = MIR_LoadImage(ROOT"images/system/radar_point_g.png", 1); 
 
 
-	damage = LoadImage(ROOT"images/system/poskozeni.png", 1); 
-	speed = LoadImage(ROOT"images/system/rychlost.png", 1); 
-	position_x = LoadImage(ROOT"images/system/poloha_x.png", 1); 
-	position_y = LoadImage(ROOT"images/system/poloha_y.png", 1); 
-	position_ptr_x = LoadImage(ROOT"images/system/ptr.png", 1); 
-	position_ptr_y = LoadImage(ROOT"images/system/ptr_y.png", 1); 
+	damage = MIR_LoadImage(ROOT"images/system/poskozeni.png", 1); 
+	speed = MIR_LoadImage(ROOT"images/system/rychlost.png", 1); 
+	position_x = MIR_LoadImage(ROOT"images/system/poloha_x.png", 1); 
+	position_y = MIR_LoadImage(ROOT"images/system/poloha_y.png", 1); 
+	position_ptr_x = MIR_LoadImage(ROOT"images/system/ptr.png", 1); 
+	position_ptr_y = MIR_LoadImage(ROOT"images/system/ptr_y.png", 1); 
 
-	CENTER = LoadImage(ROOT"images/center.png", 1); 
-	console = LoadImage(ROOT"images/system/console.png", 1); 
-	console_bg = LoadImage(ROOT"images/system/console.png", 1); 
+	CENTER = MIR_LoadImage(ROOT"images/center.png", 1); 
+	console = MIR_LoadImage(ROOT"images/system/console.png", 1); 
+	console_bg = MIR_LoadImage(ROOT"images/system/console.png", 1); 
 	
 	if (space 		!= NULL && 
 		IMG_RED_RX	!= NULL &&
@@ -122,11 +122,11 @@ int Nacti_obrazky_vesmir()
 int Nacti_obrazky_menu()
 //==============================================================================
 {
-	bg_img   	= LoadImage(ROOT"images/bg.png", 1); 
-	bg_nastaveni	= LoadImage(ROOT"images/bg_nastaveni.jpg", 1); 
-	//tlacitko 	= LoadImage(ROOT"images/tlacitko.png", 1); 
-	//policko  	= LoadImage(ROOT"images/policko.png", 1); 
-	//policko1  	= LoadImage(ROOT"images/policko-1.png", 1); 
+	bg_img   	= MIR_LoadImage(ROOT"images/bg.png", 1); 
+	bg_nastaveni	= MIR_LoadImage(ROOT"images/bg_nastaveni.jpg", 1); 
+	//tlacitko 	= MIR_LoadImage(ROOT"images/tlacitko.png", 1); 
+	//policko  	= MIR_LoadImage(ROOT"images/policko.png", 1); 
+	//policko1  	= MIR_LoadImage(ROOT"images/policko-1.png", 1); 
 	
 	if (bg_img != NULL && 
 		bg_nastaveni != NULL)
