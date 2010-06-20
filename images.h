@@ -51,6 +51,7 @@ SDL_Surface *IMG_GREEN_ZX_crap;		//
 
 // Explosions
 SDL_Surface *r_explosion;
+SDL_Surface *g_explosion;
 SDL_Surface *b_explosion;
 
 
@@ -62,6 +63,7 @@ SDL_Surface *laser;
 SDL_Surface *raketa;
 SDL_Surface *energy_laser;
 SDL_Surface *energy_plasma;
+SDL_Surface *micro_missile;
 
 // Pristroje
 SDL_Surface *radar;

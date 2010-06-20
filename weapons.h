@@ -22,6 +22,14 @@
 } T_weapon;
 */
 
+T_weapon Explosion = {
+	.type = EXPLOSION,
+	.speed = 0,
+	.damage = 0,
+	.alive = 1,
+
+};
+
 
 // NEW speeds
 T_weapon RX_laser = {
@@ -37,6 +45,16 @@ T_weapon RX_R1 = {
 	.speed = 15,
 	.damage = 30,
 	.alive = 1,
+
+};
+
+
+T_weapon RX_M1 = {
+	.type = MICRO_MISSILE,
+	.speed = 20,
+	.damage = 15,
+	.alive = 1,
+	.ttl = 200,
 
 };
 

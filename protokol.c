@@ -304,6 +304,11 @@ int Get_weapon_states(){
 		tp += sizeof(float);
 		
 		weapon[id].alive = 1;
+/*
+		if(weapon[id].type == EXPLOSION) 
+				printf("TEST: explosion at: %g %g", 
+					weapon[id].X, weapon[id].Y);
+*/
 
 		if(id >= pocet_weapons)
 			pocet_weapons++;

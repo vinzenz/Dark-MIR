@@ -7,7 +7,7 @@
 
 TARGET = mir
 SERVER_TARGET = server
-CFLAGS = --std=c99 -Wall -pedantic  $(shell sdl-config --cflags)  -O2 -DDEBUG 
+CFLAGS = --std=c99 -Wall -pedantic  $(shell sdl-config --cflags)  -O2 -DDEBUG -g
 LDFLAGS = $(shell sdl-config --libs) -lSDL_image -lSDL_ttf -lSDL_net -lm -lSDL_gfx
 OPTIMALIZE = -O2
 
@@ -21,7 +21,7 @@ SERVER_MODULES = server.o
 #===============================================================================
 
 
-.PHONY: all run clean ci
+.PHONY: all run local gdb clean ci
 
 #===============================================================================
 all: $(TARGET)   $(SERVER_TARGET) 
@@ -68,3 +68,10 @@ ci:
 run:
 	./mir -n $(USER) -r 2 abadon.no-ip.org
 
+#===============================================================================
+local:
+	./mir -n $(USER)   localhost
+
+#===============================================================================
+gdb:
+	gdb --args ./mir -n $(USER)   localhost

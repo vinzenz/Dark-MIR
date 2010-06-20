@@ -27,7 +27,7 @@ return interval;
 
 
 
-
+/*
 //==============================================================================
 int Vystrel(int zbran, T_ship *ship){
 //==============================================================================
@@ -41,8 +41,6 @@ int Vystrel(int zbran, T_ship *ship){
 				lasers[pocet_laseru].angle = ship->angle;
 				lasers[pocet_laseru].X = X;
 				lasers[pocet_laseru].Y = Y;
-				//lasers[pocet_laseru].x = /*(WIDTH/2) - (laser->w/2) + */(lasers[pocet_laseru].X - lasers[pocet_laseru].sX);
-				//lasers[pocet_laseru].y = /*(HEIGHT/2) - (laser->h/2) + */(lasers[pocet_laseru].Y - lasers[pocet_laseru].sY);
 				
 				
 				
@@ -69,11 +67,6 @@ int Vystrel(int zbran, T_ship *ship){
 				rockets[pocet_raket].X = X;
 				rockets[pocet_raket].Y = Y;
 				
-				//rockets[pocet_laseru].x = /*(WIDTH/2) - (laser->w/2) + */(rockets[pocet_laseru].X - lasers[pocet_laseru].sX);
-				//lasers[pocet_laseru].y = /*(HEIGHT/2) - (laser->h/2) + */(lasers[pocet_laseru].Y - lasers[pocet_laseru].sY);
-				
-				
-				
 			}
 			else{
 			#ifdef DEBUG
@@ -96,3 +89,5 @@ int Vystrel(int zbran, T_ship *ship){
 	
 return OK;	
 }
+
+*/

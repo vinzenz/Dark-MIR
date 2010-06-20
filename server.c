@@ -743,10 +743,10 @@ int Inicializuj_objekty(){
 	SHIP_BLUE_RX.img_c = IMG_BLUE_RX_crap;
 	SHIP_BLUE_RX.strana = BLUE;
 
-	SHIP_BLUE_RX.img = IMG_GREEN_ZX_move;
-	SHIP_BLUE_RX.img_m = IMG_GREEN_ZX_move;
-	SHIP_BLUE_RX.img_c = IMG_GREEN_ZX_crap;
-	SHIP_BLUE_RX.strana = GREEN;
+	SHIP_GREEN_ZX.img = IMG_GREEN_ZX_move;
+	SHIP_GREEN_ZX.img_m = IMG_GREEN_ZX_move;
+	SHIP_GREEN_ZX.img_c = IMG_GREEN_ZX_crap;
+	SHIP_GREEN_ZX.strana = GREEN;
 	
 	
 	for(int i=0; i < MAX_PLAYERS; i++){
@@ -768,8 +768,6 @@ int Inicializuj_objekty(){
 		player[i].ship.alive	= 1;
 	}
 
-	pocet_raket = 0;
-	pocet_laseru = 0;
 	players = 0;
 
 
@@ -877,14 +875,16 @@ int Detekuj_kolize(){
 		if(weapon[i].strana == player[x].ship.strana) continue;
 
 		if(Collision_detect(&player[x].ship, &weapon[i])){
-		POINT(99);
-			// DISABLE PROJECTIL
-			weapon[i].alive = 0;
-			weapon[i].X = 0;
-			weapon[i].Y = 0;
-			weapon[i].speed = 0;
+		//POINT(99);
 			// MAKE DAMAGE
 			player[x].ship.health -= weapon[i].damage;
+			// DISABLE PROJECTIL and CREATE EXPLOSION
+			weapon[i].alive = 1;
+			weapon[i].speed = 0;
+			weapon[i].damage= 0;
+			weapon[i].type = EXPLOSION;
+
+
 			if(player[x].ship.health <= 0){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				//player[x].ship.speed= 0;

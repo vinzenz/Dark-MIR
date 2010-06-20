@@ -70,6 +70,7 @@ int Nacti_obrazky_vesmir()
 	energy_plasma =  MIR_LoadImage(ROOT"images/G_Q2.png", 1); 
 
 	r_explosion = MIR_LoadImage(ROOT"images/r_explosion.png", 1); 
+	g_explosion = MIR_LoadImage(ROOT"images/g_explosion.png", 1); 
 	b_explosion = MIR_LoadImage(ROOT"images/b_explosion.png", 1); 
 
 	
@@ -97,6 +98,7 @@ int Nacti_obrazky_vesmir()
 		IMG_BLUE_RX_move	!= NULL &&
 		IMG_BLUE_RX_crap	!= NULL &&
 		r_explosion != NULL &&
+		g_explosion != NULL &&
 		b_explosion != NULL &&
 		laser 		!= NULL	&&
 		radar 		!= NULL	&&

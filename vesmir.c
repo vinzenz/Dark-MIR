@@ -431,8 +431,6 @@ int Inicializuj_objekty(){
 	ship[4] = SHIP_BLUE_RX;
 	
 	pocet_lodi   = 5;
-	pocet_laseru = 0;
-	pocet_raket  = 0;
 
  return OK;
 }

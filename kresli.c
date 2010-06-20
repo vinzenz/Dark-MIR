@@ -186,6 +186,15 @@ return OK;
 int Draw_weapon(T_weapon *weapon){
 //==============================================================================
 SDL_Rect rect;
+SDL_Rect rect2;
+static int T;
+static int clk;
+
+  if(weapon->X < 0){
+		  Draw_weapon(&Explosion);
+		  return OK;
+  }
+
 
   if(weapon->X < (0 + 50))
 		  return OK;
@@ -198,10 +207,10 @@ SDL_Rect rect;
 
   switch(weapon->type){
 	case LASER:
-		if((weapon->img == NULL) || (weapon->angle2 != weapon->angle)){
+		if(weapon->img != NULL)
 			SDL_FreeSurface(weapon->img);		
-			weapon->img = rotozoomSurface(laser, weapon->angle, 1, 0);
-		}
+
+		weapon->img = rotozoomSurface(laser, weapon->angle, 1, 0);
 		
 		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X /*- lasers[i].sX */ - X;
 		rect.y = (HEIGHT/2) - (weapon->img->h/2) + weapon->Y /*- lasers[i].sY*/ - Y;
@@ -209,10 +218,10 @@ SDL_Rect rect;
 		break;
 
 	case ROCKET:
-		if((weapon->img == NULL) || (weapon->angle2 != weapon->angle)){
+		if(weapon->img != NULL)
 			SDL_FreeSurface(weapon->img);		
-			weapon->img = rotozoomSurface(raketa, weapon->angle, 1, 0);
-		}
+
+		weapon->img = rotozoomSurface(raketa, weapon->angle, 1, 0);
 		
 		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X  - X;
 		rect.y = (HEIGHT/2) - (weapon->img->w/2) + weapon->Y  - Y;
@@ -220,14 +229,39 @@ SDL_Rect rect;
 		break;
 
 	case ENERGY_LASER:
-		if((weapon->img == NULL) || (weapon->angle2 != weapon->angle)){
+
+		if(weapon->img != NULL)
 			SDL_FreeSurface(weapon->img);		
-			weapon->img = rotozoomSurface(energy_laser, weapon->angle, 1, 0);
-		}
+
+		weapon->img = rotozoomSurface(energy_laser, weapon->angle, 1, 0);
 		
 		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X /*- lasers[i].sX */ - X;
 		rect.y = (HEIGHT/2) - (weapon->img->h/2) + weapon->Y /*- lasers[i].sY*/ - Y;
 		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
+		break;
+
+	case EXPLOSION:
+
+		if(weapon->ttl > 10)
+				weapon->alive = 0;
+
+		T = weapon->ttl;
+		weapon->ttl++;
+
+		rect.x = (WIDTH/2) - (50/2) + weapon->X  - X;
+		rect.y = (HEIGHT/2) - (50/2) + weapon->Y  - Y;
+			
+		rect2.x = 50 * (T % 3);	
+		rect2.y = 50 * (T / 3);	
+		rect2.w = 50;
+		rect2.h = 50;
+		
+		if(weapon->strana == RED)
+			SDL_BlitSurface(r_explosion, &rect2, screen, &rect);
+		if(weapon->strana == BLUE)
+			SDL_BlitSurface(b_explosion, &rect2, screen, &rect);
+		if(weapon->strana == GREEN)
+			SDL_BlitSurface(g_explosion, &rect2, screen, &rect);
 		break;
   }	
 

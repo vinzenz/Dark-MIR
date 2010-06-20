@@ -4,9 +4,10 @@
 
 #define LASER 1
 #define ROCKET 2
-
 #define ENERGY_LASER 3
+#define MICRO_MISSILE 4
 
+#define EXPLOSION 20
 // ==========================================
 #define MAX_WEAPONS 1000
 #define MAX_LASER 300
@@ -14,13 +15,11 @@
 
 
 int pocet_weapons;
-int pocet_laseru;
-int pocet_raket;
 
  typedef struct str_weapon {
 	SDL_Surface *img;
-	char type;
-	char strana;
+	Uint8 type;
+	Uint8 strana;
 
 	float speed;
 	float MAX_speed;
@@ -29,11 +28,14 @@ int pocet_raket;
 	float angle;
 	float angle2;
 	int damage;
-	float X; //  pozice
+	float X; 
 	float Y;
-	int x;   // rect vykreslovaci pozice
-	int y;
-	char alive;
+	//int x;   
+	//int y;
+
+	Uint8 alive;
+	Uint16 ttl;		// Time To Live
+
 } T_weapon;
 
 /*
@@ -41,10 +43,11 @@ struct zbrane lasery[MAX_LASERU];
 struct zbrane rakety[MAX_LASERU];
 */
 
-T_weapon lasers[MAX_LASER];
-T_weapon rockets[MAX_ROCKET];
+//T_weapon lasers[MAX_LASER];
+//T_weapon rockets[MAX_ROCKET];
 
 T_weapon weapon[MAX_WEAPONS];
+T_weapon Explosion;
 
 //char strilej[16];	// oznacuje ze kterych zbrani se prave strili
 
