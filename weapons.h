@@ -34,7 +34,7 @@ T_weapon Explosion = {
 // NEW speeds
 T_weapon RX_laser = {
 	.type = LASER,
-	.speed = 40,
+	.speed = 50,
 	.damage = 10,
 	.alive = 1,
 
@@ -42,7 +42,7 @@ T_weapon RX_laser = {
 
 T_weapon RX_R1 = {
 	.type = ROCKET,
-	.speed = 15,
+	.speed = 20,
 	.damage = 30,
 	.alive = 1,
 
@@ -60,8 +60,8 @@ T_weapon RX_M1 = {
 
 T_weapon RX_M2 = {
 	.type = GUIDED_MISSILE,
-	.speed = 10,
-	.damage = 20,
+	.speed = 15,
+	.damage = 40,
 	.alive = 1,
 	.ttl = 500,
 
@@ -70,7 +70,7 @@ T_weapon RX_M2 = {
 
 T_weapon ZX_Q1 = {
 	.type = ENERGY_LASER,
-	.speed = 40,
+	.speed = 50,
 	.damage = 20,
 	.alive = 1,
 

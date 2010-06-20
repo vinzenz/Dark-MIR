@@ -48,7 +48,7 @@ T_ship SHIP_RED_RX = {
 
    .MAX_wp_1	= 100,
    .MAX_wp_2	= 8,
-   .MAX_wp_3	= 200,
+   .MAX_wp_3	= 2,
    .alive 	= 1,
 };
 
@@ -62,6 +62,7 @@ T_ship SHIP_RED_EX = {
 
    .MAX_wp_1= 300,
    .MAX_wp_2= 30,
+   .MAX_wp_2= 10,
    .alive = 1,
 };
 
