@@ -64,6 +64,7 @@ int Nacti_obrazky_vesmir()
 	
 	laser = MIR_LoadImage(ROOT"images/RED/laser.png", 1); 
 	raketa = MIR_LoadImage(ROOT"images/r1.png", 1); 
+	micro_missile= MIR_LoadImage(ROOT"images/micro_missile.png", 1); 
 	//raketa = MIR_LoadImage(ROOT"images/G_Q1.png", 1); 
 
 	energy_laser =  MIR_LoadImage(ROOT"images/G_Q1.png", 1); 

@@ -228,6 +228,17 @@ static int clk;
 		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
 		break;
 
+	case MICRO_MISSILE:
+		if(weapon->img != NULL)
+			SDL_FreeSurface(weapon->img);		
+
+		weapon->img = rotozoomSurface(micro_missile, weapon->angle, 1, 0);
+		
+		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X  - X;
+		rect.y = (HEIGHT/2) - (weapon->img->w/2) + weapon->Y  - Y;
+		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
+		break;
+
 	case ENERGY_LASER:
 
 		if(weapon->img != NULL)

@@ -42,6 +42,14 @@ typedef struct str_ship{
 	float Y;
 
 	int alive;	
+						// weapons
+	int wp_1;
+	int wp_2;
+	int wp_3;
+
+	int MAX_wp_1;
+	int MAX_wp_2;
+	int MAX_wp_3;
 		
   } T_ship;
 

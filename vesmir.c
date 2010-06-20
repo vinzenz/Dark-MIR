@@ -124,7 +124,8 @@ int Vesmir(){
 
 				 case SDLK_LSHIFT:			// TURBO
 				 case SDLK_RSHIFT:			
-					Turbo(START);
+					if(ship[ID].strana == RED);
+						Turbo(START);
 				 	break;
 
 				 case SDLK_LALT:			// MODIFIKATOR = FIRE 1
@@ -138,12 +139,16 @@ int Vesmir(){
 				 
 				 case SDLK_RCTRL:
 				 case SDLK_LCTRL:
-					if(ship[ID].strana == GREEN);
-						//Fire(ROCKET);
+					if(ship[ID].strana == GREEN)
+						;//Fire(ROCKET);
+					if(ship[ID].strana == BLUE)
+						Fire(MICRO_MISSILE);
 					else
 						Fire(ROCKET);
 					break;
+
 				 
+
 				 case SDLK_TAB:			// PLAYER LIST
 					Request_player_list();	
 					break;

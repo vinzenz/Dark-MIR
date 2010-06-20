@@ -34,7 +34,7 @@ T_weapon Explosion = {
 // NEW speeds
 T_weapon RX_laser = {
 	.type = LASER,
-	.speed = 30,
+	.speed = 40,
 	.damage = 10,
 	.alive = 1,
 
@@ -51,8 +51,8 @@ T_weapon RX_R1 = {
 
 T_weapon RX_M1 = {
 	.type = MICRO_MISSILE,
-	.speed = 20,
-	.damage = 15,
+	.speed = 25,
+	.damage = 20,
 	.alive = 1,
 	.ttl = 200,
 

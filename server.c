@@ -277,6 +277,8 @@ if (SDLNet_UDP_Recv(ussd, p)) {
 		case P_FIRE_1:   
 		case P_FIRE_2:    
 		case P_FIRE_3:     
+		case P_FIRE_4:     
+		case P_FIRE_5:     
 			
 			Fire(p_id, r->data[0] - P_FIRE_0);
 			break;
@@ -548,17 +550,41 @@ int Fire(int id, int wp){
 	}
 
 	switch(wp){
-		
+	
+		// === PRIMARY WEAPONS ===	
 		case LASER:
+			//printf("TEST: WP1: %d\n", player[id].ship.wp_1);
+			if(	player[id].ship.wp_1 <= 0)
+				return FAIL;
+
+			player[id].ship.wp_1 -= 1;
 			weapon[i] = RX_laser;
 			break;
 
 		case ENERGY_LASER:
+			if(	player[id].ship.wp_1 <= 0)
+				return FAIL;
+
+			player[id].ship.wp_1--;
 			weapon[i] = ZX_Q1;
 			break;
 
+		// === SECONDARY WEAPONS ===	
 		case ROCKET:
+			if(	player[id].ship.wp_2 <= 0)
+				return FAIL;
+
+			player[id].ship.wp_2--;
 			weapon[i] = RX_R1;
+			break;
+
+		case MICRO_MISSILE:
+			if(	player[id].ship.wp_2 <= 0)
+				return FAIL;
+
+			player[id].ship.wp_2 -= 1;
+			//player[id].ship.wp_2--;
+			weapon[i] = RX_M1;
 			break;
 
 	}
@@ -764,6 +790,9 @@ int Inicializuj_objekty(){
 		player[i].ship.angle 	= 0;
 		player[i].ship.manevr	= 0;
 		player[i].ship.shift 	= 0;
+		player[i].ship.wp_1 	= player[i].ship.MAX_wp_1;
+		printf("WP1: %d\n", player[i].ship.wp_1);
+		player[i].ship.wp_2 	= player[i].ship.MAX_wp_2;
 		player[i].ship.acceleration	= 0;
 		player[i].ship.alive	= 1;
 	}
@@ -899,12 +928,16 @@ int Detekuj_kolize(){
 
 				Send_player_list();
 
+
 				//Respawn(&player[x]);
 				player[x].ship.X = rand() % MAX_X;
 				player[x].ship.Y = rand() % MAX_Y;
 				player[x].ship.alive = 1;
 				player[x].ship.health = player[x].ship.MAX_health;
+				player[x].ship.wp_1 	= player[x].ship.MAX_wp_1;
+				player[x].ship.wp_2 	= player[x].ship.MAX_wp_2;
 				player[x].ship.speed = 0;
+				printf("RESPAWN: %d \n",player[i].ship.wp_2);
 			}
 
 		}
