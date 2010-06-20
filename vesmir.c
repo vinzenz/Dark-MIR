@@ -366,11 +366,11 @@ int Prekresli_vesmir(){
 		SDL_BlitSurface(space, NULL, screen, &rect);
 	    }
 	}
-/*	
+	
 	rect.x = (WIDTH/2) - (CENTER->w/2) + MAX_X/2 - X;
 	rect.y = (HEIGHT/2) - (CENTER->h/2) + MAX_Y/2 - Y;
 	SDL_BlitSurface(CENTER, NULL, screen, &rect);
-*/
+
 
 	// === Strely === 
 	

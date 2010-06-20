@@ -87,7 +87,9 @@ int Nacti_obrazky_vesmir()
 	position_ptr_x = MIR_LoadImage(ROOT"images/system/ptr.png", 1); 
 	position_ptr_y = MIR_LoadImage(ROOT"images/system/ptr_y.png", 1); 
 
-	CENTER = MIR_LoadImage(ROOT"images/center.png", 1); 
+	CENTER = MIR_LoadImage(ROOT"images/center_2.png", 1); 
+
+
 	console = MIR_LoadImage(ROOT"images/system/console.png", 1); 
 	console_bg = MIR_LoadImage(ROOT"images/system/console.png", 1); 
 	
