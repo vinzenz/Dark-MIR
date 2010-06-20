@@ -9,9 +9,12 @@ INSTALL:
 
 	(so start here)
 	make
+	
 	make run
 	
-	./mir -r [number_for_resolution] [-f] abadon.no-ip.org
+	OR	
+	
+	./mir -n [NICKNAME] -r [number_for_resolution] [-f] abadon.no-ip.org
 
 ================================================================================
 USE:
@@ -28,9 +31,11 @@ CONTROLS:
 	A		shift left
 	D		shift right
 
+	G		fire guided missile
+
 	CTRL	fire missile
 	ALT		fire laser
-	SPACE	fire laser
+	SPACE	fire laser burst
 
 
 ================================================================================

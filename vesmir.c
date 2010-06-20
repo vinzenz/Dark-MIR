@@ -132,11 +132,22 @@ int Vesmir(){
 				 	break;
 
 				 case SDLK_LALT:			// MODIFIKATOR = FIRE 1
-				 case SDLK_SPACE:
 					if(ship[ID].strana == GREEN)
 						Fire(ENERGY_LASER);
 					else
 						Fire(LASER);
+					break;
+
+				 case SDLK_SPACE:
+					if(ship[ID].strana == GREEN)
+						Fire(ENERGY_LASER);
+					else{
+						Fire(LASER);
+						SDL_Delay(30);
+						Fire(LASER);
+						SDL_Delay(30);
+						Fire(LASER);
+					}
 				 	
 					break;
 				 

@@ -41,12 +41,12 @@ T_ship lode[MAX_LODI];
 // LIGHT BATTLE FIGHTER / SCOUT
 T_ship SHIP_RED_RX = {
    .MAX_health 			= 120,	
-   .MAX_speed 			= 8.00,
+   .MAX_speed 			= 7.00,
    .MAX_shift 			= 10.00,
    .MAX_acceleration 	= 0.3,
    .MAX_manevr= 2.0,
 
-   .MAX_wp_1	= 100,
+   .MAX_wp_1	= 150,
    .MAX_wp_2	= 8,
    .MAX_wp_3	= 2,
    .alive 	= 1,
@@ -68,7 +68,7 @@ T_ship SHIP_RED_EX = {
 
 // LIGHT BATTLE FIGHTER / SCOUT
 T_ship SHIP_BLUE_RX = {
-   .MAX_health = 70,	
+   .MAX_health = 90,	
    .MAX_speed 	= 10.00,
    .MAX_shift 	= 10.00,
    .MAX_acceleration = 0.3,

@@ -182,8 +182,7 @@ int Server(){
 
 while (1){
 
-
-	SDL_Delay(1);		// free CPU
+	SDL_Delay(10);		// free CPU
 
 /*
 if (SDLNet_UDP_Recv(ussd, p)) {
@@ -404,6 +403,7 @@ int Speed_up(int id, int X){
   	player[id].ship.acceleration = 0;
   else
   	player[id].ship.acceleration = + player[id].ship.MAX_acceleration;	
+  
 
   printf("acceleration: %f\n", (double) player[id].ship.acceleration);
 
@@ -657,6 +657,7 @@ int Send_ship_states(){
 	}
   }
 	
+   	memset(t->data, 0xFF ,BUFF_SIZE);
 	return OK;
 }
 //==============================================================================
@@ -709,6 +710,7 @@ int Send_weapon_states(){
 		fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
     }
 
+   	memset(t->data, 0xFF ,BUFF_SIZE);
 	return OK;
 }
 
@@ -734,6 +736,7 @@ Uint8 *tp;
 		 *(tp) = player[id].ship.type;				// TYPE
 		tp++;	
 		*((Sint16 *)tp) = player[id].score;			// SCORE 
+		printf("PLAYER: %d  SCORE: %d\n",id, player[id].score);
 		tp++;
 		tp++;
 		strncpy((char *)tp, player[id].nick,  NICKNAME_MAX-1);	// NICK
@@ -839,10 +842,13 @@ int Pohybuj_objekty(){
 	// ==== speed limit ====
  	if(player[i].ship.speed < 0)
 		  player[i].ship.speed = 0;
-	if(player[i].ship.speed > (player[i].ship.MAX_speed + 
-	player[i].ship.turbo * player[i].ship.MAX_speed) )
-			player[i].ship.speed =  player[i].ship.MAX_speed + 
-			player[i].ship.turbo * player[i].ship.MAX_speed ;
+	if(player[i].ship.speed > (player[i].ship.MAX_speed + player[i].ship.turbo * player[i].ship.MAX_speed) ){
+
+			player[i].ship.speed =  player[i].ship.MAX_speed + player[i].ship.turbo * player[i].ship.MAX_speed ;
+			//player[i].ship.acceleration = 0;
+
+	}
+
 
 		
 	// ==== angle limit ====
@@ -1003,27 +1009,41 @@ int Detekuj_kolize(){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				//player[x].ship.speed= 0;
 				player[x].ship.alive = 0;
-				player[x].score -= 1;
+				//player[x].score -= 1;
 				
+
+				// WINNING TEAM BONUS
 				for(int z=0; z < players; z++){
-					if(weapon[i].strana == player[z].ship.strana)
+					if(weapon[i].strana == player[z].ship.strana){
 						player[z].score += 1;
+						player[z].ship.wp_1 =  player[z].ship.MAX_wp_1;
+						player[z].ship.wp_2 =  player[z].ship.MAX_wp_2;
+						player[z].ship.wp_3 =  player[z].ship.MAX_wp_3;
+
+					}
 
 				}
 
 				Send_player_list();
+				POINT(111);
 
 
 				//Respawn(&player[x]);
-				player[x].ship.X = rand() % MAX_X;
-				player[x].ship.Y = rand() % MAX_Y;
+				player[x].ship.X = (MAX_X/4) + rand() % (MAX_X/2);
+				player[x].ship.Y = (MAX_Y/4) + rand() % (MAX_Y/2);
 				player[x].ship.alive = 1;
 				player[x].ship.health = player[x].ship.MAX_health;
+				POINT(211);
 				player[x].ship.wp_1 	= player[x].ship.MAX_wp_1;
+				POINT(311);
 				player[x].ship.wp_2 	= player[x].ship.MAX_wp_2;
+				POINT(411);
 				player[x].ship.wp_3 	= player[x].ship.MAX_wp_3;
-				player[x].ship.speed = 0;
-				printf("RESPAWN: %d \n",player[i].ship.wp_2);
+				POINT(511);
+				player[x].ship.speed = 0.1;
+				POINT(611);
+				printf("RESPAWN: %d \n",player[x].ship.wp_2);
+				POINT(711);
 			}
 
 		}

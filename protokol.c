@@ -348,7 +348,8 @@ int Get_player_list(){
 		strncpy(nick, (char *) tp, NICKNAME_MAX-1);	// NICK
 		tp += NICKNAME_MAX;
 
-		 sprintf(player_list[id], "| %2d | %32s | %3d |", id, nick, score);		
+		printf("PLAYER: %d  SCORE: %d\n",id, score);
+		sprintf(player_list[id], "| %2d | %32s | %3d |", id, nick, score);		
 		
 
   }
