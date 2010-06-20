@@ -64,6 +64,7 @@ SDL_Surface *raketa;
 SDL_Surface *energy_laser;
 SDL_Surface *energy_plasma;
 SDL_Surface *micro_missile;
+SDL_Surface *guided_missile;
 
 // Pristroje
 SDL_Surface *radar;

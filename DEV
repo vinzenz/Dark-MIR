@@ -1,0 +1,10 @@
+================================================================================
+Some development info
+================================================================================
+
+
+	images.h	- declaration of SDL surfaces pointers
+	images.c	- filling SDL surface pointers
+		
+	ships.h		- ship models (types) definition
+	weapons.h	- weapons models (types) definition

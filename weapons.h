@@ -58,6 +58,15 @@ T_weapon RX_M1 = {
 
 };
 
+T_weapon RX_M2 = {
+	.type = GUIDED_MISSILE,
+	.speed = 10,
+	.damage = 20,
+	.alive = 1,
+	.ttl = 500,
+
+};
+
 
 T_weapon ZX_Q1 = {
 	.type = ENERGY_LASER,

@@ -583,9 +583,17 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_2 -= 1;
-			//player[id].ship.wp_2--;
 			weapon[i] = RX_M1;
 			break;
+
+		case GUIDED_MISSILE:
+			if(	player[id].ship.wp_3 <= 0)
+				return FAIL;
+
+			player[id].ship.wp_3 -= 1;
+			weapon[i] = RX_M2;
+			break;
+
 
 	}
 	weapon[i].angle = 	player[id].ship.angle;
@@ -777,11 +785,11 @@ int Inicializuj_objekty(){
 	
 	for(int i=0; i < MAX_PLAYERS; i++){
 		if(i % 3 == 0)
-			player[i].ship = SHIP_GREEN_ZX;
+			player[i].ship = SHIP_RED_RX;
 		else if(i % 3 == 1)
 			player[i].ship = SHIP_BLUE_RX;
 		else if(i % 3 == 2)
-			player[i].ship = SHIP_RED_EX;
+			player[i].ship = SHIP_GREEN_ZX;
 
 		player[i].ship.X = (MAX_X/2) + (i * 200);
 		player[i].ship.Y = (MAX_Y/2) + (i * 200);
@@ -793,6 +801,7 @@ int Inicializuj_objekty(){
 		player[i].ship.wp_1 	= player[i].ship.MAX_wp_1;
 		printf("WP1: %d\n", player[i].ship.wp_1);
 		player[i].ship.wp_2 	= player[i].ship.MAX_wp_2;
+		player[i].ship.wp_3 	= player[i].ship.MAX_wp_3;
 		player[i].ship.acceleration	= 0;
 		player[i].ship.alive	= 1;
 	}
@@ -806,7 +815,10 @@ int Inicializuj_objekty(){
 //==============================================================================
 int Pohybuj_objekty(){
 //==============================================================================
-//
+
+  float x,y,v;
+  float distance = 99999;
+  float min_distance = 99999;
 
   for(int i=0; i < players; i++){
 
@@ -866,8 +878,80 @@ int Pohybuj_objekty(){
 
 	// === PROJECTILS (WEAPONS) movement ===
 	
-	for (int i=0; i < pocet_weapons; i++){
+  for (int i=0; i < pocet_weapons; i++){
+	int n = 0;
+
 	  if(! weapon[i].alive) continue;
+	  if(weapon[i].type == GUIDED_MISSILE){
+
+		// Find the nearest enemy ship
+		 for(int j = 0; j < players; j++){
+			if(! player[j].alive) continue;
+			if(player[j].ship.strana == weapon[i].strana) continue;
+
+			x = player[j].ship.X - weapon[i].X;
+			y = player[j].ship.Y - weapon[i].Y;
+			//distance = (x * x) + (y * y);
+			distance = sqrt((x * x) + (y * y));
+		
+			if(distance < min_distance){
+				n = j;
+				min_distance = distance;
+			}			
+  		}
+		
+		// Set angle 
+		// WARINING kvadranty a znamenka
+		if(distance > 100){
+			x = player[n].ship.X - weapon[i].X;
+			y = player[n].ship.Y - weapon[i].Y;
+
+			//x = weapon[i].X - player[n].ship.X;
+			//y = weapon[i].Y - player[n].ship.Y;
+			v = y / x;
+
+
+			if(y > 0){
+				if(x > 0){	// I (4)
+					weapon[i].angle =  360 - (180/M_PI) * atan(v);
+					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) weapon[i].angle);
+					POINT(1);
+				}
+				else{		// II (3)
+					weapon[i].angle = 180 - (180/M_PI) * atan(v);
+					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) weapon[i].angle);
+					POINT(2);
+				}
+			}
+			else{
+				if(x > 0){	// IV (1)
+					weapon[i].angle = 360 - (180/M_PI) * atan(v);
+					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) weapon[i].angle);
+					POINT(4);
+				}
+				else{		// III (2)
+					weapon[i].angle = 180 - (180/M_PI) * atan(v);
+					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) weapon[i].angle);
+					POINT(3);
+				}
+			}
+
+
+//			v = v - trunc(v) * M_PI;
+/*
+			if((v > M_PI_2) && ( v < M_PI))
+				weapon[i].angle = 270 + (180/M_PI) * atan(v);
+			if((v < 0) && ( v > - M_PI_2))
+				weapon[i].angle = -1 *  (180/M_PI) * atan(v);
+
+			if((v > 0) && ( v < M_PI_2))
+				weapon[i].angle =   (180/M_PI) * atan(v);
+			else
+				weapon[i].angle =    (180/M_PI) * atan(v);
+*/				
+		}
+	  }
+
 	  weapon[i].X += weapon[i].speed * cos(((float)weapon[i].angle/180)*M_PI);
 	  weapon[i].Y -= weapon[i].speed  * sin(((float)weapon[i].angle/180)*M_PI); 	
 
@@ -912,6 +996,7 @@ int Detekuj_kolize(){
 			weapon[i].speed = 0;
 			weapon[i].damage= 0;
 			weapon[i].type = EXPLOSION;
+			// sending until server quits, so TODO
 
 
 			if(player[x].ship.health <= 0){
@@ -936,6 +1021,7 @@ int Detekuj_kolize(){
 				player[x].ship.health = player[x].ship.MAX_health;
 				player[x].ship.wp_1 	= player[x].ship.MAX_wp_1;
 				player[x].ship.wp_2 	= player[x].ship.MAX_wp_2;
+				player[x].ship.wp_3 	= player[x].ship.MAX_wp_3;
 				player[x].ship.speed = 0;
 				printf("RESPAWN: %d \n",player[i].ship.wp_2);
 			}

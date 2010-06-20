@@ -6,6 +6,7 @@
 #define ROCKET 2
 #define ENERGY_LASER 3
 #define MICRO_MISSILE 4
+#define GUIDED_MISSILE 5
 
 #define EXPLOSION 20
 // ==========================================

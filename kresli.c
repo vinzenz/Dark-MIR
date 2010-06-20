@@ -188,7 +188,7 @@ int Draw_weapon(T_weapon *weapon){
 SDL_Rect rect;
 SDL_Rect rect2;
 static int T;
-static int clk;
+//static int clk;
 
   if(weapon->X < 0){
 		  Draw_weapon(&Explosion);
@@ -240,7 +240,6 @@ static int clk;
 		break;
 
 	case ENERGY_LASER:
-
 		if(weapon->img != NULL)
 			SDL_FreeSurface(weapon->img);		
 
@@ -248,6 +247,17 @@ static int clk;
 		
 		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X /*- lasers[i].sX */ - X;
 		rect.y = (HEIGHT/2) - (weapon->img->h/2) + weapon->Y /*- lasers[i].sY*/ - Y;
+		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
+		break;
+
+	case GUIDED_MISSILE:
+		if(weapon->img != NULL)
+			SDL_FreeSurface(weapon->img);		
+
+		weapon->img = rotozoomSurface(guided_missile, weapon->angle, 1, 0);
+		
+		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X  - X;
+		rect.y = (HEIGHT/2) - (weapon->img->w/2) + weapon->Y  - Y;
 		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
 		break;
 

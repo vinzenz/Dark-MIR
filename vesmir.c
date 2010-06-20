@@ -36,7 +36,7 @@ Uint32 Redraw_loop(Uint32 interval, void *param);
 int Vesmir(){
 //==============================================================================
  
- int ukonci=0;
+ int quit=0;
  SDL_Event event;
  Uint8* keys;	
 
@@ -66,7 +66,7 @@ int Vesmir(){
 	Inicializuj_objekty();
 	
 	// ============================== GAME LOOP ==============================
-	while(!ukonci){
+	while(!quit){
 
 		// Recieving position X,Y, angle, speed ... of ship	
 		//Get_ship_state();		// NON blocking function
@@ -81,7 +81,7 @@ int Vesmir(){
 					
 				  case SDLK_ESCAPE:
 					pauza = 1;
-				  	ukonci = 1;		
+				  	quit = 1;		
 					break;
 				
 				  case SDLK_PAUSE:
@@ -121,10 +121,13 @@ int Vesmir(){
 				 	//my_ship->shift -= 1;
 					break;
 
+				 case SDLK_g:
+					Fire(GUIDED_MISSILE);
+					break;
 
 				 case SDLK_LSHIFT:			// TURBO
 				 case SDLK_RSHIFT:			
-					if(ship[ID].strana == RED);
+					if(ship[ID].strana == RED)
 						Turbo(START);
 				 	break;
 
@@ -197,7 +200,7 @@ int Vesmir(){
 				break;
 	
 			case SDL_QUIT:
-				ukonci = 1;
+				quit = 1;
 				break;
 
 				
@@ -376,11 +379,10 @@ int Prekresli_vesmir(){
 	
 	Kresli_strely();
 	
-	// === Lod === 
-	//		if(my_ship->alive) Kresli_lod(my_ship); 		// my ship 
+	// === Lode === 
 
 	for(int id = 0; id < pocet_lodi; id++){	
-		if(ship[id].alive) Kresli_lod(&ship[id]); 		// another ship
+		if(ship[id].alive) Kresli_lod(&ship[id]); 		
 	}	
 	// === Pristroje ===
 	
@@ -429,10 +431,10 @@ int Inicializuj_objekty(){
 	
 	my_ship = &ship[ID];	
 	
-	ship[0] = SHIP_GREEN_ZX;
+	ship[0] = SHIP_RED_RX;
 	ship[1] = SHIP_BLUE_RX;
-	ship[2] = SHIP_RED_EX;
-	ship[3] = SHIP_GREEN_ZX;
+	ship[2] = SHIP_GREEN_ZX;
+	ship[3] = SHIP_RED_RX;
 	ship[4] = SHIP_BLUE_RX;
 	
 	pocet_lodi   = 5;
