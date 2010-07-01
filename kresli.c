@@ -187,15 +187,16 @@ int Draw_weapon(T_weapon *weapon){
 //==============================================================================
 SDL_Rect rect;
 SDL_Rect rect2;
-static int T;
+int T;
 //static int clk;
+  if(! weapon->alive) return FAIL;
 
   if(weapon->X < 0){
 		  Draw_weapon(&Explosion);
 		  return OK;
   }
 
-
+  // Space borders
   if(weapon->X < (0 + 50))
 		  return OK;
   if(weapon->Y < (0 + 50))
@@ -263,11 +264,14 @@ static int T;
 
 	case EXPLOSION:
 
-		if(weapon->ttl > 10)
-				weapon->alive = 0;
+		if(weapon->ttl > 20){
+			weapon->alive = 0;
+			weapon->ttl = 0;
+			break;
+		}
 
 		T = weapon->ttl;
-		weapon->ttl++;
+		weapon->ttl += 1;
 
 		rect.x = (WIDTH/2) - (50/2) + weapon->X  - X;
 		rect.y = (HEIGHT/2) - (50/2) + weapon->Y  - Y;

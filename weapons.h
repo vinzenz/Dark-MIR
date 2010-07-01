@@ -3,7 +3,6 @@
 
 #include "zbrane.h"
 
-#define EXPLOSION_TTL 200
 /*
  typedef struct str_weapon {
 	SDL_Surface *img;

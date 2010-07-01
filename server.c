@@ -996,6 +996,8 @@ int Detekuj_kolize(){
 
 	for(int i=0; i < pocet_weapons; i++){
 		if(!weapon[i].alive) continue;
+		if(weapon[i].type == EXPLOSION) continue;		// ignore
+
 		if(weapon[i].strana == player[x].ship.strana) continue;
 
 		if(Collision_detect(&player[x].ship, &weapon[i])){
@@ -1006,8 +1008,8 @@ int Detekuj_kolize(){
 			weapon[i].alive = 1;
 			weapon[i].speed = 0;
 			weapon[i].damage= 0;
-			weapon[i].type = EXPLOSION;
 			weapon[i].ttl = EXPLOSION_TTL;
+			weapon[i].type = EXPLOSION;
 			// sending until server quits, so TODO
 
 

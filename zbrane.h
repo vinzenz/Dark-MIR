@@ -14,6 +14,7 @@
 #define MAX_LASER 300
 #define MAX_ROCKET 30
 
+#define EXPLOSION_TTL 10
 
 int pocet_weapons;
 
