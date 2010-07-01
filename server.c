@@ -70,6 +70,7 @@ int Inicializuj_objekty();
 int Pohybuj_objekty();
 int Detekuj_kolize();
  int Collision_detect(T_ship *ship, T_weapon *weapon );
+int Time_to_live(T_weapon *weapon );
 
 // Global variables
  //==============================================================================
@@ -321,6 +322,7 @@ Uint32 Timed_loop(Uint32 interval, void *param){
 	Pohybuj_objekty();
 
 	Detekuj_kolize();
+
 
 	return interval;
 }
@@ -888,6 +890,9 @@ int Pohybuj_objekty(){
 	int n = 0;
 
 	  if(! weapon[i].alive) continue;
+
+	  Time_to_live(&weapon[i]);
+
 	  if(weapon[i].type == GUIDED_MISSILE){
 
 		// Find the nearest enemy ship
@@ -1002,6 +1007,7 @@ int Detekuj_kolize(){
 			weapon[i].speed = 0;
 			weapon[i].damage= 0;
 			weapon[i].type = EXPLOSION;
+			weapon[i].ttl = EXPLOSION_TTL;
 			// sending until server quits, so TODO
 
 
@@ -1071,3 +1077,34 @@ int Collision_detect(T_ship *ship, T_weapon *weapon ){
   return c;
 }
 
+//==============================================================================
+int Time_to_live(T_weapon *weapon ){
+//==============================================================================
+/*
+  if (ship != NULL){
+		  ship->ttl -= 1;
+		  if(ship->ttl <= 0){
+		  }
+  }
+*/
+  if (weapon != NULL){
+		  weapon->ttl -= 1;
+
+		  if(weapon->ttl <= 0){
+			if(weapon->type == EXPLOSION){
+				weapon->alive = 0;
+				return OK;
+			}
+
+			weapon->alive 	= 1;
+			weapon->speed  /= 4;
+			weapon->damage	= 0;
+			weapon->ttl 	= EXPLOSION_TTL;
+			weapon->type = EXPLOSION;
+
+		  }
+  }
+  else return FAIL;
+
+  return OK;
+}

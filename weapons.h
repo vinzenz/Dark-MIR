@@ -3,6 +3,7 @@
 
 #include "zbrane.h"
 
+#define EXPLOSION_TTL 200
 /*
  typedef struct str_weapon {
 	SDL_Surface *img;
@@ -37,6 +38,7 @@ T_weapon RX_laser = {
 	.speed = 50,
 	.damage = 10,
 	.alive = 1,
+	.ttl = 300,	// 300 * 20 ms = 6s
 
 };
 
@@ -45,6 +47,7 @@ T_weapon RX_R1 = {
 	.speed = 20,
 	.damage = 30,
 	.alive = 1,
+	.ttl = 600,	//  = 12s
 
 };
 
@@ -54,7 +57,7 @@ T_weapon RX_M1 = {
 	.speed = 25,
 	.damage = 20,
 	.alive = 1,
-	.ttl = 200,
+	.ttl = 400,	//  = 8s
 
 };
 
@@ -63,7 +66,7 @@ T_weapon RX_M2 = {
 	.speed = 15,
 	.damage = 40,
 	.alive = 1,
-	.ttl = 500,
+	.ttl = 500, // 10s
 
 };
 
@@ -73,6 +76,7 @@ T_weapon ZX_Q1 = {
 	.speed = 50,
 	.damage = 20,
 	.alive = 1,
+	.ttl = 400, // 8s
 
 };
 
