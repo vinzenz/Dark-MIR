@@ -338,6 +338,59 @@ SDL_Rect dst;
 
   return OK;
 }
+//==============================================================================
+int Draw_configure(){
+//==============================================================================
+SDL_Rect src;
+SDL_Rect dst;
+
+	// === Draw Menu ===
+	 SDL_BlitSurface(settings_bg, NULL, screen, NULL);
+
+	 dst.x = 50;
+	 dst.y = 50;
+	// LOGO
+	SDL_BlitSurface(menu_button[0], NULL, screen, &dst);
+
+	 dst.x = 200;
+	 dst.y = 350;
+
+	for(int i=1; i < MAX_BUTTONS; i++){
+		SDL_BlitSurface(menu_button[i], NULL, screen, &dst);
+		dst.y += 70;
+	}
+	 SDL_Flip(screen);
+
+
+  return OK;
+}
+
+//==============================================================================
+int Draw_connect(){
+//==============================================================================
+SDL_Rect src;
+SDL_Rect dst;
+
+	// === Draw Menu ===
+	 SDL_BlitSurface(connect_bg, NULL, screen, NULL);
+
+	 dst.x = 50;
+	 dst.y = 50;
+	// LOGO
+	SDL_BlitSurface(menu_button[0], NULL, screen, &dst);
+
+	 dst.x = 200;
+	 dst.y = 350;
+
+	for(int i=1; i < MAX_BUTTONS; i++){
+		SDL_BlitSurface(menu_button[i], NULL, screen, &dst);
+		dst.y += 70;
+	}
+	 SDL_Flip(screen);
+
+
+  return OK;
+}
 
 //==============================================================================
 int FPS(){		// Frames Per Secund

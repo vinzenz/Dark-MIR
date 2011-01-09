@@ -4,6 +4,7 @@
 
 
 int Menu();
+int Configure();
 
 
 #define MAX_BUTTONS 10

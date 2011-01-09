@@ -20,6 +20,11 @@
 
   char player_list[MAX_PLAYERS][80];
 
+#define MAX_SERVERS 16
+#define SERVER_ADDRESS_MAX 256
+
+  char server_list[MAX_SERVERS][SERVER_ADDRESS_MAX];
+
 // FUNCTIONS
 // =============================================================================
 int New_client();
@@ -40,6 +45,8 @@ int Get_weapon_states();
 int Get_player_list();
 int Request_player_list();
 
-
+//==============================================================================
+int	NET_Init(const char *hostname);
+int Load_server_list();
 
 #endif

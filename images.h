@@ -24,6 +24,7 @@ int Kresli_lod();
 int Kresli_pristroje();
 int Kresli_strely();
 int Draw_menu();
+int Draw_configure();
 
 SDL_Surface *screen;            // okno
 
@@ -31,6 +32,7 @@ SDL_Surface *screen;            // okno
 // ===== MENU =====
 SDL_Surface *menu_bg;           // pozadi
 SDL_Surface *settings_bg;       // pozadi
+SDL_Surface *connect_bg;        // pozadi
 
 SDL_Surface *menu_connect_button;
 SDL_Surface *menu_settings_button;

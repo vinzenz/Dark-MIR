@@ -407,7 +407,7 @@ int Speed_up(int id, int X){
   	player[id].ship.acceleration = + player[id].ship.MAX_acceleration;	
   
 
-  printf("acceleration: %f\n", (double) player[id].ship.acceleration);
+ // printf("acceleration: %f\n", (double) player[id].ship.acceleration);
 
 
   /*tp = t->data;
@@ -622,7 +622,7 @@ int Send_ship_states(){
   	  for(int x = 0; x < players; x++){
 		if(player[x].alive){
 		UDP_CHANNEL_SEND(player[x].channel);
-		fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+		//fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
 		}
   	  }
 	  tp = t->data;
@@ -655,7 +655,7 @@ int Send_ship_states(){
   for(int x = 0; x < players; x++){
 	if(player[x].alive){
 		UDP_CHANNEL_SEND(player[x].channel);
-		fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+		//fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
 	}
   }
 	
@@ -700,7 +700,7 @@ int Send_weapon_states(){
 	  for(int x = 0; x < players; x++){
 	    if(! player[x].alive) continue;
 		UDP_CHANNEL_SEND(player[x].channel);
-		fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+		//fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
       }
 	}
   }
@@ -709,7 +709,7 @@ int Send_weapon_states(){
 	for(int x = 0; x < players; x++){
 	    if(! player[x].alive) continue;
 		UDP_CHANNEL_SEND(player[x].channel);
-		fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+		//fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
     }
 
    	memset(t->data, 0xFF ,BUFF_SIZE);
@@ -804,7 +804,7 @@ int Inicializuj_objekty(){
 		player[i].ship.manevr	= 0;
 		player[i].ship.shift 	= 0;
 		player[i].ship.wp_1 	= player[i].ship.MAX_wp_1;
-		printf("WP1: %d\n", player[i].ship.wp_1);
+		//printf("WP1: %d\n", player[i].ship.wp_1);
 		player[i].ship.wp_2 	= player[i].ship.MAX_wp_2;
 		player[i].ship.wp_3 	= player[i].ship.MAX_wp_3;
 		player[i].ship.acceleration	= 0;
@@ -836,7 +836,7 @@ int Pohybuj_objekty(){
 	if(! player[i].ship.alive) continue;
 
 	player[i].ship.angle += player[i].ship.manevr;
-	printf("angle: %f\n", (double) player[i].ship.angle);
+	//printf("angle: %f\n", (double) player[i].ship.angle);
 
 	player[i].ship.speed += player[i].ship.acceleration + 
 			2 * player[i].ship.turbo * player[i].ship.acceleration ;

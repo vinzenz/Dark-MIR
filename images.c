@@ -129,10 +129,15 @@ int Load_space_images()
 int Load_menu_images(){
 //==============================================================================
 
-	menu_bg   	= MIR_LoadImage(ROOT"images/menu_bg.png", 1); 
-	settings_bg	= MIR_LoadImage(ROOT"images/settins_bg.png", 1); 
+	menu_bg   	= MIR_LoadImage(ROOT"images/menu/menu_bg.png", 1); 
 
-	menu_logo = MIR_LoadImage(ROOT"images/menu/logo.png", 1); 
+	//settings_bg	= MIR_LoadImage(ROOT"images/menu/settins_bg.png", 1); 
+	settings_bg	= MIR_LoadImage(ROOT"images/menu/configure_bg.png", 1); 
+
+	connect_bg	= MIR_LoadImage(ROOT"images/menu/connect_bg.png", 1); 
+
+	//menu_logo = MIR_LoadImage(ROOT"images/menu/logo.png", 1); 
+	menu_logo = MIR_LoadImage(ROOT"images/menu/logo_alpha.png", 1); 
 
 	menu_connect_button = MIR_LoadImage(ROOT"images/menu/connect_button.png", 1); 
 	menu_settings_button = MIR_LoadImage(ROOT"images/menu/settings_button.png", 1); 

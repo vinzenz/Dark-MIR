@@ -58,7 +58,6 @@ int main(int argc,char *argv[]){
 	Menu();
 
 	POINT(111);
-	NET_Init(hostname);
 	POINT(211);
 
 
@@ -84,15 +83,17 @@ int	Get_Opts(int argc, char **argv){
 	
 
 	// argumenty 
-    while (1) {
+  while (1) {
+
 	 int c = getopt(argc, argv, "hfer:l:n:");
 	 if (c == -1) {
 	      return OK;
 	    } else
-     switch (c) {
+
+   switch (c) {
 	  case 'h':
-		printf("%s\n", HELP_MSG);
-	    return OK;
+		    printf("%s\n", HELP_MSG);
+	      exit(EXIT_SUCCESS);
         break;
 	  
 	  case 'f':
@@ -100,17 +101,12 @@ int	Get_Opts(int argc, char **argv){
 	    break;
      
 	  case 'r':
-        
 	  	nastavene_rozliseni = atoi(optarg);
-		
-	    
 	    break;
 	  
 	  
 	  case 'l':
-        
 	  	p_lang = optarg;
-	    
 	    break; 
 
 	  case 'n':
@@ -173,55 +169,7 @@ int	Init(int w, int h, int bits, int full){
     SDL_ShowCursor(SDL_DISABLE); 
 	if(F==1)SDL_WM_ToggleFullScreen(screen);	
 
-    return OK;	
+  return OK;	
 }
 
 //==============================================================================
-int	NET_Init(const char *hostname){
-//==============================================================================
-	// ==== SDL_NET_Init ====
-	if (SDLNet_Init() == FAIL){
-	    fprintf(stderr, "ERROR: SDLNet_Init: %s\n", SDLNet_GetError());
-		exit(EXIT_FAILURE);
-	}
- 
-	// Resolving the host 
-  	if (SDLNet_ResolveHost(&ip, hostname, PORT) == FAIL){
-		fprintf(stderr, "ERROR: SDLNet_ResolveHost: %s\n", hostname);
-		fprintf(stderr, "ERROR: %s\n", SDLNet_GetError());
-	    exit(EXIT_FAILURE);
-    }
-
-
-/*// === TCP ===   	
-  // Open a connection with the IP provided ) 
-  if (!(sd = SDLNet_TCP_Open(&ip))){
-	fprintf(stderr, "SDLNet_TCP_Open: %s\n", SDLNet_GetError());
-	exit(EXIT_FAILURE);
-  }
-*/
-
-  // === UDP ===   	
-  if (!(usd = SDLNet_UDP_Open(0))) {
-	fprintf(stderr, "ERROR: SDLNet_UDP_Open: %s\n", SDLNet_GetError());
-	exit(EXIT_FAILURE);
-  }
-
-
-  // Allocate memory for the packet
-  if (!(t = SDLNet_AllocPacket(512))) {
-	fprintf(stderr, "ERROR: SDLNet_AllocPacket: %s\n", SDLNet_GetError());
-	exit(EXIT_FAILURE);
-  }
-  if (!(r = SDLNet_AllocPacket(512))) {
-	fprintf(stderr, "ERROR: SDLNet_AllocPacket: %s\n", SDLNet_GetError());
-	exit(EXIT_FAILURE);
-  }
- 
-  t->address.host = ip.host;	// Set the destination host 
-  t->address.port = ip.port;	// And destination port 
-  t->len = BUFF_SIZE;
-
-
-    return OK;	
-}

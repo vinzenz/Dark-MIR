@@ -2,7 +2,7 @@
 #ifndef PROGRAM_H
  #define PROGRAM_H
 
-#define  VERSION "0.01"
+#define  VERSION "0.02"
 
 #include <stdio.h> 
 #include <stdlib.h> 
@@ -101,18 +101,18 @@ int Vesmir();
 
 
 #define HELP_MSG "\
-DARK MIR v 0.01\n\
-2007-2010 copyright by (c) Alexej alexej.x@mail.ru GNU GPL-2 \n\
+DARK MIR version 0.02\n\
+2007-2011 copyright by (c) Alexej alexej.x@mail.ru GNU GPL-2 \n\
  ./mir [-r N] [-f] [-n NICK] < IP_address of server / domain name >\n\
-    	-h		show this help    	\n\
-		-n NICK	sets your nickname	\n\
-    	-f		fullscreen    		\n\
-    	-r NUM		resolution(default 1) 	\n\
-			0 = 800x600;\n\
-		  	1 = 1024x768;\n\
-			2 = 1280x1024;\n\
-			3 = 1280x800;\n\
-			4 = 1440x900;\n\
+      -h		show this help    	\n\
+      -n NICK	sets your nickname	\n\
+      -f		fullscreen    		\n\
+      -r NUM		resolution(default 1) 	\n\
+      0 = 800x600;\n\
+      1 = 1024x768;\n\
+      2 = 1280x1024;\n\
+      3 = 1280x800;\n\
+      4 = 1440x900;\n\
 "
 
 
