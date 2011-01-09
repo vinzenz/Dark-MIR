@@ -155,8 +155,7 @@ int Connect(){
 		fprintf(stderr, "ERROR: nepodarilo se nacist obrazky pro vesmir\n");
 
 
-  //menu_button[0] = menu_logo;
-  menu_button[0] = NULL;
+  menu_button[0] = menu_logo_small;
 
   menu_button[1] = NULL;
   menu_button[2] = NULL;
