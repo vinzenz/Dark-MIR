@@ -148,7 +148,8 @@ int Connect(){
   SDL_Event event;
   Uint8* keys;	
 
-  Uint8 quit= 0;
+  int quit= 0;
+  int rc = 0;  // return code
 
   if(Load_menu_images() == FAIL) 
 		fprintf(stderr, "ERROR: nepodarilo se nacist obrazky pro vesmir\n");
@@ -182,14 +183,22 @@ int Connect(){
              	case SDLK_1:
              	case SDLK_KP1:
                  	POINT(1);
-	                NET_Init(server_list[1]);
+	                rc = Connect2server(server_list[1]);
+                  if(rc == FAIL){
+                    Message("SERVER NOT RESPONDING");
+                    break;
+                  }
                   Vesmir();
                  	break;
 
              	case SDLK_2:
              	case SDLK_KP2:
                  	POINT(2);
-	                NET_Init(server_list[2]);
+	                rc = Connect2server(server_list[2]);
+                  if(rc == FAIL){
+                    Message("SERVER NOT RESPONDING");
+                    break;
+                  }
                   Vesmir();
                  	break;
 				
@@ -213,6 +222,12 @@ int Connect(){
   return OK;
 }
 //==============================================================================
+int Message(const char *msg){
+
+  strncpy(status_line, msg, 255);
+
+  return OK;
+}
 //==============================================================================
 //==============================================================================
 //==============================================================================

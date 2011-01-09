@@ -375,7 +375,7 @@ SDL_Rect dst;
 	 SDL_BlitSurface(connect_bg, NULL, screen, NULL);
 
 	 dst.x = 50;
-	 dst.y = 50;
+	 dst.y = 10;
 	// LOGO
 	SDL_BlitSurface(menu_button[0], NULL, screen, &dst);
 
@@ -386,7 +386,28 @@ SDL_Rect dst;
 		SDL_BlitSurface(menu_button[i], NULL, screen, &dst);
 		dst.y += 70;
 	}
-	 SDL_Flip(screen);
+
+	 dst.x = 75;
+	 dst.y = 65;
+
+  char tmp[SERVER_ADDRESS_MAX + 10];
+
+	for(int i=1; i < MAX_SERVERS; i++){
+
+    sprintf(tmp, " [ %2X ]   ", i);
+    strcat(tmp, server_list[i]);
+		console_line = TTF_RenderText_Solid(text_font, tmp ,fg_color);
+
+		SDL_BlitSurface(console_line, NULL, screen, &dst);	
+		SDL_FreeSurface(console_line);
+		dst.y += 30;
+	}
+
+  console_line = TTF_RenderText_Solid(text_font, status_line ,fg_color);
+  SDL_BlitSurface(console_line, NULL, screen, &dst);	
+  SDL_FreeSurface(console_line);
+
+  SDL_Flip(screen);
 
 
   return OK;

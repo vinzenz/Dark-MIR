@@ -46,7 +46,7 @@ int Get_player_list();
 int Request_player_list();
 
 //==============================================================================
-int	NET_Init(const char *hostname);
+int	Connect2server(const char *hostname);
 int Load_server_list();
 
 #endif

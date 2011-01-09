@@ -42,12 +42,6 @@ int Vesmir(){
 
 	// Inicializace
 
-	if(New_client() == OK)		// TELL "hello server"
-		printf("---==:: CONNECTED ::==---\n");
-	else{			
-		fprintf(stderr, "SERVER ERROR");
-		// react somehow
-	}
 
 	
 	if(Load_space_images() == FAIL) 

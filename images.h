@@ -25,6 +25,7 @@ int Kresli_pristroje();
 int Kresli_strely();
 int Draw_menu();
 int Draw_configure();
+int Draw_connect();
 
 SDL_Surface *screen;            // okno
 
@@ -38,6 +39,7 @@ SDL_Surface *menu_connect_button;
 SDL_Surface *menu_settings_button;
 SDL_Surface *menu_exit_button;	
 SDL_Surface *menu_logo;
+SDL_Surface *menu_logo_small;
 
 
 
@@ -100,6 +102,7 @@ SDL_Surface *console;
 SDL_Surface *console_line;
 SDL_Surface *console_bg;
 TTF_Font *console_font;
+TTF_Font *text_font;
 
 
 SDL_Color fg_color;

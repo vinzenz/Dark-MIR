@@ -59,12 +59,6 @@ int main(int argc,char *argv[]){
 
 	POINT(111);
 	POINT(211);
-
-
-//	Init(WIDTH, HEIGHT, COLOR, 0);
-    
-  // === GAME LOOP === 
-	Vesmir();	 
 	 
   // === DESTRUCTOR === 
 	TTF_Quit();
@@ -164,6 +158,13 @@ int	Init(int w, int h, int bits, int full){
 			  return FAIL;
 	}
 	TTF_SetFontStyle(console_font, TTF_STYLE_NORMAL);
+
+	text_font = TTF_OpenFont(ROOT"data/normal.ttf", 20);
+	if(!text_font){
+			  printf("Unable to open font: %s\n", TTF_GetError());
+			  return FAIL;
+	}
+	TTF_SetFontStyle(text_font, TTF_STYLE_NORMAL);
 
 
     SDL_ShowCursor(SDL_DISABLE); 

@@ -49,7 +49,7 @@ int New_client(){
 
   }
 		printf("SERVER IS NOT RUNNING\n");		
-  		exit(EXIT_FAILURE);
+  	return FAIL;
 }
 
 //==============================================================================

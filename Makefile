@@ -7,7 +7,7 @@
 
 TARGET = mir
 SERVER_TARGET = server
-CFLAGS = --std=c99 -Wall -pedantic  $(shell sdl-config --cflags)  -O2 -DDEBUG -g
+CFLAGS = --std=c99 -Wall -pedantic  $(shell sdl-config --cflags)  -O2  -g
 LDFLAGS = $(shell sdl-config --libs) -lSDL_image -lSDL_ttf -lSDL_net -lm -lSDL_gfx
 OPTIMALIZE = -O2
 
