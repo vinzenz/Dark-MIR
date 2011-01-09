@@ -10,6 +10,7 @@
  * na stejny pixel format, jako ma okno (framebuffer)
  */
 
+//==============================================================================
 SDL_Surface *MIR_LoadImage(const char *filename, int alpha)
 {
 	SDL_Surface *tmp;// Pomocny
@@ -38,7 +39,7 @@ SDL_Surface *MIR_LoadImage(const char *filename, int alpha)
 
 
 //==============================================================================
-int Nacti_obrazky_vesmir()
+int Load_space_images()
 //==============================================================================
 {
 	fg_color.r=255; 
@@ -125,17 +126,22 @@ int Nacti_obrazky_vesmir()
 
 
 //==============================================================================
-int Nacti_obrazky_menu()
+int Load_menu_images(){
 //==============================================================================
-{
-	bg_img   	= MIR_LoadImage(ROOT"images/bg.png", 1); 
-	bg_nastaveni	= MIR_LoadImage(ROOT"images/bg_nastaveni.jpg", 1); 
-	//tlacitko 	= MIR_LoadImage(ROOT"images/tlacitko.png", 1); 
+
+	menu_bg   	= MIR_LoadImage(ROOT"images/menu_bg.png", 1); 
+	settings_bg	= MIR_LoadImage(ROOT"images/settins_bg.png", 1); 
+
+	menu_logo = MIR_LoadImage(ROOT"images/menu/logo.png", 1); 
+
+	menu_connect_button = MIR_LoadImage(ROOT"images/menu/connect_button.png", 1); 
+	menu_settings_button = MIR_LoadImage(ROOT"images/menu/settings_button.png", 1); 
+	menu_exit_button = MIR_LoadImage(ROOT"images/menu/exit_button.png", 1); 
 	//policko  	= MIR_LoadImage(ROOT"images/policko.png", 1); 
 	//policko1  	= MIR_LoadImage(ROOT"images/policko-1.png", 1); 
 	
-	if (bg_img != NULL && 
-		bg_nastaveni != NULL)
+	if (menu_bg != NULL && 
+		settings_bg != NULL)
 		return OK;
 	
 	 return FAIL;
@@ -144,31 +150,32 @@ int Nacti_obrazky_menu()
 
 
 //==============================================================================
-int Uklid_obrazky_menu()
+int Free_menu_images(){
 //==============================================================================
-{
-	if(bg_img!=NULL) SDL_FreeSurface(bg_img);
-	if(bg_nastaveni!=NULL) SDL_FreeSurface(bg_nastaveni);
-	//if(tlacitko!=NULL) SDL_FreeSurface(tlacitko);
-	//if(policko!=NULL) SDL_FreeSurface(policko);
-	//if(policko1!=NULL) SDL_FreeSurface(policko1);
+
+	FREE(menu_bg);
+	FREE(settings_bg);
+
+	FREE(menu_connect_button);
+	FREE(menu_settings_button);
+	FREE(menu_exit_button);
 		
 	return OK;
 }
 
 
 //==============================================================================
-int Uklid_obrazky_vesmir()
+int Free_space_images(){
 //==============================================================================
-{
-	if(lod!=NULL) SDL_FreeSurface(lod);
-	if(space!=NULL) SDL_FreeSurface(space);
-	if(laser!=NULL) SDL_FreeSurface(laser);
-	if(radar!=NULL) SDL_FreeSurface(radar);	
-	if(position_x!=NULL) SDL_FreeSurface(position_x);	
-	if(position_y!=NULL) SDL_FreeSurface(position_y);	
-	if(position_ptr_x!=NULL) SDL_FreeSurface(position_ptr_x);	
-	if(position_ptr_y!=NULL) SDL_FreeSurface(position_ptr_y);	
+
+	FREE(lod);
+	FREE(space);
+	FREE(laser);
+	FREE(radar);	
+	FREE(position_x);	
+	FREE(position_y);	
+	FREE(position_ptr_x);	
+	FREE(position_ptr_y);	
 	
 	return OK;
 }

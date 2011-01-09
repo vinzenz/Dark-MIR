@@ -120,4 +120,8 @@ DARK MIR v 0.01\n\
 #define POINT(N) printf("POINT: %3d\n",(N)); fflush(stdout);
 
 
+
+
+#define CENTRAL_GAME_SERVER "undergroundlab.cz"
+
 #endif

@@ -4,6 +4,7 @@
 #include "lod.h"
 #include "zbrane.h"
 #include "client.h"
+#include "menu.h"
 
 #include <SDL/SDL_rotozoom.h>
 
@@ -311,8 +312,32 @@ return OK;
 
 
 
+//==============================================================================
+int Draw_menu(){
+//==============================================================================
+SDL_Rect src;
+SDL_Rect dst;
+
+	// === Draw Menu ===
+	 SDL_BlitSurface(menu_bg, NULL, screen, NULL);
+
+	 dst.x = 200;
+	 dst.y = 350;
+	// LOGO
+	SDL_BlitSurface(menu_button[0], NULL, screen, &dst);
+
+	 dst.x = 100;
+	 dst.y = 50;
+
+	for(int i=1; i < MAX_BUTTONS; i++){
+		SDL_BlitSurface(menu_button[i], NULL, screen, &dst);
+		dst.y += 70;
+	}
+	 SDL_Flip(screen);
 
 
+  return OK;
+}
 
 //==============================================================================
 int FPS(){		// Frames Per Secund

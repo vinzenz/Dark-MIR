@@ -50,7 +50,7 @@ int Vesmir(){
 	}
 
 	
-	if(Nacti_obrazky_vesmir() == FAIL) 
+	if(Load_space_images() == FAIL) 
 		fprintf(stderr, "ERROR: nepodarilo se nacist obrazky pro vesmir\n");
  
 	//SDL_EnableKeyRepeat( 50, 50);  // Dalsi signal stisknute klavesy odesle po 50ms
@@ -300,7 +300,7 @@ int Vesmir(){
   printf("---==:: DISCONNECTED ::==---\n");
 	
   // === Uklizeni ===
-  Uklid_obrazky_vesmir();
+  Free_space_images();
   
   SDL_RemoveTimer(draw_timer);
   SDL_RemoveTimer(mv_timer);

@@ -24,24 +24,26 @@
 #include "program.h"
 #include "images.h"
 #include "client.h"
+#include "menu.h"
 
 #include <getopt.h>
 
 
 
 int	Init(int w, int h, int bits, int full);
-int NET_Init();	
+int NET_Init(const char *hostname);	
 int	Get_Opts(int argc, char **argv);
 
 
-// -------------------------------------------------------------------------------------------
 
 //==============================================================================
 int main(int argc,char *argv[]){
 //==============================================================================
 
-
+	
   strcpy(nick, "PLAYER_Alexej");
+  nastavene_rozliseni = VYCHOZI_ROZLISENI;
+  strcpy(hostname, CENTRAL_GAME_SERVER);
 
 	Get_Opts(argc, argv);  
 	
@@ -49,16 +51,23 @@ int main(int argc,char *argv[]){
 	
 //	Nacti_jazyk(p_lang);
 
-	NET_Init();
 
 	Nastav_rozliseni();   
 	Zmena_rozliseni(nastavene_rozliseni);
+
+	Menu();
+
+	POINT(111);
+	NET_Init(hostname);
+	POINT(211);
+
 
 //	Init(WIDTH, HEIGHT, COLOR, 0);
     
   // === GAME LOOP === 
 	Vesmir();	 
 	 
+  // === DESTRUCTOR === 
 	TTF_Quit();
 	SDL_Quit();
 
@@ -68,18 +77,17 @@ int main(int argc,char *argv[]){
 
 
 
-
-// -------------------------------------------------------------------------------------------
 //==============================================================================
 int	Get_Opts(int argc, char **argv){
 //==============================================================================
   char *p_lang;
+	
 
 	// argumenty 
     while (1) {
 	 int c = getopt(argc, argv, "hfer:l:n:");
 	 if (c == -1) {
-	      break;
+	      return OK;
 	    } else
      switch (c) {
 	  case 'h':
@@ -94,6 +102,7 @@ int	Get_Opts(int argc, char **argv){
 	  case 'r':
         
 	  	nastavene_rozliseni = atoi(optarg);
+		
 	    
 	    break;
 	  
@@ -118,7 +127,6 @@ int	Get_Opts(int argc, char **argv){
 
 	return OK;
 }
-// -------------------------------------------------------------------------------------------
 
 
 
@@ -162,14 +170,14 @@ int	Init(int w, int h, int bits, int full){
 	TTF_SetFontStyle(console_font, TTF_STYLE_NORMAL);
 
 
-
+    SDL_ShowCursor(SDL_DISABLE); 
 	if(F==1)SDL_WM_ToggleFullScreen(screen);	
 
     return OK;	
 }
 
 //==============================================================================
-int	NET_Init(){
+int	NET_Init(const char *hostname){
 //==============================================================================
 	// ==== SDL_NET_Init ====
 	if (SDLNet_Init() == FAIL){
@@ -179,9 +187,11 @@ int	NET_Init(){
  
 	// Resolving the host 
   	if (SDLNet_ResolveHost(&ip, hostname, PORT) == FAIL){
-		fprintf(stderr, "ERROR: SDLNet_ResolveHost: %s\n", SDLNet_GetError());
+		fprintf(stderr, "ERROR: SDLNet_ResolveHost: %s\n", hostname);
+		fprintf(stderr, "ERROR: %s\n", SDLNet_GetError());
 	    exit(EXIT_FAILURE);
     }
+
 
 /*// === TCP ===   	
   // Open a connection with the IP provided ) 
