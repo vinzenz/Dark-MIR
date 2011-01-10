@@ -348,7 +348,7 @@ SDL_Rect dst;
 	 SDL_BlitSurface(settings_bg, NULL, screen, NULL);
 
 	 dst.x = 50;
-	 dst.y = 50;
+	 dst.y = 10;
 	// LOGO
 	SDL_BlitSurface(menu_button[0], NULL, screen, &dst);
 
@@ -358,6 +358,17 @@ SDL_Rect dst;
 	for(int i=1; i < MAX_BUTTONS; i++){
 		SDL_BlitSurface(menu_button[i], NULL, screen, &dst);
 		dst.y += 70;
+	}
+	 dst.x = 200;
+	 dst.y = 200;
+
+	for(int i=0; i < CONFIG_ITEMS_MAX; i++){
+
+		console_line = TTF_RenderText_Solid(text_font, configure_list[i] ,fg_color);
+
+		SDL_BlitSurface(console_line, NULL, screen, &dst);	
+		SDL_FreeSurface(console_line);
+		dst.y += 30;
 	}
 	 SDL_Flip(screen);
 

@@ -89,11 +89,20 @@ int Configure(){
 		fprintf(stderr, "ERROR: nepodarilo se nacist obrazky pro vesmir\n");
 
 
-  menu_button[0] = menu_logo;
+  menu_button[0] = menu_logo_small;
 
   menu_button[1] = menu_exit_button;
   menu_button[2] = NULL;
   menu_button[3] = NULL;
+
+
+  //for(int i = 0; i < CONFIG_ITEMS_MAX; i++){
+  strcpy(configure_list[0], " [ 0 ] resolution 800x600");
+  strcpy(configure_list[1], " [ 1 ] resolution 1024x768");
+  strcpy(configure_list[2], " [ 2 ] resolution 1280x1024");
+  strcpy(configure_list[3], " [ 3 ] resolution 1280x800");
+  strcpy(configure_list[4], " [ 4 ] resolution 1440x900");
+
 
   // ==== MENU LOOP ====
   while(!quit){
@@ -112,12 +121,25 @@ int Configure(){
              	case SDLK_1:
              	case SDLK_KP1:
                  	POINT(1);
-                 	quit = 1;
+                  Zmena_rozliseni(1);
                  	break;
 
              	case SDLK_2:
              	case SDLK_KP2:
+                  Zmena_rozliseni(2);
                  	POINT(2);
+                 	break;
+
+             	case SDLK_3:
+             	case SDLK_KP3:
+                  Zmena_rozliseni(3);
+                 	POINT(3);
+                 	break;
+
+             	case SDLK_4:
+             	case SDLK_KP4:
+                  Zmena_rozliseni(4);
+                 	POINT(4);
                  	break;
 				
 				default:
@@ -182,6 +204,8 @@ int Connect(){
              	case SDLK_1:
              	case SDLK_KP1:
                  	POINT(1);
+                  Message("Connecting to  ... [  1  ] ");
+                  Draw_connect();
 	                rc = Connect2server(server_list[1]);
                   if(rc == FAIL){
                     Message("SERVER NOT RESPONDING");
@@ -193,6 +217,8 @@ int Connect(){
              	case SDLK_2:
              	case SDLK_KP2:
                  	POINT(2);
+                  Message("Connecting to  ... [  2  ] ");
+                  Draw_connect();
 	                rc = Connect2server(server_list[2]);
                   if(rc == FAIL){
                     Message("SERVER NOT RESPONDING");
