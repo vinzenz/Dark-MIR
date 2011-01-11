@@ -1,3 +1,12 @@
+//==============================================================================
+// DARK MIR server
+//==============================================================================
+//
+// author:  Alexej.x [at] mail.ru
+// license: GNU GPL-2
+//
+//==============================================================================
+
 #include <math.h>
 
 #include "program.h"
@@ -40,8 +49,9 @@ int I;
 
 
 
+//==============================================================================
 // Function prototypes
- //==============================================================================
+//==============================================================================
 int Init();
 int Init_server();
 int Server();
@@ -49,7 +59,7 @@ int New_client(T_player *p);
 int Free_client(int id);
 
 
- //==============================================================================
+//==============================================================================
 int Speed_up	(int id, int X);
 int Slow_down	(int id, int X);
 int Rotate_R	(int id, int X);
@@ -69,11 +79,12 @@ Uint32 Timed_loop(Uint32 interval, void *param);
 int Inicializuj_objekty();
 int Pohybuj_objekty();
 int Detekuj_kolize();
- int Collision_detect(T_ship *ship, T_weapon *weapon );
+ static inline int Collision_detect(T_ship *ship, T_weapon *weapon );
 int Time_to_live(T_weapon *weapon );
 
+//==============================================================================
 // Global variables
- //==============================================================================
+//==============================================================================
   SDL_TimerID mv_timer = NULL;
 
   TCPsocket ssd;	// server listening socket
@@ -669,17 +680,16 @@ int Send_weapon_states(){
   Uint8 *tp = NULL;
   tp = t->data + BUFF_SIZE;
 
-  for(unsigned int a = 0; a < pocet_weapons; a++){
-	if(! weapon[a].alive)	continue;  
- 	
+  for(int a = 0; a < pocet_weapons; a++){
+	  if(! weapon[a].alive)	continue;  
 
 	// New packet needed
-	if(tp - t->data >= BUFF_SIZE-1) {	
-		tp = t->data;
-		memset(t->data, 0xFF ,BUFF_SIZE);
-  		*tp = P_WEAPON_STATES;										// OP CODE
-  		tp++;
-	}
+    if(tp - t->data >= BUFF_SIZE-1) {	
+      tp = t->data;
+      memset(t->data, 0xFF ,BUFF_SIZE);
+      *tp = P_WEAPON_STATES;										// OP CODE
+      tp++;
+    }
 
 		*tp = (Uint8) a;											// ID
 		tp++;
@@ -706,11 +716,11 @@ int Send_weapon_states(){
   }
   
 	// send the rest of it	
-	for(int x = 0; x < players; x++){
-	    if(! player[x].alive) continue;
-		UDP_CHANNEL_SEND(player[x].channel);
-		//fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
-    }
+for(int x = 0; x < players; x++){
+  if(! player[x].alive) continue;
+  UDP_CHANNEL_SEND(player[x].channel);
+  //fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+  }
 
    	memset(t->data, 0xFF ,BUFF_SIZE);
 	return OK;
@@ -844,9 +854,12 @@ int Pohybuj_objekty(){
 	// ==== speed limit ====
  	if(player[i].ship.speed < 0)
 		  player[i].ship.speed = 0;
-	if(player[i].ship.speed > (player[i].ship.MAX_speed + player[i].ship.turbo * player[i].ship.MAX_speed) ){
 
-			player[i].ship.speed =  player[i].ship.MAX_speed + player[i].ship.turbo * player[i].ship.MAX_speed ;
+	if(player[i].ship.speed > 
+    (player[i].ship.MAX_speed + player[i].ship.turbo * player[i].ship.MAX_speed) ){
+
+		player[i].ship.speed =  
+      player[i].ship.MAX_speed + player[i].ship.turbo * player[i].ship.MAX_speed ;
 			//player[i].ship.acceleration = 0;
 
 	}
@@ -854,10 +867,10 @@ int Pohybuj_objekty(){
 
 		
 	// ==== angle limit ====
-  	if(player[i].ship.angle > 360)
-		player[i].ship.angle -= 360;
-	if(player[i].ship.angle < 0)
-		player[i].ship.angle += 360;
+  if(player[i].ship.angle > 360)
+    player[i].ship.angle -= 360;
+  if(player[i].ship.angle < 0)
+    player[i].ship.angle += 360;
 
 	// ==== position change ====
 	player[i].ship.X += player[i].ship.speed * cos(((float)player[i].ship.angle/180)*M_PI)
@@ -876,10 +889,10 @@ int Pohybuj_objekty(){
 			player[i].ship.Y = MAX_Y;
 
 	// LEFT  UP
-	if(player[i].ship.X < 0) 
-			player[i].ship.X = 0;
-	if(player[i].ship.Y < 0) 
-			player[i].ship.Y = 0;
+  if(player[i].ship.X < 0) 
+    player[i].ship.X = 0;
+  if(player[i].ship.Y < 0) 
+    player[i].ship.Y = 0;
 
   }
 	Send_ship_states();
@@ -893,15 +906,17 @@ int Pohybuj_objekty(){
 
 	  Time_to_live(&weapon[i]);
 
+    // === Guided missile ===
 	  if(weapon[i].type == GUIDED_MISSILE){
 
 		// Find the nearest enemy ship
-		 for(int j = 0; j < players; j++){
-			if(! player[j].alive) continue;
-			if(player[j].ship.strana == weapon[i].strana) continue;
+    for(int j = 0; j < players; j++){
+      if(! player[j].alive) continue;
+      if(player[j].ship.strana == weapon[i].strana) continue;
 
 			x = player[j].ship.X - weapon[i].X;
 			y = player[j].ship.Y - weapon[i].Y;
+
 			//distance = (x * x) + (y * y);
 			distance = sqrt((x * x) + (y * y));
 		
@@ -909,11 +924,12 @@ int Pohybuj_objekty(){
 				n = j;
 				min_distance = distance;
 			}			
-  		}
+    } // for
 		
 		// Set angle 
 		// WARINING kvadranty a znamenka
-		if(distance > 100){
+    #define G_RANGE 3000
+		if(distance > 100 && distance < G_RANGE){
 			x = player[n].ship.X - weapon[i].X;
 			y = player[n].ship.Y - weapon[i].Y;
 
@@ -1063,7 +1079,7 @@ return OK;
 }
 
 //==============================================================================
-int Collision_detect(T_ship *ship, T_weapon *weapon ){
+static inline int Collision_detect(T_ship *ship, T_weapon *weapon ){
 //==============================================================================
 
 

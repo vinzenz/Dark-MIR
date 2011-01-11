@@ -33,6 +33,7 @@ int Menu(){
   menu_button[2] = menu_settings_button;
   menu_button[3] = menu_exit_button;
 
+  Message(" > _ ");
 		// === Primy pristup ke klavesnici ===
 		while(SDL_PollEvent(&event)){
            switch(event.type){

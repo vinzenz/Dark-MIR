@@ -65,9 +65,26 @@ int Load_server_list(){
 //==============================================================================
 
   strncpy(server_list[0], "undergroundlab.cz", 255);
-  strncpy(server_list[1], "undergroundlab.cz", 255);
-  strncpy(server_list[2], "127.0.0.1", 255);
 
+  
+  #define SERVER_LIST_FILE "SERVER_LIST"
+  FILE *file;
+  char buffer[SERVER_ADDRESS_MAX];
+
+  file = fopen(SERVER_LIST_FILE, "r");
+
+  int i = 1;
+  while(i < MAX_SERVERS){
+
+      if(fgets( buffer, SERVER_ADDRESS_MAX, file) == NULL) break;
+      buffer[strlen(buffer)-1] = '\0';
+      strncpy(server_list[i], buffer, 255);
+
+      DEBUG("reading server address")
+      i++;
+  }
+  strncpy(server_list[i], "127.0.0.1", 255);
+  fclose(file);
   return OK;
 }
 //==============================================================================

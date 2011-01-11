@@ -370,6 +370,13 @@ SDL_Rect dst;
 		SDL_FreeSurface(console_line);
 		dst.y += 30;
 	}
+
+/*
+	 dst.x = 300; dst.y = HEIGHT - 400;
+	 SDL_BlitSurface(red_flag_small, NULL, screen, &dst);
+	 dst.x = WIDTH -600; dst.y = HEIGHT - 400;
+	 SDL_BlitSurface(blue_flag_small, NULL, screen, &dst);
+*/
 	 SDL_Flip(screen);
 
 
@@ -417,6 +424,11 @@ SDL_Rect dst;
   console_line = TTF_RenderText_Solid(text_font, status_line ,fg_color);
   SDL_BlitSurface(console_line, NULL, screen, &dst);	
   SDL_FreeSurface(console_line);
+
+	 dst.x = 600; dst.y = 580;
+	 SDL_BlitSurface(red_flag_small, NULL, screen, &dst);
+	 dst.x = 750; dst.y = 580;
+	 SDL_BlitSurface(blue_flag_small, NULL, screen, &dst);
 
   SDL_Flip(screen);
 

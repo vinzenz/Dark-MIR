@@ -41,8 +41,13 @@ SDL_Surface *menu_exit_button;
 SDL_Surface *menu_logo;
 SDL_Surface *menu_logo_small;
 
+SDL_Surface *selection_table;
 
+SDL_Surface *red_flag;
+SDL_Surface *blue_flag;;
 
+SDL_Surface *red_flag_small;
+SDL_Surface *blue_flag_small;;
 // ===== SHIPS =====
 SDL_Surface *lod;			// hracohracova kosmicka lod
 SDL_Surface *lod_a;			// hracohracova kosmicka lod assault

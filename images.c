@@ -150,6 +150,15 @@ int Load_menu_images(){
 	menu_exit_button = MIR_LoadImage(ROOT"images/menu/exit_button.png", 1); 
 	//policko  	= MIR_LoadImage(ROOT"images/policko.png", 1); 
 	//policko1  	= MIR_LoadImage(ROOT"images/policko-1.png", 1); 
+
+	
+  selection_table = MIR_LoadImage(ROOT"images/menu/selection_table.png", 1); 
+
+  red_flag = MIR_LoadImage(ROOT"images/red_flag.png", 1); 
+  blue_flag = MIR_LoadImage(ROOT"images/blue_flag.png", 1); 
+
+  red_flag_small = MIR_LoadImage(ROOT"images/red_flag_small.png", 1); 
+  blue_flag_small= MIR_LoadImage(ROOT"images/blue_flag_small.png", 1); 
 	
 	if (menu_bg != NULL && 
 		settings_bg != NULL)
