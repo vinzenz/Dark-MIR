@@ -35,6 +35,7 @@ typedef struct str_player{
 	Uint8 channel;
 	Uint8 alive;
 
+	Uint8 faction;
 
 } T_player;
 
@@ -346,9 +347,9 @@ int New_client(T_player *p){
 
 
 	// ACK
-	t->address = r->address;
-  	t->len = BUFF_SIZE;
-	tp=t->data;
+  t->address = r->address;
+  t->len = BUFF_SIZE;
+  tp=t->data;
 
 	if(live_players >= MAX_PLAYERS){
 		*tp = P_LOGOUT;				// server is full
@@ -374,13 +375,38 @@ int New_client(T_player *p){
 		live_players++;
 
 	fprintf(TTY, "S: New_client id:%2d: connected\n", id);
-	fprintf(TTY, "S: new nick: %s\n", &r->data[1]);
+	fprintf(TTY, "S: new nick: %s\n", &r->data[2]);
 
 		p->channel = SDLNet_UDP_Bind(usd, id, &r->address);
 		p->alive = 1;
 		p->score = 0;
-		strncpy(p->nick, ((char *)r->data)+1, 32);
+    p->faction = ((Uint8*)(r->data))[1];
+		strncpy(p->nick, ((char *)r->data)+2, 32);
 
+  if(p->faction == RED)
+  	p->ship = SHIP_RED_RX;
+	else 
+    if(p->faction == BLUE)
+			p->ship = SHIP_BLUE_RX;
+    else 
+			p->ship = SHIP_GREEN_ZX;
+
+		p->ship.X = (MAX_X/2); 
+		p->ship.Y = (MAX_Y/2); 
+		p->ship.health	= p->ship.MAX_health;
+		p->ship.speed 	= 0.0;
+		p->ship.angle 	= 0;
+		p->ship.manevr	= 0;
+		p->ship.shift 	= 0;
+		p->ship.wp_1 	= p->ship.MAX_wp_1;
+		//printf("WP1: %d\n", player[i].ship.wp_1);
+		p->ship.wp_2 	= p->ship.MAX_wp_2;
+		p->ship.wp_3 	= p->ship.MAX_wp_3;
+		p->ship.acceleration	= 0;
+		p->ship.alive	= 1;
+
+    tp++;
+		*tp = p->faction;	 			// player ID
 	}
 	UDP_CHANNEL_SEND(p->channel);
 	

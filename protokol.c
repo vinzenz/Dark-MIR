@@ -5,6 +5,7 @@
 #include "zbrane.h"
 
 #include "images.h"
+#include "faction.h"
 
 //unsigned char tbuff[BUFF_SIZE];
 //unsigned char rbuff[BUFF_SIZE];
@@ -22,6 +23,8 @@ int New_client(){
 
 	*tp = P_NEW_PLAYER;
 	tp++;
+  *((Uint8*) tp) = FACTION;
+	tp++;
 	strncpy((char *) tp, (char *) nick, NICKNAME_MAX);
 
 //	printf("t->data[0]: 0x%X\n",t->data[0]);
@@ -29,27 +32,26 @@ int New_client(){
 
 	UDP_SEND;
 
-
   for(int i=0; i < 3; i++){
 
-	SDL_Delay(500);	  
+    SDL_Delay(500);	  
 		  
-	UDP_RECV;
-	else continue;
+    UDP_RECV;
+    else continue;
 
-	if(r->data[0] == P_NEW_PLAYER){
-		ID = r->data[1];
-		printf("ID: %2d\n", ID);
-  		return OK;
-	}
-	if(r->data[0] == P_LOGOUT){
-		printf("SERVER IS FULL\n");		
-  		exit(EXIT_FAILURE);
-	}
-
+    if(r->data[0] == P_NEW_PLAYER){
+      ID = r->data[1];
+      FACTION = r->data[2];
+      printf("ID: %2d\n", ID);
+      return OK;
+    }
+    if(r->data[0] == P_LOGOUT){
+      DEBUG("SERVER IS FULL");		
+      exit(EXIT_FAILURE);
+    }
   }
-		printf("SERVER IS NOT RUNNING\n");		
-  	return FAIL;
+  printf("SERVER IS NOT RUNNING\n");		
+  return FAIL;
 }
 
 //==============================================================================

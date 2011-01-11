@@ -8,6 +8,7 @@
 #define LOD_RX_speed 4
 #define LOD_RX_angle 10
 
+
 typedef struct str_ship{
 	SDL_Surface *img;		// img of ship
 	SDL_Surface *img_m;		// img of ship on move
@@ -88,7 +89,7 @@ typedef struct str_ship{
 
   int pocet_lodi;
 
-
+// =============================================================================
 // Function Prototypes  
 // =============================================================================
 

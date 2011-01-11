@@ -12,6 +12,10 @@
 // Ship models
 #include "ships.h"
 
+
+#include "faction.h"
+
+
 // Weapon models
 //#include "weapons.h"
 
@@ -433,14 +437,23 @@ int Inicializuj_objekty(){
 
 	//ship[0] = SHIP_RED_RX;
 	//ship[0] = SHIP_BLUE_RX;
-	
-	my_ship = &ship[ID];	
-	
+
 	ship[0] = SHIP_RED_RX;
 	ship[1] = SHIP_BLUE_RX;
 	ship[2] = SHIP_GREEN_ZX;
 	ship[3] = SHIP_RED_RX;
 	ship[4] = SHIP_BLUE_RX;
+
+  if(FACTION == RED)
+    ship[ID] = SHIP_RED_RX;
+  else 
+    if (FACTION == BLUE)
+      ship[ID] = SHIP_BLUE_RX;
+    else
+      ship[ID] = SHIP_GREEN_ZX;
+
+	my_ship = &ship[ID];	
+	
 	
 	pocet_lodi   = 5;
 

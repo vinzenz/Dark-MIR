@@ -9,6 +9,7 @@
 #include "images.h"
 #include "menu.h"
 #include "client.h"
+#include "faction.h"
 
 //==============================================================================
 int Menu(){
@@ -186,7 +187,7 @@ int Connect(){
 
 
   Load_server_list();
-
+  FACTION = RED;
 
   // ==== MENU LOOP ====
   while(!quit){
@@ -227,6 +228,42 @@ int Connect(){
                   }
                   Vesmir();
                  	break;
+
+             	case SDLK_3:
+             	case SDLK_KP3:
+                 	POINT(3);
+                  Message("Connecting to  ... [  3  ] ");
+                  Draw_connect();
+	                rc = Connect2server(server_list[3]);
+                  if(rc == FAIL){
+                    Message("SERVER NOT RESPONDING");
+                    break;
+                  }
+                  Vesmir();
+                 	break;
+
+             	case SDLK_4:
+             	case SDLK_KP4:
+                 	POINT(4);
+                  Message("Connecting to  ... [  4  ] ");
+                  Draw_connect();
+	                rc = Connect2server(server_list[4]);
+                  if(rc == FAIL){
+                    Message("SERVER NOT RESPONDING");
+                    break;
+                  }
+                  Vesmir();
+                 	break;
+
+             	case SDLK_r:
+                 FACTION = RED;
+                 Message("[ SOCIALISTS ]   s e l e c t e d");
+                 break ;
+
+             	case SDLK_b:
+                 FACTION = BLUE;
+                 Message("[ IMPERIALISTS ]   s e l e c t e d");
+                 break;
 				
 				default:
 					break;
