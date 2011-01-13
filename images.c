@@ -90,6 +90,7 @@ int Load_space_images()
 	position_ptr_y = MIR_LoadImage(ROOT"images/system/ptr_y.png", 1); 
 
 	CENTER = MIR_LoadImage(ROOT"images/center_2.png", 1); 
+	red_space_station = MIR_LoadImage(ROOT"images/objects/red_space_station.png", 1); 
 
 
 	console = MIR_LoadImage(ROOT"images/system/console.png", 1); 

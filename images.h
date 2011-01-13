@@ -76,8 +76,9 @@ SDL_Surface *r_explosion;
 SDL_Surface *g_explosion;
 SDL_Surface *b_explosion;
 
-
+// Objekty vesmiru
 SDL_Surface *CENTER;
+SDL_Surface *red_space_station;
 
 
 // Zbrane

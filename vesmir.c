@@ -383,6 +383,10 @@ int Prekresli_vesmir(){
 	rect.y = (HEIGHT/2) - (CENTER->h/2) + MAX_Y/2 - Y;
 	SDL_BlitSurface(CENTER, NULL, screen, &rect);
 
+	rect.x = (WIDTH/2) - (CENTER->w/2) + MAX_X-2000 - X;
+	rect.y = (HEIGHT/2) - (CENTER->h/2) + MAX_Y-2000 - Y;
+	SDL_BlitSurface(red_space_station, NULL, screen, &rect);
+
 
 	// === Strely === 
 	

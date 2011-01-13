@@ -18,6 +18,7 @@
 
  - Grafika
  	Lode, zbrane, zakladny, asteroidy .....
+  -> startovaci orbitalni stanice
 
   - Vlakna
 	Implementovat udalosti pomoci casovacu v minimalne 2 vlaknech
