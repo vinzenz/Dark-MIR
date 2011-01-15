@@ -81,6 +81,7 @@ int Inicializuj_objekty();
 int Pohybuj_objekty();
 int Detekuj_kolize();
  static inline int Collision_detect(T_ship *ship, T_weapon *weapon );
+ static inline int Collision_detect_ships(T_ship *ship1, T_ship *ship2 );
 int Time_to_live(T_weapon *weapon );
 
 //==============================================================================
@@ -1033,15 +1034,33 @@ int Pohybuj_objekty(){
 int Detekuj_kolize(){
 //==============================================================================
 
+  int diff;  
+
   for(int x=0; x < players; x++){		
   	if(! player[x].ship.alive) continue;
 
-	for(int i=0; i < pocet_weapons; i++){
-		if(!weapon[i].alive) continue;
-		if(weapon[i].type == EXPLOSION) continue;		// ignore
+    for(int y=0; y < players; y++){		
+      // Ship vs Ship
+		  if((x != y) && (Collision_detect_ships(&player[x].ship, &player[y].ship))){
+        diff = player[x].ship.health - player[y].ship.health;
 
-		if(weapon[i].strana == player[x].ship.strana) continue;
+        // Small ships -> both destroyed
+        player[x].ship.health = 0;
+        player[y].ship.health = 0;
+     
 
+      }
+    }
+
+
+	  for(int i=0; i < pocet_weapons; i++){
+		  if(!weapon[i].alive) continue;
+  		if(weapon[i].type == EXPLOSION) continue;		// ignore
+
+  		if(weapon[i].strana == player[x].ship.strana) continue;
+
+
+    // Waapon vs Ship
 		if(Collision_detect(&player[x].ship, &weapon[i])){
 		//POINT(99);
 			// MAKE DAMAGE
@@ -1054,29 +1073,35 @@ int Detekuj_kolize(){
 			weapon[i].type = EXPLOSION;
 			// sending until server quits, so TODO
 
+  		// WINNING TEAM BONUS
 
-			if(player[x].ship.health <= 0){
+	    if(player[x].ship.health <= 0){
+	  	  for(int z=0; z < players; z++){
+		  	  if(weapon[i].strana == player[z].ship.strana){
+			      player[z].score += 1;
+  				  player[z].ship.wp_1 =  player[z].ship.MAX_wp_1;
+  				  player[z].ship.wp_2 =  player[z].ship.MAX_wp_2;
+  				  player[z].ship.wp_3 =  player[z].ship.MAX_wp_3;
+
+			    }
+        }
+
+		  }
+    }
+
+  }		
+	
+
+	if(player[x].ship.health <= 0){
 				printf("# SHIP n.%3d DESTROYED\n",x);
 				//player[x].ship.speed= 0;
 				player[x].ship.alive = 0;
 				//player[x].score -= 1;
 				
 
-				// WINNING TEAM BONUS
-				for(int z=0; z < players; z++){
-					if(weapon[i].strana == player[z].ship.strana){
-						player[z].score += 1;
-						player[z].ship.wp_1 =  player[z].ship.MAX_wp_1;
-						player[z].ship.wp_2 =  player[z].ship.MAX_wp_2;
-						player[z].ship.wp_3 =  player[z].ship.MAX_wp_3;
-
-					}
-
-				}
 
 				Send_player_list();
 				POINT(111);
-
 
 				//Respawn(&player[x]);
 				player[x].ship.X = (MAX_X/4) + rand() % (MAX_X/2);
@@ -1096,12 +1121,9 @@ int Detekuj_kolize(){
 				POINT(711);
 			}
 
-		}
-	}
-
   } 
 
-return OK;
+  return OK;
 }
 
 //==============================================================================
@@ -1111,6 +1133,22 @@ static inline int Collision_detect(T_ship *ship, T_weapon *weapon ){
 
   int c = (fabs(ship->X - weapon->X) < (50  >> 1)) &&
   	  (fabs(ship->Y - weapon->Y) < (50 >> 1));
+
+ /*
+  int c = (fabs(ship->X - weapon->X) < (ship->img->w  >> 1)) &&
+  	  (fabs(ship->Y - weapon->Y) < (ship->img->h >> 1));
+ */
+  //if(c)	printf("COLLISION: X: %d Y: %d\n",(int)(ship->X), (int)(ship->Y));
+
+  return c;
+}
+//==============================================================================
+static inline int Collision_detect_ships(T_ship *ship1, T_ship *ship2 ){
+//==============================================================================
+
+
+  int c = (fabs(ship1->X - ship2->X) < (50  >> 1)) &&
+  	  (fabs(ship1->Y - ship2->Y) < (50 >> 1));
 
  /*
   int c = (fabs(ship->X - weapon->X) < (ship->img->w  >> 1)) &&

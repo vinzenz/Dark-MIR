@@ -20,9 +20,9 @@ int Menu(){
 
   Uint8 quit= 0;
 
-  if(Load_menu_images() == FAIL) 
-		fprintf(stderr, "ERROR: nepodarilo se nacist obrazky pro vesmir\n");
-
+  if(Load_menu_images() == FAIL){
+		ERROR("some images missing ... ignore");
+  }
 
 
   // ==== MENU LOOP ====
@@ -43,7 +43,7 @@ int Menu(){
               switch(event.key.keysym.sym){
              
              	case SDLK_ESCAPE:
-                 	exit(0);               
+                 	Exit_game(0);               
                  	break;
 				
              	case SDLK_1:
