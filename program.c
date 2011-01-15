@@ -40,30 +40,17 @@ int	Get_Opts(int argc, char **argv);
 int main(int argc,char *argv[]){
 //==============================================================================
 
-	
-  strcpy(nick, "PLAYER_Alexej");
   nastavene_rozliseni = VYCHOZI_ROZLISENI;
-  strcpy(hostname, CENTRAL_GAME_SERVER);
 
+	Read_configuration();
 	Get_Opts(argc, argv);  
 	
-//	Nacti_konfiguraci();
-	
-//	Nacti_jazyk(p_lang);
-
-
 	Nastav_rozliseni();   
 	Zmena_rozliseni(nastavene_rozliseni);
 
 	Menu();
 
-	POINT(111);
-	POINT(211);
-	 
-  // === DESTRUCTOR === 
-	TTF_Quit();
-	SDL_Quit();
-
+  Exit_game(EXIT_SUCCESS);
 	return OK;
 }
 

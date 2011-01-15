@@ -99,12 +99,9 @@ double X,Y;
 // Function prototypes
 //==============================================================================
 
+int Read_configuration();
 int Init();
-int Vesmir();
-
-
-
-
+int Exit_game(int RC);
 
 
 
@@ -131,5 +128,6 @@ DARK MIR version 0.02\n\
 
 
 #define CENTRAL_GAME_SERVER "undergroundlab.cz"
+#define CONFIGURATION_FILE "CONFIG"
 
 #endif

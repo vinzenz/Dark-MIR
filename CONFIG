@@ -1,0 +1,17 @@
+# DARK MIR CONFIGURATION FILE
+# comment
+
+# Resolution settings
+# 800x600
+#resolution = 0
+# 1024x768
+#resolution = 1
+# 1280x1024
+#resolution = 2
+# 1280x800
+#resolution = 3
+# 1440x900
+resolution = 4
+
+# Nickname settings
+nickname = Rogue
