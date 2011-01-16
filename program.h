@@ -93,7 +93,7 @@ struct R rozliseni[MAX_RES];
 char pauza;
 
 double X,Y;
-
+Uint8 ID;
 
 //==============================================================================
 // Function prototypes

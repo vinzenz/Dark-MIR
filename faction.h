@@ -9,7 +9,8 @@
 //==============================================================================
 #define RED 1
 #define BLUE 2
-#define NEUTRAL 3
+#define GREEN 3
+#define NEUTRAL 4
 
   int FACTION;
 

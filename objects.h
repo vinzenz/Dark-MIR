@@ -14,13 +14,17 @@
 #define NATURE 4
 
 
+#define ASTEROID 5
+
+
 // index range start
 #define WP 128
 #define NT 512
 //==============================================================================
 // PROTOTYPES
 //==============================================================================
-int Create_object(int faction, int type, int model);
+int Initialize_objects( int );
+int Create_object(int faction, int type, int model, int X, int Y);
 
 //==============================================================================
 // DATA TYPES
@@ -93,4 +97,5 @@ typedef struct str_object {
   T_object *my_ship;
 
 
+//==============================================================================
 #endif 

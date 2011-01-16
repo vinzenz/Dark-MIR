@@ -16,7 +16,6 @@
    char hostname[HOSTNAME_MAX];
    char nick[NICKNAME_MAX];
 
-  Uint8 ID;
 
   char player_list[MAX_PLAYERS][80];
 

@@ -10,7 +10,7 @@
 #include "client.h"
 
 // Ship models
-#include "ships.h"
+//#include "ships.h"
 
 
 #include "faction.h"
@@ -28,7 +28,6 @@
 
 // Function prototypes
 //==============================================================================
-int Inicializuj_objekty();
 int Pohybuj_objekty();
 int Detekuj_kolize();
  int Collision_detect(T_object *object1, T_object *object2 );
@@ -46,8 +45,6 @@ int Vesmir(){
  Uint8* keys;	
 
 	// Inicializace
-
-
 	
 	if(Load_space_images() == FAIL) 
 		fprintf(stderr, "ERROR: nepodarilo se nacist obrazky pro vesmir\n");
@@ -62,7 +59,7 @@ int Vesmir(){
 	draw_timer = SDL_AddTimer(30, Redraw_loop, NULL); 				// DRAW
 	
 
-	Inicializuj_objekty();
+	Initialize_objects(1);
 	
 	// ============================== GAME LOOP ==============================
 	while(!quit){
@@ -392,11 +389,7 @@ int Prekresli_vesmir(){
 	SDL_BlitSurface(red_space_station, NULL, screen, &rect);
 
 
-	// === Strely === 
-	
-	//Kresli_strely();
-	
-	// === Lode === 
+	// === Vsechny objekty === 
 
 	for(int i = 0; i < MAX_OBJECTS; i++){	
 		if(object[i].alive) Draw_object(&object[i]); 		
@@ -418,57 +411,6 @@ int Prekresli_vesmir(){
 return OK;	
 }
 
-
-//==============================================================================
-int Inicializuj_objekty(){
-//==============================================================================
-	// Specifika vlastni lodi	
-	// ====================
-	SHIP_RED_RX.img = IMG_RED_RX;
-	SHIP_RED_RX.img_m = IMG_RED_RX_move;
-	SHIP_RED_RX.img_c = IMG_RED_RX_crap;
-	SHIP_RED_RX.faction = RED;
-
-	SHIP_RED_EX.img = IMG_RED_EX;
-	SHIP_RED_EX.img_m = IMG_RED_EX_move;
-	SHIP_RED_EX.img_c = IMG_RED_EX_crap;
-	SHIP_RED_EX.faction = RED;
-
-	SHIP_BLUE_RX.img = IMG_BLUE_RX;
-	SHIP_BLUE_RX.img_m = IMG_BLUE_RX_move;
-	SHIP_BLUE_RX.img_c = IMG_BLUE_RX_crap;
-	SHIP_BLUE_RX.faction = BLUE;
-
-	SHIP_GREEN_ZX.img = IMG_GREEN_ZX;
-	SHIP_GREEN_ZX.img_m = IMG_GREEN_ZX_move;
-	SHIP_GREEN_ZX.img_c = IMG_GREEN_ZX_crap;
-	SHIP_GREEN_ZX.faction = GREEN;
-
-	//ship[0] = SHIP_RED_RX;
-	//ship[0] = SHIP_BLUE_RX;
-
-	object[0] = SHIP_RED_RX;
-	object[0].alive = 1;
-
-	object[1] = SHIP_BLUE_RX;
-	object[2] = SHIP_GREEN_ZX;
-	object[3] = SHIP_RED_RX;
-	object[4] = SHIP_BLUE_RX;
-
-  printf("MY ID %3d\n", ID);
-	my_ship = &object[ID];	
-
-  if(FACTION == RED)
-    *my_ship = SHIP_RED_RX;
-  else 
-    if (FACTION == BLUE)
-      *my_ship = SHIP_BLUE_RX;
-    else
-      *my_ship = SHIP_GREEN_ZX;
-
-
- return OK;
-}
 
 /*
 //==============================================================================

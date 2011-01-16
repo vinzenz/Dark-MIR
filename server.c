@@ -13,7 +13,7 @@
 #include "vesmir.h"
 #include "server.h"
 #include "lod.h"
-#include "ships.h"
+//#include "ships.h"
 #include "zbrane.h"
 #include "weapons.h"
 
@@ -21,36 +21,33 @@
 #include "objects.h"
 
 
-#define TTY stdout
-#define SEED 1
+  float f;
+  double D;
+  int I;
+
+//==============================================================================
+// Global variables
+//==============================================================================
+
+  TCPsocket ssd;	// server listening socket
+  TCPsocket sd; 	// server - client socket
+  IPaddress ip, *remoteIP;
+
+  UDPsocket ussd;	// server listening socket
+  UDPsocket usd;	// client socket
+  UDPpacket *t;		// transmit
+  UDPpacket *r;		// recieve
 
 
+  SDL_TimerID mv_timer = NULL;
 
-typedef struct str_player{
-	IPaddress  ip;	
-	char nick[32];
-	Sint16 score;
-	
-	T_object ship;
-//	TCPsocket sd;	
-//  UDPsocket usd;
-	Uint8 channel;
-	Uint8 alive;
-
-	Uint8 faction;
-
-} T_player;
-
-
-T_player player[MAX_PLAYERS+1];
-
-
-float f;
-double D;
-int I;
-
-
-
+  int players = 0;	// count of
+  int live_players = 0;	// count of
+  //unsigned char r->data[BUFF_SIZE];
+  //unsigned char t->data[BUFF_SIZE];
+  unsigned char *tp;		// r->data pointer
+  int len=0;
+  int p_id = 0;
 
 //==============================================================================
 // Function prototypes
@@ -79,34 +76,11 @@ int Send_player_list();
 
 Uint32 Timed_loop(Uint32 interval, void *param);
 
-int Inicializuj_objekty();
 int Pohybuj_objekty();
 int Detekuj_kolize();
  static inline int Collision_detect(T_object *ship, T_object *weapon );
  static inline int Collision_detect_ships(T_object *ship1, T_object *ship2 );
 int Time_to_live(T_object *weapon );
-
-//==============================================================================
-// Global variables
-//==============================================================================
-  SDL_TimerID mv_timer = NULL;
-
-  TCPsocket ssd;	// server listening socket
-  TCPsocket sd; 	// server - client socket
-  IPaddress ip, *remoteIP;
-
-  UDPsocket ussd;	// server listening socket
-  UDPsocket usd;	// client socket
-  UDPpacket *t;		// transmit
-  UDPpacket *r;		// recieve
-
-  int players = 0;	// count of
-  int live_players = 0;	// count of
-  //unsigned char r->data[BUFF_SIZE];
-  //unsigned char t->data[BUFF_SIZE];
-  unsigned char *tp;		// r->data pointer
-  int len=0;
-  int p_id = 0;
 
 // ==============================================================================
 // ==============================================================================
@@ -115,7 +89,7 @@ int main(int argc, char **argv){
 
   Init();	
   Init_server();
-  Inicializuj_objekty();
+  Initialize_objects(0);
 
   Server();
 
@@ -386,8 +360,12 @@ int New_client(T_player *p){
     p->faction = ((Uint8*)(r->data))[1];
 		strncpy(p->nick, ((char *)r->data)+2, 32);
 
+    extern T_object SHIP_RED_RX;
+    extern T_object SHIP_BLUE_RX;
+    extern T_object SHIP_GREEN_ZX;
+
   if(p->faction == RED)
-  	p->ship = SHIP_RED_RX;
+  	  p->ship = SHIP_RED_RX;
 	else 
     if(p->faction == BLUE)
 			p->ship = SHIP_BLUE_RX;
@@ -581,13 +559,11 @@ int Fire(int id, int wp){
 
 
 	for( i= WP; i < MAX_OBJECTS; i++){		// find first not .alive weapon
-			if(! object[i].alive){				    // and use this slot 
-					break;
-			}
+			if(! object[i].alive) break;      // and use this slot 
 	}	
-	if(i >= MAX_OBJECTS - 1){					// no not .alive slote
+	if(i >= MAX_OBJECTS - 1)					    // no not .alive slote
 			return FAIL;
-	}
+	
 
 	switch(wp){
 	
@@ -808,56 +784,6 @@ Uint8 *tp;
 //
 //==============================================================================
 //==============================================================================
-//==============================================================================
-// 	COPY FROM CLIENT
-//==============================================================================
-int Inicializuj_objekty(){
-//==============================================================================
-	// Specifika vlastni lodi	
-	// ====================
-	SHIP_RED_RX.img = IMG_RED_RX;
-	SHIP_RED_RX.img_m = IMG_RED_RX_move;
-	SHIP_RED_RX.img_c = IMG_RED_RX_crap;
-	SHIP_RED_RX.faction = RED;
-
-	SHIP_RED_EX.faction = RED;
-
-
-	SHIP_BLUE_RX.img = IMG_BLUE_RX;
-	SHIP_BLUE_RX.img_m = IMG_BLUE_RX_move;
-	SHIP_BLUE_RX.img_c = IMG_BLUE_RX_crap;
-	SHIP_BLUE_RX.faction = BLUE;
-
-	SHIP_GREEN_ZX.img = IMG_GREEN_ZX_move;
-	SHIP_GREEN_ZX.img_m = IMG_GREEN_ZX_move;
-	SHIP_GREEN_ZX.img_c = IMG_GREEN_ZX_crap;
-	SHIP_GREEN_ZX.faction = GREEN;
-	
-	
-	for(int i=0; i < MAX_PLAYERS; i++){
-			player[i].ship = SHIP_RED_RX;
-
-		player[i].ship.X = (MAX_X/2) + (i * 200);
-		player[i].ship.Y = (MAX_Y/2) + (i * 200);
-		player[i].ship.health	= player[i].ship.MAX_health;
-		player[i].ship.speed 	= 0.0;
-		player[i].ship.angle 	= 0;
-		player[i].ship.manevr	= 0;
-		player[i].ship.shift 	= 0;
-		player[i].ship.wp_1 	= player[i].ship.MAX_wp_1;
-		//printf("WP1: %d\n", player[i].ship.wp_1);
-		player[i].ship.wp_2 	= player[i].ship.MAX_wp_2;
-		player[i].ship.wp_3 	= player[i].ship.MAX_wp_3;
-		player[i].ship.acceleration	= 0;
-		player[i].ship.alive	= 1;
-	}
-
-	players = 0;
-
-
- return OK;
-}
-
 //==============================================================================
 int Pohybuj_objekty(){
 //==============================================================================

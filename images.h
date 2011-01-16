@@ -87,6 +87,7 @@ SDL_Surface *b_explosion;
 SDL_Surface *CENTER;
 SDL_Surface *red_space_station;
 
+SDL_Surface *asteroid1;
 SDL_Surface *asteroid2;
 
 
