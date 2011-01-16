@@ -18,6 +18,8 @@
 #include "weapons.h"
 
 #include "protokol.h"
+#include "objects.h"
+
 
 #define TTY stdout
 #define SEED 1
@@ -29,7 +31,7 @@ typedef struct str_player{
 	char nick[32];
 	Sint16 score;
 	
-	T_ship ship;
+	T_object ship;
 //	TCPsocket sd;	
 //  UDPsocket usd;
 	Uint8 channel;
@@ -80,9 +82,9 @@ Uint32 Timed_loop(Uint32 interval, void *param);
 int Inicializuj_objekty();
 int Pohybuj_objekty();
 int Detekuj_kolize();
- static inline int Collision_detect(T_ship *ship, T_weapon *weapon );
- static inline int Collision_detect_ships(T_ship *ship1, T_ship *ship2 );
-int Time_to_live(T_weapon *weapon );
+ static inline int Collision_detect(T_object *ship, T_object *weapon );
+ static inline int Collision_detect_ships(T_object *ship1, T_object *ship2 );
+int Time_to_live(T_object *weapon );
 
 //==============================================================================
 // Global variables
@@ -577,15 +579,12 @@ int Fire(int id, int wp){
 //==============================================================================
   int i;
 
-	for( i=0; i < pocet_weapons; i++){		// find first not .alive weapon
-			if(! weapon[i].alive){				// and use this slot 
+	for( i=0; i < MAX_OBJECTS; i++){		// find first not .alive weapon
+			if(! object[i].alive){				// and use this slot 
 					break;
 			}
 	}	
-	if(i == pocet_weapons){							// no not .alive slote
-		if(pocet_weapons < MAX_WEAPONS)				// create new one
-			pocet_weapons++;
-		else
+	if(i >= MAX_OBJECTS - 1){					// no not .alive slote
 			return FAIL;
 	}
 
@@ -598,7 +597,7 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_1 -= 1;
-			weapon[i] = RX_laser;
+			object[i] = RX_laser;
 			break;
 
 		case ENERGY_LASER:
@@ -606,7 +605,7 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_1--;
-			weapon[i] = ZX_Q1;
+			object[i] = ZX_Q1;
 			break;
 
 		// === SECONDARY WEAPONS ===	
@@ -615,7 +614,7 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_2--;
-			weapon[i] = RX_R1;
+			object[i] = RX_R1;
 			break;
 
 		case MICRO_MISSILE:
@@ -623,7 +622,7 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_2 -= 1;
-			weapon[i] = RX_M1;
+			object[i] = RX_M1;
 			break;
 
 		case GUIDED_MISSILE:
@@ -631,16 +630,16 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_3 -= 1;
-			weapon[i] = RX_M2;
+			object[i] = RX_M2;
 			break;
 
 
 	}
-	weapon[i].angle = 	player[id].ship.angle;
-	weapon[i].X = 		player[id].ship.X;
-	weapon[i].Y = 		player[id].ship.Y;
-	weapon[i].strana = 	player[id].ship.strana;
-	weapon[i].alive = 	1;
+	object[i].angle = 	player[id].ship.angle;
+	object[i].X = 		player[id].ship.X;
+	object[i].Y = 		player[id].ship.Y;
+	object[i].faction = 	player[id].ship.faction;
+	object[i].alive = 	1;
 
  return OK;
 }
@@ -676,11 +675,11 @@ int Send_ship_states(){
 	*tp = SHIP;													// TYPE
 	tp++;
 
-	*((float *)tp) = player[i].ship.X;							// X
 //	fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));	
-	tp += sizeof(float);
-	*((float *)tp) = player[i].ship.Y;							// Y
-	tp += sizeof(float);
+	*((Sint32 *)tp) = player[i].ship.X;							// X
+	tp += sizeof(Sint32);
+	*((Sint32 *)tp) = player[i].ship.Y;							// Y
+	tp += sizeof(Sint32);
 	*((float *)tp) = player[i].ship.speed;						// SPEED
 	tp += sizeof(float);
 	*((float *)tp) = player[i].ship.angle;						// ANGLE
@@ -707,8 +706,8 @@ int Send_weapon_states(){
   Uint8 *tp = NULL;
   tp = t->data + BUFF_SIZE;
 
-  for(int a = 0; a < pocet_weapons; a++){
-	  if(! weapon[a].alive)	continue;  
+  for(int a = 0; a < MAX_OBJECTS; a++){
+	  if(! object[a].alive)	continue;  
 
 	// New packet needed
     if(tp - t->data >= BUFF_SIZE-1) {	
@@ -720,16 +719,16 @@ int Send_weapon_states(){
 
 		*tp = (Uint8) a;											// ID
 		tp++;
-		*tp = weapon[a].type;										// TYPE
+		*tp = object[a].type;										// TYPE
 		tp++;
-		*tp = weapon[a].strana;										// SUBTYPE
+		*tp = object[a].faction;										// SUBTYPE
 		tp++;
 
-		*((float *)tp) = weapon[a].X;								// X
+		*((float *)tp) = object[a].X;								// X
 		tp += sizeof(float);
-		*((float *)tp) = weapon[a].Y;								// Y
+		*((float *)tp) = object[a].Y;								// Y
 		tp += sizeof(float);
-		*((float *)tp) = weapon[a].angle;							// ANGLE
+		*((float *)tp) = object[a].angle;							// ANGLE
 		tp += sizeof(float);
 
   	if(tp - t->data >= BUFF_SIZE-1) {	
@@ -809,29 +808,24 @@ int Inicializuj_objekty(){
 	SHIP_RED_RX.img = IMG_RED_RX;
 	SHIP_RED_RX.img_m = IMG_RED_RX_move;
 	SHIP_RED_RX.img_c = IMG_RED_RX_crap;
-	SHIP_RED_RX.strana = RED;
+	SHIP_RED_RX.faction = RED;
 
-	SHIP_RED_EX.strana = RED;
+	SHIP_RED_EX.faction = RED;
 
 
 	SHIP_BLUE_RX.img = IMG_BLUE_RX;
 	SHIP_BLUE_RX.img_m = IMG_BLUE_RX_move;
 	SHIP_BLUE_RX.img_c = IMG_BLUE_RX_crap;
-	SHIP_BLUE_RX.strana = BLUE;
+	SHIP_BLUE_RX.faction = BLUE;
 
 	SHIP_GREEN_ZX.img = IMG_GREEN_ZX_move;
 	SHIP_GREEN_ZX.img_m = IMG_GREEN_ZX_move;
 	SHIP_GREEN_ZX.img_c = IMG_GREEN_ZX_crap;
-	SHIP_GREEN_ZX.strana = GREEN;
+	SHIP_GREEN_ZX.faction = GREEN;
 	
 	
 	for(int i=0; i < MAX_PLAYERS; i++){
-		if(i % 3 == 0)
 			player[i].ship = SHIP_RED_RX;
-		else if(i % 3 == 1)
-			player[i].ship = SHIP_BLUE_RX;
-		else if(i % 3 == 2)
-			player[i].ship = SHIP_GREEN_ZX;
 
 		player[i].ship.X = (MAX_X/2) + (i * 200);
 		player[i].ship.Y = (MAX_Y/2) + (i * 200);
@@ -900,11 +894,13 @@ int Pohybuj_objekty(){
     player[i].ship.angle += 360;
 
 	// ==== position change ====
-	player[i].ship.X += player[i].ship.speed * cos(((float)player[i].ship.angle/180)*M_PI)
-	       	+ player[i].ship.shift * cos(((float)(player[i].ship.angle+90)/180)*M_PI);
+	player[i].ship.X += 
+    player[i].ship.speed * cos(((float)player[i].ship.angle/180)*M_PI)
+	  + player[i].ship.shift * cos(((float)(player[i].ship.angle+90)/180)*M_PI);
 
-	player[i].ship.Y -= player[i].ship.speed * sin(((float)player[i].ship.angle/180)*M_PI)
-			+ player[i].ship.shift * sin(((float)(player[i].ship.angle+90)/180)*M_PI);	
+	player[i].ship.Y -= 
+    player[i].ship.speed * sin(((float)player[i].ship.angle/180)*M_PI)
+		+ player[i].ship.shift * sin(((float)(player[i].ship.angle+90)/180)*M_PI);	
 
 
 	player[i].ship.shift /= 1.02;
@@ -929,20 +925,20 @@ int Pohybuj_objekty(){
   for (int i=0; i < pocet_weapons; i++){
 	int n = 0;
 
-	  if(! weapon[i].alive) continue;
+	  if(! object[i].alive) continue;
 
-	  Time_to_live(&weapon[i]);
+	  Time_to_live(&object[i]);
 
     // === Guided missile ===
-	  if(weapon[i].type == GUIDED_MISSILE){
+	  if(object[i].type == GUIDED_MISSILE){
 
 		// Find the nearest enemy ship
     for(int j = 0; j < players; j++){
       if(! player[j].alive) continue;
-      if(player[j].ship.strana == weapon[i].strana) continue;
+      if(player[j].ship.faction == object[i].faction) continue;
 
-			x = player[j].ship.X - weapon[i].X;
-			y = player[j].ship.Y - weapon[i].Y;
+			x = player[j].ship.X - object[i].X;
+			y = player[j].ship.Y - object[i].Y;
 
 			//distance = (x * x) + (y * y);
 			distance = sqrt((x * x) + (y * y));
@@ -957,35 +953,35 @@ int Pohybuj_objekty(){
 		// WARINING kvadranty a znamenka
     #define G_RANGE 3000
 		if(distance > 100 && distance < G_RANGE){
-			x = player[n].ship.X - weapon[i].X;
-			y = player[n].ship.Y - weapon[i].Y;
+			x = player[n].ship.X - object[i].X;
+			y = player[n].ship.Y - object[i].Y;
 
-			//x = weapon[i].X - player[n].ship.X;
-			//y = weapon[i].Y - player[n].ship.Y;
+			//x = object[i].X - player[n].ship.X;
+			//y = object[i].Y - player[n].ship.Y;
 			v = y / x;
 
 
 			if(y > 0){
 				if(x > 0){	// I (4)
-					weapon[i].angle =  360 - (180/M_PI) * atan(v);
-					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) weapon[i].angle);
+					object[i].angle =  360 - (180/M_PI) * atan(v);
+					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
 					POINT(1);
 				}
 				else{		// II (3)
-					weapon[i].angle = 180 - (180/M_PI) * atan(v);
-					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) weapon[i].angle);
+					object[i].angle = 180 - (180/M_PI) * atan(v);
+					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
 					POINT(2);
 				}
 			}
 			else{
 				if(x > 0){	// IV (1)
-					weapon[i].angle = 360 - (180/M_PI) * atan(v);
-					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) weapon[i].angle);
+					object[i].angle = 360 - (180/M_PI) * atan(v);
+					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
 					POINT(4);
 				}
 				else{		// III (2)
-					weapon[i].angle = 180 - (180/M_PI) * atan(v);
-					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) weapon[i].angle);
+					object[i].angle = 180 - (180/M_PI) * atan(v);
+					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
 					POINT(3);
 				}
 			}
@@ -1006,21 +1002,21 @@ int Pohybuj_objekty(){
 		}
 	  }
 
-	  weapon[i].X += weapon[i].speed * cos(((float)weapon[i].angle/180)*M_PI);
-	  weapon[i].Y -= weapon[i].speed  * sin(((float)weapon[i].angle/180)*M_PI); 	
+	  object[i].X += object[i].speed * cos(((float)object[i].angle/180)*M_PI);
+	  object[i].Y -= object[i].speed  * sin(((float)object[i].angle/180)*M_PI); 	
 
 	   // ==== position limits ====
 	  // RIGHT  DOWN 
-	  if(weapon[i].X > MAX_X) 
-			weapon[i].alive = 0;
-	  if(weapon[i].Y > MAX_Y) 
-			weapon[i].alive = 0;
+	  if(object[i].X > MAX_X) 
+			object[i].alive = 0;
+	  if(object[i].Y > MAX_Y) 
+			object[i].alive = 0;
 
 	  // LEFT  UP
-	  if(weapon[i].X < 0) 
-			weapon[i].alive = 0;
-	  if(weapon[i].Y < 0) 
-			weapon[i].alive = 0;
+	  if(object[i].X < 0) 
+			object[i].alive = 0;
+	  if(object[i].Y < 0) 
+			object[i].alive = 0;
 
   }
 	Send_weapon_states();
@@ -1053,31 +1049,31 @@ int Detekuj_kolize(){
     }
 
 
-	  for(int i=0; i < pocet_weapons; i++){
-		  if(!weapon[i].alive) continue;
-  		if(weapon[i].type == EXPLOSION) continue;		// ignore
+	  for(int i=0; i < MAX_OBJECTS; i++){
+		  if(!object[i].alive) continue;
+  		if(object[i].type == EXPLOSION) continue;		// ignore
 
-  		if(weapon[i].strana == player[x].ship.strana) continue;
+  		if(object[i].faction == player[x].ship.faction) continue;
 
 
     // Waapon vs Ship
-		if(Collision_detect(&player[x].ship, &weapon[i])){
+		if(Collision_detect(&player[x].ship, &object[i])){
 		//POINT(99);
 			// MAKE DAMAGE
-			player[x].ship.health -= weapon[i].damage;
+			player[x].ship.health -= object[i].damage;
 			// DISABLE PROJECTIL and CREATE EXPLOSION
-			weapon[i].alive = 1;
-			weapon[i].speed = 0;
-			weapon[i].damage= 0;
-			weapon[i].ttl = EXPLOSION_TTL;
-			weapon[i].type = EXPLOSION;
+			object[i].alive = 1;
+			object[i].speed = 0;
+			object[i].damage= 0;
+			object[i].ttl = EXPLOSION_TTL;
+			object[i].type = EXPLOSION;
 			// sending until server quits, so TODO
 
   		// WINNING TEAM BONUS
 
 	    if(player[x].ship.health <= 0){
 	  	  for(int z=0; z < players; z++){
-		  	  if(weapon[i].strana == player[z].ship.strana){
+		  	  if(object[i].faction == player[z].ship.faction){
 			      player[z].score += 1;
   				  player[z].ship.wp_1 =  player[z].ship.MAX_wp_1;
   				  player[z].ship.wp_2 =  player[z].ship.MAX_wp_2;
@@ -1127,7 +1123,7 @@ int Detekuj_kolize(){
 }
 
 //==============================================================================
-static inline int Collision_detect(T_ship *ship, T_weapon *weapon ){
+static inline int Collision_detect(T_object *ship, T_object *weapon ){
 //==============================================================================
 
 
@@ -1140,10 +1136,10 @@ static inline int Collision_detect(T_ship *ship, T_weapon *weapon ){
  */
   //if(c)	printf("COLLISION: X: %d Y: %d\n",(int)(ship->X), (int)(ship->Y));
 
-  return c;
+  return c && (ship != weapon);
 }
 //==============================================================================
-static inline int Collision_detect_ships(T_ship *ship1, T_ship *ship2 ){
+static inline int Collision_detect_ships(T_object *ship1, T_object *ship2 ){
 //==============================================================================
 
 
@@ -1156,11 +1152,11 @@ static inline int Collision_detect_ships(T_ship *ship1, T_ship *ship2 ){
  */
   //if(c)	printf("COLLISION: X: %d Y: %d\n",(int)(ship->X), (int)(ship->Y));
 
-  return c;
+  return c && (ship1 != ship2);
 }
 
 //==============================================================================
-int Time_to_live(T_weapon *weapon ){
+int Time_to_live(T_object *weapon ){
 //==============================================================================
 /*
   if (ship != NULL){
@@ -1169,6 +1165,9 @@ int Time_to_live(T_weapon *weapon ){
 		  }
   }
 */
+
+  if(weapon->type == SHIP) return OK;
+
   if (weapon != NULL){
 		  weapon->ttl -= 1;
 

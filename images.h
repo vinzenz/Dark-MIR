@@ -3,10 +3,14 @@
 
 
 #include "program.h"
+#include "objects.h"
 
 #define FREE(IMG) if((IMG) !=NULL) SDL_FreeSurface((IMG));
 
 
+//==============================================================================
+// PROTOTYPES
+//==============================================================================
 int Load_space_images();
 int Free_space_images();
 
@@ -20,13 +24,16 @@ int Uklid_obrazky_mapa();
 int Nastav_rozliseni();
 int Zmena_rozliseni(char X);
 
-int Kresli_lod();
+int Draw_object(T_object *object);
 int Kresli_pristroje();
 int Kresli_strely();
 int Draw_menu();
 int Draw_configure();
 int Draw_connect();
 
+//==============================================================================
+// GLOBAL variables
+//==============================================================================
 SDL_Surface *screen;            // okno
 
 

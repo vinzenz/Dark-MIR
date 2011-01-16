@@ -9,60 +9,64 @@
 #include <SDL/SDL_rotozoom.h>
 
 //==============================================================================
-int Kresli_lod(T_ship *ship){
+int Draw_object(T_object *object){
 //==============================================================================
 static int T;
 static int clk;
 
-SDL_Rect rect = {.x = 0, .y = 0};
-SDL_Rect rect2 = {.x = 0, .y = 0};
 
-		rect.x = (WIDTH/2)  - (ship->img->w/2) + ship->X  - X;
-		rect.y = (HEIGHT/2) - (ship->img->h/2) + ship->Y  - Y;	
+  // OBJECT SHIP 
+  if(object->type == SHIP){
+
+    SDL_Rect rect = {.x = 0, .y = 0};
+    SDL_Rect rect2 = {.x = 0, .y = 0};
+
+		rect.x = (WIDTH/2)  - (object->img->w/2) + object->X  - X;
+		rect.y = (HEIGHT/2) - (object->img->h/2) + object->Y  - Y;	
 	
-		rect2.w = ship->img->w;	
-		rect2.h = ship->img->h;	
+		rect2.w = object->img->w;	
+		rect2.h = object->img->h;	
 
-	if(ship->speed > 0){
-		SDL_FreeSurface(ship->rot_img);		// free old img
-		ship->rot_img = rotozoomSurface(ship->img_m, ship->angle, 1, 0);
-	}
-	else{
-		SDL_FreeSurface(ship->rot_img);		// free old img
-		ship->rot_img = rotozoomSurface(ship->img, ship->angle, 1, 0);
-	}
-	if(ship->health <= 0){					// crap
-		//SDL_FreeSurface(ship->rot_img);		// free old img
-		//ship->rot_img = rotozoomSurface(ship->img_c, ship->angle, 1, 0);
+  	if(object->speed > 0){
+	  	SDL_FreeSurface(object->rot_img);		// free old img
+  		object->rot_img = rotozoomSurface(object->img_m, object->angle, 1, 0);
+  	}
+  	else{
+	  	SDL_FreeSurface(object->rot_img);		// free old img
+  		object->rot_img = rotozoomSurface(object->img, object->angle, 1, 0);
+  	}
+	  if(object->health <= 0){					// crap
+		  //SDL_FreeSurface(object->rot_img);		// free old img
+		  //object->rot_img = rotozoomSurface(object->img_c, object->angle, 1, 0);
 
 
-		if(clk++ > 10)
-			T++;
+		  if(clk++ > 10)
+			  T++;
 			
-		rect2.x = ship->img->w * (T % 3);	
-		rect2.y = ship->img->h * (T / 3);	
-		SDL_BlitSurface(r_explosion, &rect2, screen, &rect);
-		return OK;
-	}
+		  rect2.x = object->img->w * (T % 3);	
+		  rect2.y = object->img->h * (T / 3);	
+		  SDL_BlitSurface(r_explosion, &rect2, screen, &rect);
+		  return OK;
+	  }
 
-		SDL_BlitSurface(ship->rot_img, NULL, screen, &rect);
+		SDL_BlitSurface(object->rot_img, NULL, screen, &rect);
+  }
 
-
-return OK;
+  return OK;
 }
 
 
 // -----------------------------------------------
 //==============================================================================
-int Kresli_pristroje(T_ship *my_ship){
+int Kresli_pristroje(T_object *my_ship){
 //==============================================================================
 SDL_Rect rect = {.x = 0, .y = 0};
 SDL_Rect rect2 = {.x = 0, .y = 0};
-SDL_Surface *GP = NULL;
-SDL_Surface *RP = NULL;
+//SDL_Surface *GP = NULL;
+//SDL_Surface *RP = NULL;
 
 	// Radar
-	
+	/*
 	rect.x = 20;
 	rect.y = HEIGHT - 20 - radar->h;
 
@@ -99,6 +103,7 @@ SDL_Surface *RP = NULL;
 			SDL_FreeSurface(RP);
 		}
 	}
+  */
 
 	// Ukazatel zdravi
 	
@@ -300,9 +305,9 @@ int Kresli_strely(){
 //==============================================================================
   int i;
 	
- 	for(i = 0; i <= pocet_weapons; i++){
-		if(weapon[i].alive) Draw_weapon(&weapon[i]);
-		else weapon[i].img = NULL;
+ 	for(i = 0; i < MAX_OBJECTS; i++){
+		if(object[i].alive) Draw_object(&object[i]);
+		else object[i].img = NULL;
 	}
 
 
@@ -315,7 +320,7 @@ return OK;
 //==============================================================================
 int Draw_menu(){
 //==============================================================================
-SDL_Rect src;
+//SDL_Rect src;
 SDL_Rect dst;
 
 	// === Draw Menu ===
@@ -341,7 +346,7 @@ SDL_Rect dst;
 //==============================================================================
 int Draw_configure(){
 //==============================================================================
-SDL_Rect src;
+//SDL_Rect src;
 SDL_Rect dst;
 
 	// === Draw Menu ===
@@ -386,7 +391,7 @@ SDL_Rect dst;
 //==============================================================================
 int Draw_connect(){
 //==============================================================================
-SDL_Rect src;
+//SDL_Rect src;
 SDL_Rect dst;
 
 	// === Draw Menu ===

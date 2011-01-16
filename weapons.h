@@ -22,7 +22,7 @@
 } T_weapon;
 */
 
-T_weapon Explosion = {
+T_object Explosion = {
 	.type = EXPLOSION,
 	.speed = 0,
 	.damage = 0,
@@ -32,7 +32,7 @@ T_weapon Explosion = {
 
 
 // NEW speeds
-T_weapon RX_laser = {
+T_object RX_laser = {
 	.type = LASER,
 	.speed = 50,
 	.damage = 10,
@@ -41,7 +41,7 @@ T_weapon RX_laser = {
 
 };
 
-T_weapon RX_R1 = {
+T_object RX_R1 = {
 	.type = ROCKET,
 	.speed = 20,
 	.damage = 30,
@@ -51,7 +51,7 @@ T_weapon RX_R1 = {
 };
 
 
-T_weapon RX_M1 = {
+T_object RX_M1 = {
 	.type = MICRO_MISSILE,
 	.speed = 25,
 	.damage = 20,
@@ -60,7 +60,7 @@ T_weapon RX_M1 = {
 
 };
 
-T_weapon RX_M2 = {
+T_object RX_M2 = {
 	.type = GUIDED_MISSILE,
 	.speed = 15,
 	.damage = 40,
@@ -70,7 +70,7 @@ T_weapon RX_M2 = {
 };
 
 
-T_weapon ZX_Q1 = {
+T_object ZX_Q1 = {
 	.type = ENERGY_LASER,
 	.speed = 50,
 	.damage = 20,

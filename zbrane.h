@@ -1,6 +1,7 @@
-#ifndef ZBRANE_H
- #define ZBRANE_H
+#ifndef __ZBRANE_H_
+ #define __ZBRANE_H_
 
+#include "objects.h"
 
 #define LASER 1
 #define ROCKET 2
@@ -48,8 +49,8 @@ struct zbrane rakety[MAX_LASERU];
 //T_weapon lasers[MAX_LASER];
 //T_weapon rockets[MAX_ROCKET];
 
-T_weapon weapon[MAX_WEAPONS];
-T_weapon Explosion;
+//T_weapon weapon[MAX_WEAPONS];
+T_object Explosion;
 
 //char strilej[16];	// oznacuje ze kterych zbrani se prave strili
 

@@ -14,6 +14,7 @@
 
 
 #include "faction.h"
+#include "objects.h"
 
 
 // Weapon models
@@ -30,7 +31,7 @@
 int Inicializuj_objekty();
 int Pohybuj_objekty();
 int Detekuj_kolize();
- int Collision_detect(T_ship *ship, T_weapon *weapon );
+ int Collision_detect(T_object *object1, T_object *object2 );
 int Prekresli_vesmir();
 
 Uint32 Timed_loop(Uint32 interval, void *param);
@@ -125,19 +126,19 @@ int Vesmir(){
 
 				 case SDLK_LSHIFT:			// TURBO
 				 case SDLK_RSHIFT:			
-					if(ship[ID].strana == RED)
+					if(my_ship->faction == RED)
 						Turbo(START);
 				 	break;
 
 				 case SDLK_LALT:			// MODIFIKATOR = FIRE 1
-					if(ship[ID].strana == GREEN)
+					if(my_ship->faction == GREEN)
 						Fire(ENERGY_LASER);
 					else
 						Fire(LASER);
 					break;
 
 				 case SDLK_SPACE:
-					if(ship[ID].strana == GREEN)
+					if(my_ship->faction == GREEN)
 						Fire(ENERGY_LASER);
 					else{
 						Fire(LASER);
@@ -151,9 +152,9 @@ int Vesmir(){
 				 
 				 case SDLK_RCTRL:
 				 case SDLK_LCTRL:
-					if(ship[ID].strana == GREEN)
+					if(my_ship->faction == GREEN)
 						;//Fire(ROCKET);
-					if(ship[ID].strana == BLUE)
+					if(my_ship->faction == BLUE)
 						Fire(MICRO_MISSILE);
 					else
 						Fire(ROCKET);
@@ -390,13 +391,14 @@ int Prekresli_vesmir(){
 
 	// === Strely === 
 	
-	Kresli_strely();
+	//Kresli_strely();
 	
 	// === Lode === 
 
-	for(int id = 0; id < pocet_lodi; id++){	
-		if(ship[id].alive) Kresli_lod(&ship[id]); 		
+	for(int i = 0; i < MAX_OBJECTS; i++){	
+		if(object[i].alive) Draw_object(&object[i]); 		
 	}	
+
 	// === Pristroje ===
 	
 	Kresli_pristroje(my_ship);
@@ -422,44 +424,42 @@ int Inicializuj_objekty(){
 	SHIP_RED_RX.img = IMG_RED_RX;
 	SHIP_RED_RX.img_m = IMG_RED_RX_move;
 	SHIP_RED_RX.img_c = IMG_RED_RX_crap;
-	SHIP_RED_RX.strana = RED;
+	SHIP_RED_RX.faction = RED;
 
 	SHIP_RED_EX.img = IMG_RED_EX;
 	SHIP_RED_EX.img_m = IMG_RED_EX_move;
 	SHIP_RED_EX.img_c = IMG_RED_EX_crap;
-	SHIP_RED_EX.strana = RED;
+	SHIP_RED_EX.faction = RED;
 
 	SHIP_BLUE_RX.img = IMG_BLUE_RX;
 	SHIP_BLUE_RX.img_m = IMG_BLUE_RX_move;
 	SHIP_BLUE_RX.img_c = IMG_BLUE_RX_crap;
-	SHIP_BLUE_RX.strana = BLUE;
+	SHIP_BLUE_RX.faction = BLUE;
 
 	SHIP_GREEN_ZX.img = IMG_GREEN_ZX;
 	SHIP_GREEN_ZX.img_m = IMG_GREEN_ZX_move;
 	SHIP_GREEN_ZX.img_c = IMG_GREEN_ZX_crap;
-	SHIP_GREEN_ZX.strana = GREEN;
+	SHIP_GREEN_ZX.faction = GREEN;
 
 	//ship[0] = SHIP_RED_RX;
 	//ship[0] = SHIP_BLUE_RX;
 
-	ship[0] = SHIP_RED_RX;
-	ship[1] = SHIP_BLUE_RX;
-	ship[2] = SHIP_GREEN_ZX;
-	ship[3] = SHIP_RED_RX;
-	ship[4] = SHIP_BLUE_RX;
+	object[0] = SHIP_RED_RX;
+	object[1] = SHIP_BLUE_RX;
+	object[2] = SHIP_GREEN_ZX;
+	object[3] = SHIP_RED_RX;
+	object[4] = SHIP_BLUE_RX;
+
+	my_ship = &object[ID];	
 
   if(FACTION == RED)
-    ship[ID] = SHIP_RED_RX;
+    *my_ship = SHIP_RED_RX;
   else 
     if (FACTION == BLUE)
-      ship[ID] = SHIP_BLUE_RX;
+      *my_ship = SHIP_BLUE_RX;
     else
-      ship[ID] = SHIP_GREEN_ZX;
+      *my_ship = SHIP_GREEN_ZX;
 
-	my_ship = &ship[ID];	
-	
-	
-	pocet_lodi   = 5;
 
  return OK;
 }
@@ -558,7 +558,7 @@ return OK;
 }
 */
 //==============================================================================
-int Collision_detect(T_ship *ship, T_weapon *weapon ){
+int Collision_detect(T_object *ship, T_object *weapon ){
 //==============================================================================
 
   int c = (fabs(ship->X - weapon->X) < (ship->img->w  >> 1)) &&
