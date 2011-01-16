@@ -23,6 +23,7 @@
 */
 
 T_object Explosion = {
+  .descriptor = WEAPON,
 	.type = EXPLOSION,
 	.speed = 0,
 	.damage = 0,
@@ -33,6 +34,7 @@ T_object Explosion = {
 
 // NEW speeds
 T_object RX_laser = {
+  .descriptor = WEAPON,
 	.type = LASER,
 	.speed = 50,
 	.damage = 10,
@@ -42,6 +44,7 @@ T_object RX_laser = {
 };
 
 T_object RX_R1 = {
+  .descriptor = WEAPON,
 	.type = ROCKET,
 	.speed = 20,
 	.damage = 30,
@@ -52,6 +55,7 @@ T_object RX_R1 = {
 
 
 T_object RX_M1 = {
+  .descriptor = WEAPON,
 	.type = MICRO_MISSILE,
 	.speed = 25,
 	.damage = 20,
@@ -61,6 +65,7 @@ T_object RX_M1 = {
 };
 
 T_object RX_M2 = {
+  .descriptor = WEAPON,
 	.type = GUIDED_MISSILE,
 	.speed = 15,
 	.damage = 40,
@@ -71,6 +76,7 @@ T_object RX_M2 = {
 
 
 T_object ZX_Q1 = {
+  .descriptor = WEAPON,
 	.type = ENERGY_LASER,
 	.speed = 50,
 	.damage = 20,

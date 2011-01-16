@@ -102,6 +102,7 @@ SDL_Surface *guided_missile;
 SDL_Surface *radar;
 SDL_Surface *radar_point_r;
 SDL_Surface *radar_point_g;
+SDL_Surface *radar_point_missile;
 
 
 SDL_Surface *damage;

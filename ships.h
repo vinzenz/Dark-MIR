@@ -12,7 +12,7 @@
 // LIGHT BATTLE FIGHTER / SCOUT
 T_object SHIP_RED_RX = {
    .MAX_health 			= 120,	
-   .MAX_speed 			= 7.00,
+   .MAX_speed 			= 5.00,
    .MAX_shift 			= 10.00,
    .MAX_acceleration 	= 0.3,
    .MAX_manevr= 2.0,
@@ -40,10 +40,10 @@ T_object SHIP_RED_EX = {
 // LIGHT BATTLE FIGHTER / SCOUT
 T_object SHIP_BLUE_RX = {
    .MAX_health = 90,	
-   .MAX_speed 	= 10.00,
+   .MAX_speed 	= 7.00,
    .MAX_shift 	= 10.00,
    .MAX_acceleration = 0.3,
-   .MAX_manevr 	= 3.0,
+   .MAX_manevr 	= 2.5,
 
    .MAX_wp_1= 100,
    .MAX_wp_2= 20,

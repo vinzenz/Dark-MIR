@@ -579,8 +579,9 @@ int Fire(int id, int wp){
 //==============================================================================
   int i;
 
-	for( i=0; i < MAX_OBJECTS; i++){		// find first not .alive weapon
-			if(! object[i].alive){				// and use this slot 
+
+	for( i= WP; i < MAX_OBJECTS; i++){		// find first not .alive weapon
+			if(! object[i].alive){				    // and use this slot 
 					break;
 			}
 	}	
@@ -639,7 +640,8 @@ int Fire(int id, int wp){
 	object[i].X = 		player[id].ship.X;
 	object[i].Y = 		player[id].ship.Y;
 	object[i].faction = 	player[id].ship.faction;
-	object[i].alive = 	1;
+	object[i].alive =     	1;
+	object[i].destroyed = 	0;
 
  return OK;
 }
@@ -675,8 +677,8 @@ int Send_ship_states(){
 	*tp = SHIP;													// TYPE
 	tp++;
 
-//	fprintf(TTY,"<< X: %4f\n", (double) *((float *)tp));	
 	*((Sint32 *)tp) = player[i].ship.X;							// X
+	fprintf(TTY,"<< X: %4d\n", *((Sint32 *)tp));	
 	tp += sizeof(Sint32);
 	*((Sint32 *)tp) = player[i].ship.Y;							// Y
 	tp += sizeof(Sint32);
@@ -707,9 +709,16 @@ int Send_weapon_states(){
   tp = t->data + BUFF_SIZE;
 
   for(int a = 0; a < MAX_OBJECTS; a++){
-	  if(! object[a].alive)	continue;  
+    if(! object[a].alive)	continue;  
 
-	// New packet needed
+    // Send information: Object was destroyed
+	  if(object[a].destroyed){
+      object[a].alive = 0;
+		  object[a].X = 0;								
+		  object[a].Y = 0;							
+    }
+
+	  // New packet needed
     if(tp - t->data >= BUFF_SIZE-1) {	
       tp = t->data;
       memset(t->data, 0xFF ,BUFF_SIZE);
@@ -733,11 +742,12 @@ int Send_weapon_states(){
 
   	if(tp - t->data >= BUFF_SIZE-1) {	
 	  a--;		
+
 	  for(int x = 0; x < players; x++){
 	    if(! player[x].alive) continue;
-		UDP_CHANNEL_SEND(player[x].channel);
-		//fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
-      }
+		  UDP_CHANNEL_SEND(player[x].channel);
+		  //fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+    }
 	}
   }
   
@@ -922,7 +932,7 @@ int Pohybuj_objekty(){
 
 	// === PROJECTILS (WEAPONS) movement ===
 	
-  for (int i=0; i < pocet_weapons; i++){
+  for (int i= WP; i < MAX_OBJECTS; i++){
 	int n = 0;
 
 	  if(! object[i].alive) continue;
@@ -1008,15 +1018,15 @@ int Pohybuj_objekty(){
 	   // ==== position limits ====
 	  // RIGHT  DOWN 
 	  if(object[i].X > MAX_X) 
-			object[i].alive = 0;
+			object[i].destroyed = 1;
 	  if(object[i].Y > MAX_Y) 
-			object[i].alive = 0;
+			object[i].destroyed = 1;
 
 	  // LEFT  UP
 	  if(object[i].X < 0) 
-			object[i].alive = 0;
+			object[i].destroyed = 1;
 	  if(object[i].Y < 0) 
-			object[i].alive = 0;
+			object[i].destroyed = 1;
 
   }
 	Send_weapon_states();
@@ -1173,7 +1183,7 @@ int Time_to_live(T_object *weapon ){
 
 		  if(weapon->ttl <= 0){
 			if(weapon->type == EXPLOSION){
-				weapon->alive = 0;
+				weapon->destroyed = 1;
 				return OK;
 			}
 

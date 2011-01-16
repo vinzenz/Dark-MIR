@@ -7,6 +7,17 @@
 #include "program.h"
 
 //==============================================================================
+// GLOBAL DEFINE
+//==============================================================================
+#define SHIP   2
+#define WEAPON 3
+#define NATURE 4
+
+
+// index range start
+#define WP 128
+#define NT 512
+//==============================================================================
 // PROTOTYPES
 //==============================================================================
 int Create_object(int faction, int type, int model);
@@ -19,6 +30,7 @@ int Create_object(int faction, int type, int model);
 typedef struct str_object {
   Uint8 faction;
 
+  Uint8 descriptor;
   Uint8 type;
   Uint8 model;
 
@@ -26,6 +38,7 @@ typedef struct str_object {
   Sint32 Y;
 
   Uint8 alive;
+  Uint8 destroyed;
   Uint16 ttl;            // Time To Live
 
 
@@ -75,7 +88,7 @@ typedef struct str_object {
 //==============================================================================
 #define MAX_OBJECTS 1024
   
-  static T_object object[MAX_OBJECTS];
+  T_object object[MAX_OBJECTS];
 
   T_object *my_ship;
 

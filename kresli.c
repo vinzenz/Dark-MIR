@@ -16,7 +16,13 @@ static int clk;
 
 
   // OBJECT SHIP 
-  if(object->type == SHIP){
+  if(object->descriptor == WEAPON){
+
+    Draw_weapon(object);
+    return OK;
+   }
+
+  if(object->descriptor == SHIP){
 
     SDL_Rect rect = {.x = 0, .y = 0};
     SDL_Rect rect2 = {.x = 0, .y = 0};
@@ -62,11 +68,11 @@ int Kresli_pristroje(T_object *my_ship){
 //==============================================================================
 SDL_Rect rect = {.x = 0, .y = 0};
 SDL_Rect rect2 = {.x = 0, .y = 0};
-//SDL_Surface *GP = NULL;
-//SDL_Surface *RP = NULL;
+SDL_Surface *GP = NULL;
+SDL_Surface *RP = NULL;
 
-	// Radar
-	/*
+	//  === Radar ===
+	
 	rect.x = 20;
 	rect.y = HEIGHT - 20 - radar->h;
 
@@ -75,27 +81,46 @@ SDL_Rect rect2 = {.x = 0, .y = 0};
  	
 	SDL_BlitSurface(radar, NULL, screen, &rect);
 
-	for(int i= 0; i < pocet_lodi; i++){
-		if(! ship[i].alive) continue;
-		if(ship[i].X == 0) continue;
-		if(ship[i].Y == 0) continue;
+	for(int i= 0; i < MAX_OBJECTS; i++){
+		if(! object[i].alive) continue;
+
+		if(object[i].descriptor != SHIP){
+		  if(object[i].type != GUIDED_MISSILE)
+        continue; 
+    }
+		//if(object[i].X == 0) continue;
+		//if(object[i].Y == 0) continue;
 
 
-		if(ship[i].strana == GREEN && ship[i].speed == 0) continue;
+		if(object[i].faction == GREEN && object[i].speed == 0) continue;
 
-		rect.x = R_X + (radar->w/2 * (ship[i].X - ship[ID].X)) / MAX_X;
-		rect.y = R_Y + (radar->h/2 * (ship[i].Y - ship[ID].Y )) / MAX_Y;
+		rect.x = R_X + (radar->w/2 * (object[i].X - object[ID].X)) / MAX_X;
+		rect.y = R_Y + (radar->h/2 * (object[i].Y - object[ID].Y )) / MAX_Y;
 
 		//printf("SHIP: %d R:X: %3d R:Y: %3d\n",i, rect.x, rect.y);
 
-		if(ship[i].strana == ship[ID].strana){	// FRIEND
+    
+    // MISSILE
+		//if(object[i].type == GUIDED_MISSILE){	
+	  if(object[i].descriptor == WEAPON){	
+			rect.x -= radar_point_g->w/2;	
+			rect.y -= radar_point_g->h/2;	
+			RP = rotozoomSurface(radar_point_missile, 0, 1, 0);
+			SDL_BlitSurface(RP, NULL, screen, &rect);
+			SDL_FreeSurface(RP);
+		}
+    else
+
+    // FRIEND
+		if(object[i].faction == object[ID].faction){	
 			rect.x -= radar_point_g->w/2;	
 			rect.y -= radar_point_g->h/2;	
 			GP = rotozoomSurface(radar_point_g, 0, 1, 0);
 			SDL_BlitSurface(GP, NULL, screen, &rect);
 			SDL_FreeSurface(GP);
 		}
-		else{									// ENEMY
+    // ENEMY
+		else{									
 			rect.x -= radar_point_r->w/2;	
 			rect.y -= radar_point_r->h/2;	
 			RP = rotozoomSurface(radar_point_r, 0, 1, 0);
@@ -103,9 +128,9 @@ SDL_Rect rect2 = {.x = 0, .y = 0};
 			SDL_FreeSurface(RP);
 		}
 	}
-  */
+  
 
-	// Ukazatel zdravi
+	//  === Ukazatel zdravi ===
 	
 	rect.x = WIDTH  - 30 - damage->w;
 	rect.y = HEIGHT - 30 - damage->h;
@@ -189,7 +214,7 @@ return OK;
 
 // -----------------------------------------------
 //==============================================================================
-int Draw_weapon(T_weapon *weapon){
+int Draw_weapon(T_object *weapon){
 //==============================================================================
 SDL_Rect rect;
 SDL_Rect rect2;
@@ -287,11 +312,11 @@ int T;
 		rect2.w = 50;
 		rect2.h = 50;
 		
-		if(weapon->strana == RED)
+		if(weapon->faction == RED)
 			SDL_BlitSurface(r_explosion, &rect2, screen, &rect);
-		if(weapon->strana == BLUE)
+		if(weapon->faction == BLUE)
 			SDL_BlitSurface(b_explosion, &rect2, screen, &rect);
-		if(weapon->strana == GREEN)
+		if(weapon->faction == GREEN)
 			SDL_BlitSurface(g_explosion, &rect2, screen, &rect);
 		break;
   }	

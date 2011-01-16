@@ -113,8 +113,8 @@ typedef struct str_player{
 
 // PROTOCOL TYPE IDENTIFIERS
 // =============================================================================
-#define SHIP 	0
-#define WEAPON	1
+//#define SHIP 	0
+//#define WEAPON	1
 
 
 // PROTOCOL SUBTYPE IDENTIFIERS

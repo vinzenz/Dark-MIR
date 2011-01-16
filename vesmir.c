@@ -367,7 +367,10 @@ int Prekresli_vesmir(){
 
   SDL_Rect rect;
   int x,y;
-  
+ 
+
+  //printf(" ID: %3d my_ship: %8X my_ship->X %4d \n", ID, my_ship, my_ship->health );
+  //printf(" ID: %3d object0: %8X object0->X %4d \n", ID, &object[0], object[0].health );
 	X = my_ship->X;
 	Y = my_ship->Y;
   
@@ -445,11 +448,14 @@ int Inicializuj_objekty(){
 	//ship[0] = SHIP_BLUE_RX;
 
 	object[0] = SHIP_RED_RX;
+	object[0].alive = 1;
+
 	object[1] = SHIP_BLUE_RX;
 	object[2] = SHIP_GREEN_ZX;
 	object[3] = SHIP_RED_RX;
 	object[4] = SHIP_BLUE_RX;
 
+  printf("MY ID %3d\n", ID);
 	my_ship = &object[ID];	
 
   if(FACTION == RED)

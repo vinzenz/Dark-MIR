@@ -249,14 +249,16 @@ int Get_ship_states(){
 		if(id == 0xFF) break;
 
 		tp++;	
+		object[id].descriptor = SHIP;
 		object[id].type = *(tp);				// TYPE
 		tp++;	
-		object[id].X = *( (float *)tp);		// X
-//		printf("X: %f\n", ship[id].X);
-		tp += sizeof(float);
-		object[id].Y = *( (float *)tp);		// Y
+		object[id].X = *( (Sint32 *)tp);		// X
+		printf("ID: %3d id: %3d X: %5d\n",ID, id, object[id].X);
+		printf("ID: %3d ship: %3d X: %5d\n",ID, id, my_ship->X);
+		tp += sizeof(Sint32);
+		object[id].Y = *( (Sint32 *)tp);		// Y
 //		printf("Y: %f\n", ship[id].Y);
-		tp += sizeof(float);
+		tp += sizeof(Sint32);
 		object[id].speed = *( (float *)tp);	// SPEED
 //		printf("speed: %f\n", ship[id].speed);
 		tp += sizeof(float);
@@ -264,7 +266,7 @@ int Get_ship_states(){
 //		printf("angle: %f\n", ship[id].angle);
 		tp += sizeof(float);
 		object[id].health = *( (int *)tp);	// DAMAGE
-//		printf("health: %d\n", ship[id].health);
+		printf("health: %4d\n", object[id].health);
 		tp += sizeof(int);
 
   }
@@ -291,6 +293,7 @@ int Get_weapon_states(){
 		if(id == 0xFF) break;
 
 		tp++;	
+		object[id].descriptor = WEAPON;
 		object[id].type = *(tp);			// TYPE
 		tp++;	
 		object[id].faction = *(tp);			// SUBTYPE (strana)
@@ -304,8 +307,11 @@ int Get_weapon_states(){
 		object[id].angle = *( (float *)tp);	// ANGLE
 //		printf("angle: %f\n", weapon[id].angle);
 		tp += sizeof(float);
-		
-		object[id].alive = 1;
+	
+    if((object[id].X == 0) && (object[id].Y == 0))	
+		  object[id].alive = 0;
+    else
+		  object[id].alive = 1;
 /*
 		if(weapon[id].type == EXPLOSION) 
 				printf("TEST: explosion at: %g %g", 
