@@ -87,6 +87,7 @@ int Load_space_images(){
 	radar_point_r = MIR_LoadImage(ROOT"images/system/radar_point_r.png", 1); 
 	radar_point_g = MIR_LoadImage(ROOT"images/system/radar_point_g.png", 1); 
 	radar_point_missile = MIR_LoadImage(ROOT"images/system/radar_point_missile.png", 1); 
+	radar_point_garbage = MIR_LoadImage(ROOT"images/system/radar_point_garbage.png", 1); 
 
 
 	damage = MIR_LoadImage(ROOT"images/system/poskozeni.png", 1); 

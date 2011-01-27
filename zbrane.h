@@ -8,6 +8,7 @@
 #define ENERGY_LASER 3
 #define MICRO_MISSILE 4
 #define GUIDED_MISSILE 5
+#define MISSILE 2 // 6
 
 #define EXPLOSION 20
 // ==========================================
