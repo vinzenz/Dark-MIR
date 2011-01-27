@@ -66,8 +66,10 @@
 //==============================================================================
 // Macros
 //==============================================================================
+#define D_OUT stderr
+
 #define ERROR(arg) fprintf(stderr, " ERROR: %s\n", (arg));
-#define DEBUG(arg) fprintf(stderr, " DEBUG: %s\n", (arg));
+#define DEBUG(arg) fprintf(D_OUT, " DEBUG: %s\n", (arg));
 
 //==============================================================================
 // Global vriables

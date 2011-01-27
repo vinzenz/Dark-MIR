@@ -5,24 +5,88 @@
 #include "zbrane.h"
 #include "client.h"
 #include "menu.h"
+#include "faction.h"
 
 #include <SDL/SDL_rotozoom.h>
 
 //==============================================================================
 int Draw_object(T_object *object){
 //==============================================================================
+//static int T;
+//static int clk;
+
+
+  if(object->descriptor == SHIP){
+    Draw_ship(object);
+    return OK;
+  }
+
+  if(object->descriptor == WEAPON){
+    Draw_weapon(object);
+    return OK;
+   }
+
+  if(object->descriptor == NATURE){
+    Draw_nature(object);
+    //DEBUG("Draw_object(): ASTEROID");
+    //fprintf(D_OUT, "object X: %3d\n", object->X);
+    //fprintf(D_OUT, "object Y: %3d\n", object->Y);
+    return OK;
+  }
+
+  DEBUG("Draw_object(): Unknown object");
+  fprintf(D_OUT, "object type: %3d\n", object->type);
+  return OK;
+}
+
+
+//==============================================================================
+int Draw_nature(T_object *object){
+//==============================================================================
+//static int T;
+//static int clk;
+
+
+    SDL_Rect rect = {.x = 0, .y = 0};
+    SDL_Rect rect2 = {.x = 0, .y = 0};
+
+      if(object->type == ASTEROID){
+        switch(object->model){
+          case 0:
+          case 1:
+            object->img = asteroid1;
+            break;
+          case 2:
+            object->img = asteroid2;
+            POINT(2);
+            break;
+          default:
+            POINT(2);
+            object->img = asteroid2;
+        }
+      }
+
+
+		rect.x = (WIDTH/2)  - (object->img->w/2) + object->X  - X;
+		rect.y = (HEIGHT/2) - (object->img->h/2) + object->Y  - Y;	
+	
+		rect2.w = object->img->w;	
+		rect2.h = object->img->h;	
+
+
+		SDL_BlitSurface(object->img, NULL, screen, &rect);
+
+  return OK;
+}
+
+//==============================================================================
+int Draw_ship(T_object *object){
+//==============================================================================
 static int T;
 static int clk;
 
 
   // OBJECT SHIP 
-  if(object->descriptor == WEAPON){
-
-    Draw_weapon(object);
-    return OK;
-   }
-
-  if(object->descriptor == SHIP){
 
     SDL_Rect rect = {.x = 0, .y = 0};
     SDL_Rect rect2 = {.x = 0, .y = 0};
@@ -56,11 +120,9 @@ static int clk;
 	  }
 
 		SDL_BlitSurface(object->rot_img, NULL, screen, &rect);
-  }
 
   return OK;
 }
-
 
 // -----------------------------------------------
 //==============================================================================

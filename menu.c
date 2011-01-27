@@ -211,9 +211,8 @@ int Connect(){
 	                rc = Connect2server(server_list[1]);
                   if(rc == FAIL){
                     Message("SERVER NOT RESPONDING");
-                    break;
-                  }
-                  Vesmir();
+                  }else
+                    Game_loop();
                  	break;
 
              	case SDLK_2:
@@ -224,9 +223,8 @@ int Connect(){
 	                rc = Connect2server(server_list[2]);
                   if(rc == FAIL){
                     Message("SERVER NOT RESPONDING");
-                    break;
-                  }
-                  Vesmir();
+                  }else 
+                    Game_loop();
                  	break;
 
              	case SDLK_3:
@@ -237,9 +235,8 @@ int Connect(){
 	                rc = Connect2server(server_list[3]);
                   if(rc == FAIL){
                     Message("SERVER NOT RESPONDING");
-                    break;
-                  }
-                  Vesmir();
+                  }else
+                    Game_loop();
                  	break;
 
              	case SDLK_4:
@@ -250,9 +247,8 @@ int Connect(){
 	                rc = Connect2server(server_list[4]);
                   if(rc == FAIL){
                     Message("SERVER NOT RESPONDING");
-                    break;
-                  }
-                  Vesmir();
+                  }else
+                    Game_loop();
                  	break;
 
              	case SDLK_r:

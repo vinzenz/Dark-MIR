@@ -4,7 +4,12 @@
 #include "objects.h"
 //==============================================================================
 #define PORT  		7111
-#define BUFF_SIZE 128	
+
+// working size
+#define BUFF_SIZE 128
+
+// testing size
+//#define BUFF_SIZE 256
 
 #define MAX_PLAYERS 4 
 

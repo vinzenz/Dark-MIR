@@ -21,8 +21,9 @@ extern T_object Asteroid_X2;
 //==============================================================================
 int Initialize_objects(int ARG){
 //==============================================================================
-int CLIENT = ARG;
-int SERVER = !ARG;
+int CLIENT = ARG;  // (1)
+int SERVER = !ARG; // (0)
+
 	// Specifika lodi	
 	// ====================
 	SHIP_RED_RX.faction = RED;
@@ -71,6 +72,8 @@ if(CLIENT){
 // ----------------------------------------------------------------------------
 if(SERVER){
 
+  srand(SEED);
+
   for(int i=0; i < MAX_PLAYERS; i++){
     player[i].ship = SHIP_RED_RX;
 
@@ -90,10 +93,29 @@ if(SERVER){
   }
 
   players = 0;
+
+
+  // --- Objects --------------------------------------------------------------
+
+  int pos_x;
+  int pos_y;
+
+  // Asteroids randomly 
+  for(int i = 0; i < 10; i++){
+    pos_x = rand() % MAX_X;
+    pos_y = rand() % MAX_Y;
+    Create_object(NATURE, ASTEROID, 2, pos_x, pos_y  );
+  }
+
+  // Asteroid field
+  for(int i = 0; i < 60; i++){
+    pos_x = (rand() % 2000) + 2000;
+    pos_y = (rand() % 2000) + 2000;
+    Create_object(NATURE, ASTEROID, 1, pos_x, pos_y  );
+  }
+
 }
 // ----------------------------------------------------------------------------
-
-
 
 
 
@@ -102,6 +124,7 @@ if(SERVER){
 
 
 
+//==============================================================================
 //==============================================================================
 int Create_object( int descriptor, int type, int model, int X, int Y){
 //==============================================================================
@@ -114,15 +137,13 @@ int Create_object( int descriptor, int type, int model, int X, int Y){
   }
   if(i >= MAX_OBJECTS - 1) return FAIL;
   
-  object[i].alive =     1;
-  object[i].destroyed = 0;
 
   // === Select type ===
   if(descriptor == NATURE){
     object[i].faction = NEUTRAL;
 
     if(type == ASTEROID){
-     
+
       switch(model){
     
         case 0:
@@ -133,15 +154,22 @@ int Create_object( int descriptor, int type, int model, int X, int Y){
             object[i] = Asteroid_X2;
             break;
 
-        default: ;
+        default: 
+            object[i] = Asteroid_X2;
       }
 
-      object[i].X = 5500;
-      object[i].Y = 5500;
-      DEBUG("ast");
 
     }
   } // END NATURE
 
+  object[i].X = X;
+  object[i].Y = Y;
+
+  object[i].alive =     1;
+  object[i].destroyed = 0;
+
+  fprintf(D_OUT, "AST x: %4d y: %4d\n", X, Y);
   return OK;
 }
+//==============================================================================
+// EOF

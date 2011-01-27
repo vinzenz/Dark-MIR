@@ -50,16 +50,23 @@ int	Connect2server(const char *hostname){
   t->address.port = ip.port;	// And destination port 
   t->len = BUFF_SIZE;
 
-	if(New_client() == OK){		// TELL "hello server"
-		DEBUG("---==:: CONNECTED ::==---");
+  int RC = !OK;
+  int count = 0;
+  while(RC != OK){
+    count++;
+    fprintf(D_OUT, "Connecting ... try [%1d]\n", count);
+    if(count > 3){
+		  ERROR("SERVER IS NOT RESPONDING");
+      return FAIL;
+    }
+    RC = New_client();		// TELL "hello server"
   }
-	else{			
-		ERROR("SERVER ERROR");
-    return FAIL;
-	}
 
-    return OK;	
+  DEBUG("---==:: CONNECTED ::==---");
+  return OK;	
 }
+
+
 //==============================================================================
 int Load_server_list(){
 //==============================================================================

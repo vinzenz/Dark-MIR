@@ -18,7 +18,8 @@
 //==============================================================================
 int New_client(){
 //==============================================================================
-	unsigned char *tp=NULL;
+
+	Uint8 *tp=NULL;
 	tp=t->data;
 
 	*tp = P_NEW_PLAYER;
@@ -42,7 +43,7 @@ int New_client(){
     if(r->data[0] == P_NEW_PLAYER){
       ID = r->data[1];
       FACTION = r->data[2];
-      printf("ID: %2d\n", ID);
+      //printf("ID: %2d\n", ID);
       return OK;
     }
     if(r->data[0] == P_LOGOUT){
@@ -50,7 +51,7 @@ int New_client(){
       exit(EXIT_FAILURE);
     }
   }
-  printf("SERVER IS NOT RUNNING\n");		
+  //printf("SERVER IS NOT RUNNING\n");		
   return FAIL;
 }
 
@@ -253,8 +254,8 @@ int Get_ship_states(){
 		object[id].type = *(tp);				// TYPE
 		tp++;	
 		object[id].X = *( (Sint32 *)tp);		// X
-		printf("ID: %3d id: %3d X: %5d\n",ID, id, object[id].X);
-		printf("ID: %3d ship: %3d X: %5d\n",ID, id, my_ship->X);
+		//printf("ID: %3d id: %3d X: %5d\n",ID, id, object[id].X);
+		//printf("ID: %3d ship: %3d X: %5d\n",ID, id, my_ship->X);
 		tp += sizeof(Sint32);
 		object[id].Y = *( (Sint32 *)tp);		// Y
 //		printf("Y: %f\n", ship[id].Y);
@@ -266,13 +267,15 @@ int Get_ship_states(){
 //		printf("angle: %f\n", ship[id].angle);
 		tp += sizeof(float);
 		object[id].health = *( (int *)tp);	// DAMAGE
-		printf("health: %4d\n", object[id].health);
+//		printf("health: %4d\n", object[id].health);
 		tp += sizeof(int);
 
   }
  
 	return OK;
 }
+
+/* ZASTARALE
 //==============================================================================
 int Get_weapon_states(){
 //==============================================================================	
@@ -284,13 +287,15 @@ int Get_weapon_states(){
   if(*tp != P_WEAPON_STATES)					// OP_code
     return FAIL;
 
-//printf("WEPON STATES:\n");			
+  DEBUG("GET WEAPONS STATES"); 
   tp++;	
 
 
   while(tp - r->data < BUFF_SIZE - 4 * sizeof(float)){
 		id = *(tp);							// ID
 		if(id == 0xFF) break;
+
+    printf("wp id:%3d\n");
 
 		tp++;	
 		object[id].descriptor = WEAPON;
@@ -312,11 +317,11 @@ int Get_weapon_states(){
 		  object[id].alive = 0;
     else
 		  object[id].alive = 1;
-/*
-		if(weapon[id].type == EXPLOSION) 
-				printf("TEST: explosion at: %g %g", 
-					weapon[id].X, weapon[id].Y);
-*/
+
+//		if(weapon[id].type == EXPLOSION) 
+//				printf("TEST: explosion at: %g %g", 
+//					weapon[id].X, weapon[id].Y);
+
 
 		if(id >= pocet_weapons)
 			pocet_weapons++;
@@ -324,6 +329,65 @@ int Get_weapon_states(){
  
 	return OK;
 }
+*/
+//==============================================================================
+int Get_object_states(){
+//==============================================================================	
+
+	Uint8 *tp = r->data;
+	Uint8 id = 0;
+
+
+  if((*tp != P_OBJECT_STATES) &&	
+     (*tp != P_WEAPON_STATES))					// OP_code
+      return FAIL;
+
+  DEBUG("OBJECT STATES");
+  tp++;	
+
+
+  // POTREBA PREPOCITAT VELIKOST
+  while(tp - r->data < BUFF_SIZE - 4 * sizeof(float)){
+		id = *((Uint32 *)tp);							// ID
+		if(id >= MAX_OBJECTS - 1){
+      ERROR("too high identification number, packet corruption possible");
+      break;
+    }
+
+		tp += sizeof(Uint32);
+		object[id].descriptor = *(tp);  // DESCRIPTOR
+		tp++;	
+		object[id].type = *(tp);        // TYPE
+		tp++;	
+		object[id].model = *(tp);       // TYPE model
+		tp++;	
+		object[id].faction = *(tp);			// FACTION
+		tp++;	
+		object[id].X = *( (Uint32 *)tp);		// X
+//		printf("X: %f\n", weapon[id].X);
+		tp += sizeof(Uint32);
+		object[id].Y = *( (Uint32 *)tp);		// Y
+//		printf("Y: %f\n", weapon[id].Y);
+		tp += sizeof(Uint32);
+		object[id].angle = *( (float *)tp);	// ANGLE
+//		printf("angle: %f\n", weapon[id].angle);
+		tp += sizeof(float);
+	
+    if((object[id].X == 0) && (object[id].Y == 0))	
+		  object[id].alive = 0;
+    else
+		  object[id].alive = 1;
+/*
+		if(weapon[id].type == EXPLOSION) 
+				printf("TEST: explosion at: %g %g", 
+					weapon[id].X, weapon[id].Y);
+*/
+
+  }
+ 
+	return OK;
+}
+
 
 //==============================================================================
 int Get_player_list(){

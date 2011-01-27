@@ -51,7 +51,6 @@ int main(int argc,char *argv[]){
 	Menu();
 
   Exit_game(EXIT_SUCCESS);
-	return OK;
 }
 
 

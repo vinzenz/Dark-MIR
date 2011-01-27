@@ -11,8 +11,9 @@
  */
 
 //==============================================================================
-SDL_Surface *MIR_LoadImage(const char *filename, int alpha)
-{
+SDL_Surface *MIR_LoadImage(const char *filename, int alpha){
+//==============================================================================
+
 	SDL_Surface *tmp;// Pomocny
 	SDL_Surface *ret;// Bude vracen
 
@@ -23,7 +24,8 @@ SDL_Surface *MIR_LoadImage(const char *filename, int alpha)
 	}
 
 	if((ret = (alpha) ? SDL_DisplayFormatAlpha(tmp)
-			: SDL_DisplayFormat(tmp)) == NULL)
+                    : SDL_DisplayFormat(tmp)) 
+  == NULL)
 	{
 		fprintf(stderr, "%s\n", SDL_GetError());
 		SDL_FreeSurface(tmp);
@@ -39,14 +41,18 @@ SDL_Surface *MIR_LoadImage(const char *filename, int alpha)
 
 
 //==============================================================================
-int Load_space_images()
+int Load_space_images(){
 //==============================================================================
-{
+
+  DEBUG("Loading space images ...");
+
 	fg_color.r=255; 
 	fg_color.g=255; 
 	fg_color.b=255;
 
+  DEBUG(" colors set ");
 	space  	= MIR_LoadImage(ROOT"images/space.png", 1); 
+  DEBUG(" background loaded ");
 	
 	IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX.png", 1); 		
 	IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_move.png", 1); 	
@@ -96,7 +102,7 @@ int Load_space_images()
 	asteroid1 = MIR_LoadImage(ROOT"images/objects/asteroid_1.png", 1); 
 	asteroid2 = MIR_LoadImage(ROOT"images/objects/asteroid_2.png", 1); 
 
-
+  DEBUG("Space images are loaded");
 
 	console = MIR_LoadImage(ROOT"images/system/console.png", 1); 
 	console_bg = MIR_LoadImage(ROOT"images/system/console.png", 1); 
@@ -122,7 +128,8 @@ int Load_space_images()
 		console_bg	!= NULL	
 		)
 		return OK;
-	
+
+  else	
 	 return FAIL;
 }
 

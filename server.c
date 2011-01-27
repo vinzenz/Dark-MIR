@@ -19,6 +19,7 @@
 
 #include "protokol.h"
 #include "objects.h"
+#include "faction.h"
 
 
   float f;
@@ -72,6 +73,7 @@ int Fire(int id, int wp);
 
 int Send_ship_states();
 int Send_weapon_states();
+int Send_object_states();
 int Send_player_list();
 
 Uint32 Timed_loop(Uint32 interval, void *param);
@@ -322,11 +324,12 @@ int New_client(T_player *p){
   int id=0;
   p = NULL;
 
+  // Prepare new packet
+  memset(t->data, 0xFF ,BUFF_SIZE);
 
-	// ACK
   t->address = r->address;
   t->len = BUFF_SIZE;
-  tp=t->data;
+  tp = t->data;
 
 	if(live_players >= MAX_PLAYERS){
 		*tp = P_LOGOUT;				// server is full
@@ -336,10 +339,10 @@ int New_client(T_player *p){
 	}
 	else{
 		*tp = P_NEW_PLAYER;			// player joined
-		tp++;						// 
+		tp++;
 
-		for(id=0; id < players; id++){	// find first not .alive player
-			if(! player[id].alive){		// and use his slot 
+		for(id=0; id < players; id++){  // find first not .alive player
+			if(! player[id].alive){       // and use his slot 
 					p = &player[id];
 					break;
 			}
@@ -385,6 +388,7 @@ int New_client(T_player *p){
 		p->ship.wp_3 	= p->ship.MAX_wp_3;
 		p->ship.acceleration	= 0;
 		p->ship.alive	= 1;
+		p->ship.destroyed	= 0;
 
     tp++;
 		*tp = p->faction;	 			// player ID
@@ -433,7 +437,6 @@ int Speed_up(int id, int X){
   tp++;
   memcpy(tp, &player[id].ship.speed, sizeof(float));
 
-  UDP_SEND;
 */
  return OK;
 }
@@ -451,7 +454,6 @@ int Slow_down(int id, int X){
   tp++;
   memcpy(tp, &player[id].ship.speed, sizeof(float));
 
-  UDP_SEND;
 */
  return OK;
 }
@@ -471,7 +473,6 @@ int Rotate_R(int id, int X){
   tp++;
   memcpy(tp, &player[id].ship.angle, sizeof(float));
 
-  UDP_SEND;
 */
  return OK;
 }
@@ -490,7 +491,6 @@ int Rotate_L(int id, int X){
   tp++;
   memcpy(tp, &player[id].ship.angle, sizeof(float));
 
-  UDP_SEND;
 */
  return OK;
 }
@@ -508,7 +508,6 @@ int Shift_R(int id, int X){
   tp++;
   memcpy(tp, &player[id].ship.shift, sizeof(float));
 
-//  UDP_SEND;
 */
  return OK;
 }
@@ -526,7 +525,6 @@ int Shift_L(int id, int X){
   tp++;
   memcpy(tp, &player[id].ship.shift, sizeof(float));
 
-//  UDP_SEND;
 */
  return OK;
 }
@@ -545,7 +543,6 @@ int Turbo(int id, int X){
   tp++;
   memcpy(tp, &player[id].ship.shift, sizeof(float));
 
-//  UDP_SEND;
 */
  return OK;
 }
@@ -627,26 +624,32 @@ int Send_ship_states(){
 //==============================================================================
 // WARNING possible resending incorect one incorrect paket every running this function
   Uint8 *tp = t->data;
-  tp = t->data + BUFF_SIZE;
-   memset(t->data, 0xFF ,BUFF_SIZE);
+
+  // New packet
+	  tp = t->data;
+	  memset(t->data, 0xFF ,BUFF_SIZE);
+  	*tp = P_SHIP_STATES;											// OP CODE
+  	tp++;
+	  *tp = PACKET_NUMBER++;										// PACKET_NUMBER
+	  tp++;
 
 
   for(int i=0; i < players; i++){		
 
-	if(tp - t->data >= BUFF_SIZE-1) {	
-  	  for(int x = 0; x < players; x++){
-		if(player[x].alive){
-		UDP_CHANNEL_SEND(player[x].channel);
-		//fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
-		}
+    if(tp - t->data >= BUFF_SIZE-1) {	
+      for(int x = 0; x < players; x++){
+        if(player[x].alive){
+          UDP_CHANNEL_SEND(player[x].channel);
+        //fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+        }
   	  }
 	  tp = t->data;
 	  memset(t->data, 0xFF ,BUFF_SIZE);
-  	  *tp = P_SHIP_STATES;											// OP CODE
-  	  tp++;
+  	*tp = P_SHIP_STATES;											// OP CODE
+  	tp++;
 	  *tp = PACKET_NUMBER++;										// PACKET_NUMBER
 	  tp++;
-	}
+	 }
 
 	*tp = i;													// ID
 	tp++;
@@ -654,7 +657,7 @@ int Send_ship_states(){
 	tp++;
 
 	*((Sint32 *)tp) = player[i].ship.X;							// X
-	fprintf(TTY,"<< X: %4d\n", *((Sint32 *)tp));	
+	//fprintf(TTY,"<< X: %4d\n", *((Sint32 *)tp));	
 	tp += sizeof(Sint32);
 	*((Sint32 *)tp) = player[i].ship.Y;							// Y
 	tp += sizeof(Sint32);
@@ -668,21 +671,29 @@ int Send_ship_states(){
   }
 
   for(int x = 0; x < players; x++){
-	if(player[x].alive){
-		UDP_CHANNEL_SEND(player[x].channel);
-		//fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
-	}
+    if(player[x].alive){
+      UDP_CHANNEL_SEND(player[x].channel);
+      //fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+    }
   }
 	
    	memset(t->data, 0xFF ,BUFF_SIZE);
 	return OK;
 }
 //==============================================================================
-int Send_weapon_states(){
+
+// WARNING nektera zasilaci funkce zpusobuje nove vyslani naposledy vyslaneho paketu
+//==============================================================================
+int Send_object_states(){
 //==============================================================================
 
   Uint8 *tp = NULL;
-  tp = t->data + BUFF_SIZE;
+
+      // Prepare new packet
+      tp = t->data;
+      memset(t->data, 0xFF ,BUFF_SIZE);
+      *tp = P_OBJECT_STATES;										// OP CODE
+      tp++;
 
   for(int a = 0; a < MAX_OBJECTS; a++){
     if(! object[a].alive)	continue;  
@@ -694,52 +705,56 @@ int Send_weapon_states(){
 		  object[a].Y = 0;							
     }
 
-	  // New packet needed
-    if(tp - t->data >= BUFF_SIZE-1) {	
-      tp = t->data;
-      memset(t->data, 0xFF ,BUFF_SIZE);
-      *tp = P_WEAPON_STATES;										// OP CODE
-      tp++;
-    }
 
-		*tp = (Uint8) a;											// ID
+    // --- fill packet with informations ---
+		*(Uint32 *)tp = (Uint32) a;             // ID
+		tp += sizeof(Uint32);
+
+		*tp = object[a].descriptor;						  // DESCRIPTOR
 		tp++;
 		*tp = object[a].type;										// TYPE
 		tp++;
-		*tp = object[a].faction;										// SUBTYPE
+		*tp = object[a].model;								  // TYPE model
+		tp++;
+		*tp = object[a].faction;							  // FACTION
 		tp++;
 
-		*((float *)tp) = object[a].X;								// X
-		tp += sizeof(float);
-		*((float *)tp) = object[a].Y;								// Y
-		tp += sizeof(float);
-		*((float *)tp) = object[a].angle;							// ANGLE
+		*((Uint32 *)tp) = object[a].X;					// X
+		tp += sizeof(Uint32);
+		*((Uint32 *)tp) = object[a].Y;					// Y
+		tp += sizeof(Uint32);
+		*((float *)tp) = object[a].angle;				// ANGLE
 		tp += sizeof(float);
 
-  	if(tp - t->data >= BUFF_SIZE-1) {	
-	  a--;		
+    // Packet is full -> send it
+  	if(tp - t->data + 5 * sizeof(Uint32) >= BUFF_SIZE-1) {	
 
-	  for(int x = 0; x < players; x++){
-	    if(! player[x].alive) continue;
-		  UDP_CHANNEL_SEND(player[x].channel);
-		  //fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
-    }
-	}
+	    for(int x = 0; x < players; x++){
+	      if(! player[x].alive) continue;
+		    UDP_CHANNEL_SEND(player[x].channel);
+		    //fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+      }
+
+      // Prepare new packet
+      tp = t->data;
+      memset(t->data, 0xFF ,BUFF_SIZE);
+      *tp = P_OBJECT_STATES;										// OP CODE
+      tp++;
+	 }
   }
   
 	// send the rest of it	
-for(int x = 0; x < players; x++){
-  if(! player[x].alive) continue;
-  UDP_CHANNEL_SEND(player[x].channel);
-  //fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
+  for(int x = 0; x < players; x++){
+    if(! player[x].alive) continue;
+    UDP_CHANNEL_SEND(player[x].channel);
+    //fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
   }
 
-   	memset(t->data, 0xFF ,BUFF_SIZE);
+  memset(t->data, 0xFF ,BUFF_SIZE);
 	return OK;
 }
 
 
-// WARNING nektera zasilaci funkce zpusobuje nove vyslani naposledy vyslaneho paketu
 //==============================================================================
 int Send_player_list(){
 //==============================================================================	
@@ -900,25 +915,21 @@ int Pohybuj_objekty(){
 			if(y > 0){
 				if(x > 0){	// I (4)
 					object[i].angle =  360 - (180/M_PI) * atan(v);
-					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
-					POINT(1);
+					//printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
 				}
 				else{		// II (3)
 					object[i].angle = 180 - (180/M_PI) * atan(v);
-					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
-					POINT(2);
+					//printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
 				}
 			}
 			else{
 				if(x > 0){	// IV (1)
 					object[i].angle = 360 - (180/M_PI) * atan(v);
-					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
-					POINT(4);
+					//printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
 				}
 				else{		// III (2)
 					object[i].angle = 180 - (180/M_PI) * atan(v);
-					printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
-					POINT(3);
+					//printf("x: %5f y: %5f ALFA: %f\n",x, y, (double) object[i].angle);
 				}
 			}
 
@@ -935,7 +946,7 @@ int Pohybuj_objekty(){
 			else
 				weapon[i].angle =    (180/M_PI) * atan(v);
 */				
-		}
+		 }
 	  }
 
 	  object[i].X += object[i].speed * cos(((float)object[i].angle/180)*M_PI);
@@ -955,7 +966,8 @@ int Pohybuj_objekty(){
 			object[i].destroyed = 1;
 
   }
-	Send_weapon_states();
+	//Send_weapon_states();
+	Send_object_states();
 
  return OK;
 }
@@ -1125,3 +1137,5 @@ int Time_to_live(T_object *weapon ){
 
   return OK;
 }
+//==============================================================================
+// EOF

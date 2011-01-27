@@ -25,6 +25,10 @@ int Nastav_rozliseni();
 int Zmena_rozliseni(char X);
 
 int Draw_object(T_object *object);
+int Draw_ship(T_object *object);
+int Draw_weapon(T_object *object);
+int Draw_nature(T_object *object);
+
 int Kresli_pristroje();
 int Kresli_strely();
 int Draw_menu();

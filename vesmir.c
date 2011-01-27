@@ -37,30 +37,37 @@ Uint32 Timed_loop(Uint32 interval, void *param);
 Uint32 Redraw_loop(Uint32 interval, void *param);
 
 //==============================================================================
-int Vesmir(){
+int Game_loop(){
 //==============================================================================
  
  int quit=0;
  SDL_Event event;
  Uint8* keys;	
 
+
+
 	// Inicializace
+  DEBUG("GAME LOOP");
 	
 	if(Load_space_images() == FAIL) 
-		fprintf(stderr, "ERROR: nepodarilo se nacist obrazky pro vesmir\n");
+		ERROR("failed to load all images, continuing");
  
 	//SDL_EnableKeyRepeat( 50, 50);  // Dalsi signal stisknute klavesy odesle po 50ms
 	SDL_ShowCursor(SDL_DISABLE);  // vypne zobrazovani systemoveho kurzoru
 
 	// casovani reakci na klavesy
 	
+  DEBUG("before setting timers");	
 //	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 					// KEYBORD
 //	mv_timer = SDL_AddTimer(1, Timed_loop, NULL); 					// MOVE
 	draw_timer = SDL_AddTimer(30, Redraw_loop, NULL); 				// DRAW
 	
 
+  DEBUG("before inicialization");	
 	Initialize_objects(1);
-	
+
+
+  DEBUG("before while loop");	
 	// ============================== GAME LOOP ==============================
 	while(!quit){
 
@@ -76,16 +83,16 @@ int Vesmir(){
 				switch(event.key.keysym.sym){
 					
 				  case SDLK_ESCAPE:
-					pauza = 1;
-				  	quit = 1;		
-					break;
+					  pauza = 1;
+				    quit = 1;		
+					  break;
 				
 				  case SDLK_PAUSE:
 				  case SDLK_p:
-					if(pauza==0) pauza = 1;
-					else pauza = 0;
-					fprintf(stderr, "pauza = %i\n", pauza);	
-					break;
+					  if(pauza==0) pauza = 1;
+					  else pauza = 0;
+					  fprintf(stderr, "pauza = %i\n", pauza);	
+					  break;
 					
 				 case SDLK_LEFT:
 					Rotate_L(START);
@@ -293,7 +300,7 @@ int Vesmir(){
 // ==== END GAME LOOP ====
 
   Logout();		// TELL "goodbye server"
-  printf("---==:: DISCONNECTED ::==---\n");
+  DEBUG("---==:: DISCONNECTED ::==---");
 	
   // === Uklizeni ===
   Free_space_images();
@@ -336,8 +343,10 @@ Uint32 Timed_loop(Uint32 interval, void *param){
 			Get_ship_states(); 
 			break;
 		case P_WEAPON_STATES:
-			Get_weapon_states(); 
+		case P_OBJECT_STATES:
+			Get_object_states(); 
 			break;
+
 		case P_PLAYER_LIST:
 			Get_player_list(); 
 			break;

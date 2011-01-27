@@ -69,7 +69,7 @@ typedef struct str_player{
 // PROTOCOL OP CODES
 // =============================================================================
 #define P_NEW_PLAYER 	0x01
-#define P_LOGOUT 		0xFF
+#define P_LOGOUT 		0xFE
 
 #define P_PLAYER_LIST	0x0A
 // ----------------------------
@@ -99,6 +99,7 @@ typedef struct str_player{
 //  State:  OP_code | id | type | X | Y | speed | angle
 #define P_SHIP_STATES	0x23
 #define P_WEAPON_STATES	0x26
+#define P_OBJECT_STATES	0x27
 
 
 // ----------------------------
