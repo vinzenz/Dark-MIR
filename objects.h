@@ -26,6 +26,8 @@
 int Initialize_objects( int );
 int Create_object(int faction, int type, int model, int X, int Y);
 
+void Examine_objects();
+
 //==============================================================================
 // DATA TYPES
 //==============================================================================

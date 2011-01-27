@@ -24,7 +24,7 @@ int Draw_object(T_object *object){
   if(object->descriptor == WEAPON){
     Draw_weapon(object);
     return OK;
-   }
+  }
 
   if(object->descriptor == NATURE){
     Draw_nature(object);
@@ -87,6 +87,19 @@ static int clk;
 
 
   // OBJECT SHIP 
+  // Set new img
+  if(object->img == NULL){
+
+    
+
+    if(object->faction == RED){    
+  		object->img = rotozoomSurface(IMG_RED_RX, 0x00, 1, 0);
+    }
+    if(object->faction == BLUE){    
+  		object->img = rotozoomSurface(IMG_BLUE_RX, 0x00, 1, 0);
+    }
+  }
+
 
     SDL_Rect rect = {.x = 0, .y = 0};
     SDL_Rect rect2 = {.x = 0, .y = 0};
@@ -155,8 +168,6 @@ SDL_Surface *RP = NULL;
 
 
 		if(object[i].faction == GREEN && object[i].speed == 0) continue;
-
-		rect.x = R_X + (radar->w/2 * (object[i].X - object[ID].X)) / MAX_X;
 		rect.y = R_Y + (radar->h/2 * (object[i].Y - object[ID].Y )) / MAX_Y;
 
 		//printf("SHIP: %d R:X: %3d R:Y: %3d\n",i, rect.x, rect.y);
@@ -301,10 +312,8 @@ int T;
 
   switch(weapon->type){
 	case LASER:
-		if(weapon->img != NULL)
-			SDL_FreeSurface(weapon->img);		
-
-		weapon->img = rotozoomSurface(laser, weapon->angle, 1, 0);
+		if(weapon->img == NULL) 
+		  weapon->img = rotozoomSurface(laser, weapon->angle, 1, 0);
 		
 		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X /*- lasers[i].sX */ - X;
 		rect.y = (HEIGHT/2) - (weapon->img->h/2) + weapon->Y /*- lasers[i].sY*/ - Y;
@@ -359,6 +368,8 @@ int T;
 
 		if(weapon->ttl > 20){
 			weapon->alive = 0;
+      FREE(weapon->img);  // potencial problem
+			weapon->img = NULL;
 			weapon->ttl = 0;
 			break;
 		}

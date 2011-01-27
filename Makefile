@@ -15,7 +15,7 @@ CC=$(CROSS)gcc
 LD=$(CROSS)ld
 AR=$(CROSS)ar
 
-MODULES = program.o images.o vesmir.o kresli.o lod.o protokol.o menu.o network.o garbage.o configure.o objects.o
+MODULES = program.o images.o vesmir.o kresli.o lod.o protokol.o menu.o network.o garbage.o configure.o objects.o debug.o
 SERVER_MODULES = server.o objects.o
 
 #===============================================================================
@@ -45,6 +45,7 @@ network.o: network.c program.h protokol.h client.h
 garbage.o: garbage.c program.h images.h
 configure.o: configure.c program.h images.h
 objects.o: objects.c program.h images.h objects.h
+debug.o: debug.c program.h objects.h
 
 
 #===============================================================================

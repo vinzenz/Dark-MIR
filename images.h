@@ -5,7 +5,7 @@
 #include "program.h"
 #include "objects.h"
 
-#define FREE(IMG) if((IMG) !=NULL) SDL_FreeSurface((IMG));
+#define FREE(IMG) if((IMG) !=NULL) SDL_FreeSurface((IMG)); (IMG) = NULL;
 
 
 //==============================================================================

@@ -101,7 +101,7 @@ if(SERVER){
   int pos_y;
 
   // Asteroids randomly 
-  for(int i = 0; i < 10; i++){
+  for(int i = 0; i < 20; i++){
     pos_x = rand() % MAX_X;
     pos_y = rand() % MAX_Y;
     Create_object(NATURE, ASTEROID, 2, pos_x, pos_y  );

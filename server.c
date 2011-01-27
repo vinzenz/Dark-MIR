@@ -845,16 +845,16 @@ int Pohybuj_objekty(){
     player[i].ship.angle += 360;
 
 	// ==== position change ====
-	player[i].ship.X += 
+	player[i].ship.X += round(
     player[i].ship.speed * cos(((float)player[i].ship.angle/180)*M_PI)
-	  + player[i].ship.shift * cos(((float)(player[i].ship.angle+90)/180)*M_PI);
-
-	player[i].ship.Y -= 
+	  + player[i].ship.shift * cos(((float)(player[i].ship.angle+90)/180)*M_PI));
+   
+	player[i].ship.Y -= round(
     player[i].ship.speed * sin(((float)player[i].ship.angle/180)*M_PI)
-		+ player[i].ship.shift * sin(((float)(player[i].ship.angle+90)/180)*M_PI);	
+		+ player[i].ship.shift * sin(((float)(player[i].ship.angle+90)/180)*M_PI));	
 
 
-	player[i].ship.shift /= 1.02;
+	player[i].ship.shift /= 1.12;
 	// ==== position limits ====
 	// RIGHT  DOWN 
 	if(player[i].ship.X > MAX_X) 

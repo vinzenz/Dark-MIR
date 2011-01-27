@@ -6,6 +6,12 @@
 #include "images.h"
 
 
+
+#define RED_RX_TYPE  1
+#define RED_EX_TYPE  2
+
+#define BLUE_RX_TYPE  32
+
 // SERVER TIME INTERVAL = 20 ms
 
 

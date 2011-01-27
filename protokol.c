@@ -373,9 +373,10 @@ int Get_object_states(){
 //		printf("angle: %f\n", weapon[id].angle);
 		tp += sizeof(float);
 	
-    if((object[id].X == 0) && (object[id].Y == 0))	
+    if((object[id].X == 0) && (object[id].Y == 0)){
 		  object[id].alive = 0;
-    else
+      object[id].img = NULL;
+    }else
 		  object[id].alive = 1;
 /*
 		if(weapon[id].type == EXPLOSION) 
