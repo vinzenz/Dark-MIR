@@ -24,7 +24,8 @@ T_object SHIP_RED_RX = {
    .MAX_manevr= 2.0,
 
    .MAX_wp_1	= 150,
-   .MAX_wp_2	= 8,
+   //.MAX_wp_2	= 8,
+   .MAX_wp_2	= 80,
    .MAX_wp_3	= 2,
    .alive 	= 1,
 };

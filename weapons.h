@@ -54,6 +54,17 @@ T_object RX_R1 = {
 };
 
 
+T_object RX_MM1 = {
+  .descriptor = WEAPON,
+	.type = MULTI_MISSILE,
+	.speed = 20,
+	.damage = 50,
+	.alive = 1,
+	.ttl = 300,	//  = 6s
+
+};
+
+
 T_object RX_M1 = {
   .descriptor = WEAPON,
 	.type = MICRO_MISSILE,

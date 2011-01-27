@@ -10,6 +10,8 @@
 
 #include "ships.h"
 #include "asteroids.h"
+#include "zbrane.h"
+#include "weapons.h"
 
 //==============================================================================
 // PROTOTYPES
@@ -139,6 +141,14 @@ int Create_object( int descriptor, int type, int model, int X, int Y){
   
 
   // === Select type ===
+  if(descriptor == WEAPON){
+    //object[i].faction = RED;
+
+    if(type == ROCKET){
+      object[i] = RX_R1;
+    }
+
+  }
   if(descriptor == NATURE){
     object[i].faction = NEUTRAL;
 
@@ -169,7 +179,9 @@ int Create_object( int descriptor, int type, int model, int X, int Y){
   object[i].destroyed = 0;
 
   fprintf(D_OUT, "AST x: %4d y: %4d\n", X, Y);
-  return OK;
+  return i;
+  // returning ID of created object
+  // negative value is returned in case of failure
 }
 //==============================================================================
 // EOF

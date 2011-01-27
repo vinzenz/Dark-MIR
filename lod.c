@@ -4,7 +4,7 @@
 #include "lod.h"
 
 
-#include "weapons.h"
+//#include "weapons.h"
 
 //==============================================================================
 Uint32 Ovladani(Uint32 interval, void *param){

@@ -73,6 +73,7 @@ int Load_space_images(){
 	raketa = MIR_LoadImage(ROOT"images/r1.png", 1); 
 	micro_missile= MIR_LoadImage(ROOT"images/micro_missile.png", 1); 
 	guided_missile= MIR_LoadImage(ROOT"images/guided_missile.png", 1); 
+	multi_missile= MIR_LoadImage(ROOT"images/multi_missile.png", 1); 
 	//raketa = MIR_LoadImage(ROOT"images/G_Q1.png", 1); 
 
 	energy_laser =  MIR_LoadImage(ROOT"images/G_Q1.png", 1); 

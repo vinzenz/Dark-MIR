@@ -15,7 +15,7 @@
 #include "lod.h"
 //#include "ships.h"
 #include "zbrane.h"
-#include "weapons.h"
+//#include "weapons.h"
 
 #include "protokol.h"
 #include "objects.h"
@@ -571,7 +571,7 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_1 -= 1;
-			object[i] = RX_laser;
+			//object[i] = RX_laser;
 			break;
 
 		case ENERGY_LASER:
@@ -579,9 +579,9 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_1--;
-			object[i] = ZX_Q1;
+			//object[i] = ZX_Q1;
 			break;
-
+/*
 		// === SECONDARY WEAPONS ===	
 		case ROCKET:
 			if(	player[id].ship.wp_2 <= 0)
@@ -590,13 +590,13 @@ int Fire(int id, int wp){
 			player[id].ship.wp_2--;
 			object[i] = RX_R1;
 			break;
-
+*/
 		case MICRO_MISSILE:
 			if(	player[id].ship.wp_2 <= 0)
 				return FAIL;
 
 			player[id].ship.wp_2 -= 1;
-			object[i] = RX_M1;
+			//object[i] = RX_M1;
 			break;
 
 		case GUIDED_MISSILE:
@@ -604,9 +604,37 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_3 -= 1;
-			object[i] = RX_M2;
+			//object[i] = RX_M2;
 			break;
 
+		case ROCKET:
+		case MULTI_MISSILE:
+			if(	player[id].ship.wp_2 <= 0)
+				return FAIL;
+
+			player[id].ship.wp_2 -= 1;
+      // WRITE IT
+      double angle = ((player[id].ship.angle + 90) * M_PI / 90  );
+      while(angle > 2 * M_PI) angle -= 2 * M_PI;
+      while(angle < 0) angle += 2 * M_PI;
+   
+      if(angle < M_PI/2){
+        if(angle < M_PI/4) angle = angle;
+        if(angle > M_PI/4) angle = angle;
+ 
+      }
+      int dx= 		sin(angle) * 25;
+      int dy= 		cos(angle) * 25;
+      int x= 		player[id].ship.X ;
+      int y= 		player[id].ship.Y ;
+      i = Create_object(WEAPON, ROCKET, 0, x + dx, y + dy);
+	    object[i].angle = 	player[id].ship.angle;
+	    object[i].faction = player[id].faction;
+      i = Create_object(WEAPON, ROCKET, 0, x - dx, y - dy);
+	    object[i].angle = 	player[id].ship.angle;
+	    object[i].faction = player[id].faction;
+      return OK;
+			break;
 
 	}
 	object[i].angle = 	player[id].ship.angle;
