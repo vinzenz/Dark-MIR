@@ -110,6 +110,11 @@ typedef struct str_player{
 #define P_FIRE_4		0x44
 #define P_FIRE_5		0x45
 #define P_FIRE_6		0x46
+#define P_FIRE_7		0x47
+#define P_FIRE_8		0x48
+#define P_FIRE_9		0x49
+#define P_FIRE_A		0x4A
+#define P_FIRE_B		0x4B
 
 
 // PROTOCOL TYPE IDENTIFIERS

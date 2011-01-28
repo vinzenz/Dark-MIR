@@ -270,6 +270,12 @@ if (SDLNet_UDP_Recv(ussd, p)) {
 		case P_FIRE_3:     
 		case P_FIRE_4:     
 		case P_FIRE_5:     
+		case P_FIRE_6:     
+		case P_FIRE_7:     
+		case P_FIRE_8:     
+		case P_FIRE_9:     
+		case P_FIRE_A:     
+		case P_FIRE_B:     
 			
 			Fire(p_id, r->data[0] - P_FIRE_0);
 			break;
@@ -554,6 +560,11 @@ int Fire(int id, int wp){
 //==============================================================================
   int i;
 
+  int x= 		player[id].ship.X ;
+  int y= 		player[id].ship.Y ;
+  double angle = ((player[id].ship.angle + 90) * M_PI / 180  );
+  int dx= 		cos(angle) * 25;
+  int dy= 		sin(angle) * 25;
 
 	for( i= WP; i < MAX_OBJECTS; i++){		// find first not .alive weapon
 			if(! object[i].alive) break;      // and use this slot 
@@ -571,14 +582,19 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_1 -= 1;
-			//object[i] = RX_laser;
+      i = Create_object(WEAPON, LASER, 0, x, y);
+	    object[i].angle = 	player[id].ship.angle;
+	    object[i].faction = player[id].faction;
 			break;
 
 		case ENERGY_LASER:
 			if(	player[id].ship.wp_1 <= 0)
 				return FAIL;
 
-			player[id].ship.wp_1--;
+			player[id].ship.wp_1 -= 1;
+      i = Create_object(WEAPON, ENERGY_LASER, 0, x, y);
+	    object[i].angle = 	player[id].ship.angle;
+	    object[i].faction = player[id].faction;
 			//object[i] = ZX_Q1;
 			break;
 /*
@@ -596,7 +612,10 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_2 -= 1;
-			//object[i] = RX_M1;
+      i = Create_object(WEAPON, MICRO_MISSILE, 0, x, y);
+	    object[i].angle = 	player[id].ship.angle;
+	    object[i].faction = player[id].faction;
+			
 			break;
 
 		case GUIDED_MISSILE:
@@ -604,7 +623,10 @@ int Fire(int id, int wp){
 				return FAIL;
 
 			player[id].ship.wp_3 -= 1;
-			//object[i] = RX_M2;
+
+      i = Create_object(WEAPON, GUIDED_MISSILE, 0, x, y);
+	    object[i].angle = 	player[id].ship.angle;
+	    object[i].faction = player[id].faction;
 			break;
 
 		case ROCKET:
@@ -614,25 +636,66 @@ int Fire(int id, int wp){
 
 			player[id].ship.wp_2 -= 1;
       // WRITE IT
-      double angle = ((player[id].ship.angle + 90) * M_PI / 90  );
+      printf("player angle + 90: %G\n", player[id].ship.angle + 90);
       while(angle > 2 * M_PI) angle -= 2 * M_PI;
       while(angle < 0) angle += 2 * M_PI;
    
-      if(angle < M_PI/2){
-        if(angle < M_PI/4) angle = angle;
-        if(angle > M_PI/4) angle = angle;
- 
-      }
-      int dx= 		sin(angle) * 25;
-      int dy= 		cos(angle) * 25;
-      int x= 		player[id].ship.X ;
-      int y= 		player[id].ship.Y ;
+
+      /*
+      if((angle >      0)&&(angle < M_PI/2   )){ dx = - dx; dy = + dy; }
+      if((angle > M_PI/2)&&(angle < M_PI     )){ dx = - dx; dy = + dy; }
+      if((angle > M_PI  )&&(angle < M_PI*3/2 )){ dx = - dx; dy = + dy; }
+      if((angle > M_PI*3/2  )&&(angle < M_PI*4/2 )){ dx = - dx; dy = + dy; }
+      */
+       dx = - dx; dy = + dy; 
+
       i = Create_object(WEAPON, ROCKET, 0, x + dx, y + dy);
 	    object[i].angle = 	player[id].ship.angle;
 	    object[i].faction = player[id].faction;
       i = Create_object(WEAPON, ROCKET, 0, x - dx, y - dy);
 	    object[i].angle = 	player[id].ship.angle;
 	    object[i].faction = player[id].faction;
+
+      printf("angle: %3.2F   x: %4d y: %4d  dx: %2d dy %2d\n",
+              angle * 180/M_PI,  x, y, dx, dy);
+
+      return OK;
+    // ----------------------------------------
+		case MISSILE_BURST:
+			if(	player[id].ship.wp_2 <= 0)
+				return FAIL;
+
+			player[id].ship.wp_2 -= 1;
+      // WRITE IT
+      printf("player angle + 90: %G\n", player[id].ship.angle + 90);
+      while(angle > 2 * M_PI) angle -= 2 * M_PI;
+      while(angle < 0) angle += 2 * M_PI;
+   
+
+      /*
+      if((angle >      0)&&(angle < M_PI/2   )){ dx = - dx; dy = + dy; }
+      if((angle > M_PI/2)&&(angle < M_PI     )){ dx = - dx; dy = + dy; }
+      if((angle > M_PI  )&&(angle < M_PI*3/2 )){ dx = - dx; dy = + dy; }
+      if((angle > M_PI*3/2  )&&(angle < M_PI*4/2 )){ dx = - dx; dy = + dy; }
+      */
+       dx = - dx; dy = + dy; 
+
+      i = Create_object(WEAPON, MICRO_MISSILE, 0, x + dx, y + dy);
+	    object[i].angle = 	player[id].ship.angle;
+	    object[i].faction = player[id].faction;
+      i = Create_object(WEAPON, MICRO_MISSILE, 0, x + dx/2, y + dy/2);
+	    object[i].angle = 	player[id].ship.angle;
+	    object[i].faction = player[id].faction;
+      i = Create_object(WEAPON, MICRO_MISSILE, 0, x - dx/2, y - dy/2);
+	    object[i].angle = 	player[id].ship.angle;
+	    object[i].faction = player[id].faction;
+      i = Create_object(WEAPON, MICRO_MISSILE, 0, x - dx, y - dy);
+	    object[i].angle = 	player[id].ship.angle;
+	    object[i].faction = player[id].faction;
+
+      printf("angle: %3.2F   x: %4d y: %4d  dx: %2d dy %2d\n",
+              angle * 180/M_PI,  x, y, dx, dy);
+
       return OK;
 			break;
 

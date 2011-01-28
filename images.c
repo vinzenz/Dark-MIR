@@ -69,7 +69,8 @@ int Load_space_images(){
 	IMG_GREEN_ZX_move= MIR_LoadImage(ROOT"images/G_ZX_move.png", 1); 
 	IMG_GREEN_ZX_crap= MIR_LoadImage(ROOT"images/G_ZX.png", 1); 
 	
-	laser = MIR_LoadImage(ROOT"images/RED/laser.png", 1); 
+	RED_laser = MIR_LoadImage(ROOT"images/RED/laser.png", 1); 
+	BLUE_laser = MIR_LoadImage(ROOT"images/BLUE/laser.png", 1); 
 	raketa = MIR_LoadImage(ROOT"images/r1.png", 1); 
 	micro_missile= MIR_LoadImage(ROOT"images/micro_missile.png", 1); 
 	guided_missile= MIR_LoadImage(ROOT"images/guided_missile.png", 1); 

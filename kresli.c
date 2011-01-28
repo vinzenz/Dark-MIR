@@ -326,12 +326,19 @@ int T;
 
   switch(weapon->type){
 	case LASER:
-		if(weapon->img == NULL) 
-		  weapon->img = rotozoomSurface(laser, weapon->angle, 1, 0);
-		
+		if(weapon->img == NULL){
+		 if(weapon->faction == RED) 
+		    weapon->img = RED_laser;
+		 if(weapon->faction == BLUE) 
+		    weapon->img = BLUE_laser;
+
+      FREE(weapon->rot_img);
+		  weapon->rot_img = rotozoomSurface(weapon->img, weapon->angle, 1, 0);
+    }
+
 		rect.x = (WIDTH/2) - (weapon->img->w/2) + weapon->X /*- lasers[i].sX */ - X;
 		rect.y = (HEIGHT/2) - (weapon->img->h/2) + weapon->Y /*- lasers[i].sY*/ - Y;
-		SDL_BlitSurface(weapon->img, NULL, screen, &rect);
+		SDL_BlitSurface(weapon->rot_img, NULL, screen, &rect);
 		break;
 
 	case ROCKET:

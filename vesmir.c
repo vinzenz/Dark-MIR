@@ -124,6 +124,9 @@ int Game_loop(){
 				 	//my_ship->shift -= 1;
 					break;
 
+				 case SDLK_r:
+					Fire(MISSILE_BURST);
+          break;
 				 case SDLK_g:
 					Fire(GUIDED_MISSILE);
 					break;

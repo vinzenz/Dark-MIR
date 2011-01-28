@@ -97,6 +97,9 @@ SDL_Surface *asteroid2;
 
 // Zbrane
 SDL_Surface *laser;
+SDL_Surface *RED_laser;
+SDL_Surface *BLUE_laser;
+
 SDL_Surface *raketa;
 SDL_Surface *energy_laser;
 SDL_Surface *energy_plasma;

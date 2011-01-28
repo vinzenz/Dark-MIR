@@ -144,10 +144,23 @@ int Create_object( int descriptor, int type, int model, int X, int Y){
   if(descriptor == WEAPON){
     //object[i].faction = RED;
 
-    if(type == ROCKET){
-      object[i] = RX_R1;
-    }
+    switch(type){
 
+    case LASER:
+        object[i] = RX_laser;
+        break;
+    case ROCKET:
+        object[i] = RX_R1;
+        break;
+    case MICRO_MISSILE:
+        object[i] = RX_M1;
+        break;
+    case GUIDED_MISSILE:
+        object[i] = RX_M2;
+        break;
+    default:
+       DEBUG("OBJECT IS NOT IMPLEMENTED");
+    }
   }
   if(descriptor == NATURE){
     object[i].faction = NEUTRAL;

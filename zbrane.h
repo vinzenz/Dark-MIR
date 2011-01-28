@@ -10,6 +10,7 @@
 #define GUIDED_MISSILE 5
 #define MISSILE 2 // 6
 #define MULTI_MISSILE 8 // 6
+#define MISSILE_BURST 9 // 6
 
 #define EXPLOSION 20
 // ==========================================
