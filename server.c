@@ -276,7 +276,8 @@ if (SDLNet_UDP_Recv(ussd, p)) {
 		case P_FIRE_9:     
 		case P_FIRE_A:     
 		case P_FIRE_B:     
-			
+		
+      // HERE should be some control if the weapon is equiped	
 			Fire(p_id, r->data[0] - P_FIRE_0);
 			break;
 
@@ -945,7 +946,12 @@ int Pohybuj_objekty(){
 		+ player[i].ship.shift * sin(((float)(player[i].ship.angle+90)/180)*M_PI));	
 
 
-	player[i].ship.shift /= 1.12;
+  if( player[i].ship.shift > 0)
+	  player[i].ship.shift -= 0.10;
+  if( player[i].ship.shift < 0)
+	  player[i].ship.shift += 0.10;
+  
+
 	// ==== position limits ====
 	// RIGHT  DOWN 
 	if(player[i].ship.X > MAX_X) 
@@ -1070,12 +1076,48 @@ int Detekuj_kolize(){
 //==============================================================================
 
   int diff;  
+  int new;
 
+  // ------------------------------------------------------------
+  // Object vs Object
+  // ------------------------------------------------------------
+	for(int i=WP; i < MAX_OBJECTS; i++){
+    if(! object[i].alive) continue;
+
+	  for(int z=NT; z < MAX_OBJECTS; z++){
+      if(! object[z].alive) continue;
+      if( object[i].destroyed) break;
+      if( object[z].destroyed) continue;
+ 
+     
+      if(Collision_detect(&object[i], &object[z])){ 
+   
+        object[i].health -= object[z].damage; 
+        object[z].health -= object[i].damage; 
+        
+
+        if(object[i].health < 0){
+          //new = Create_object (NATURE, EXPLOSION, object[i].faction, object[i].X, object[i].Y); 
+          object[i].destroyed = 1;
+        }  
+        if(object[z].health < 0){
+          //new = Create_object(NATURE, EXPLOSION, object[z].faction, object[z].X, object[z].Y); 
+          object[z].destroyed = 1;
+        }
+      }
+
+    }
+  };
+  // ------------------------------------------------------------
+  // Player vs object
+  // ------------------------------------------------------------
   for(int x=0; x < players; x++){		
   	if(! player[x].ship.alive) continue;
 
     for(int y=0; y < players; y++){		
+      // ------------------------------------------------------------
       // Ship vs Ship
+      // ------------------------------------------------------------
 		  if((x != y) && (Collision_detect_ships(&player[x].ship, &player[y].ship))){
         diff = player[x].ship.health - player[y].ship.health;
 

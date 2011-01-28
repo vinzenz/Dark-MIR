@@ -131,38 +131,46 @@ if(SERVER){
 int Create_object( int descriptor, int type, int model, int X, int Y){
 //==============================================================================
   
- int i=0;
+ int i= -1;
 
-  // Find_slot();
-  for(i = WP; i < MAX_OBJECTS; i++){
-    if(! object[i].alive) break;
-  }
-  if(i >= MAX_OBJECTS - 1) return FAIL;
   
 
   // === Select type ===
+  // ------------------------------------------------------------
   if(descriptor == WEAPON){
     //object[i].faction = RED;
+      // Find_slot();
+    for(i = WP; i < NT; i++){
+      if(! object[i].alive) break;
+    }
+    if(i >= MAX_OBJECTS - 1) return FAIL;
 
     switch(type){
 
-    case LASER:
+      case LASER:
         object[i] = RX_laser;
         break;
-    case ROCKET:
+      case ROCKET:
         object[i] = RX_R1;
         break;
-    case MICRO_MISSILE:
+      case MICRO_MISSILE:
         object[i] = RX_M1;
         break;
-    case GUIDED_MISSILE:
+      case GUIDED_MISSILE:
         object[i] = RX_M2;
         break;
-    default:
+      default:
        DEBUG("OBJECT IS NOT IMPLEMENTED");
     }
   }
+  // ------------------------------------------------------------
   if(descriptor == NATURE){
+    // Find_slot();
+    for(i = NT; i < MAX_OBJECTS; i++){
+      if(! object[i].alive) break;
+    }
+    if(i >= MAX_OBJECTS - 1) return FAIL;
+
     object[i].faction = NEUTRAL;
 
     if(type == ASTEROID){

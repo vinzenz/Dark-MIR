@@ -44,7 +44,7 @@ menu.o: menu.c program.h protokol.h client.h menu.h
 network.o: network.c program.h protokol.h client.h 
 garbage.o: garbage.c program.h images.h
 configure.o: configure.c program.h images.h
-objects.o: objects.c program.h images.h objects.h
+objects.o: objects.c program.h images.h objects.h weapons.h asteroids.h zbrane.h
 debug.o: debug.c program.h objects.h
 
 

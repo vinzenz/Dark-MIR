@@ -335,7 +335,7 @@ int Get_object_states(){
 //==============================================================================	
 
 	Uint8 *tp = r->data;
-	Uint8 id = 0;
+	Uint32 id = 0;
 
 
   if((*tp != P_OBJECT_STATES) &&	
