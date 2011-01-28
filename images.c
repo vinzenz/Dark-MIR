@@ -54,8 +54,10 @@ int Load_space_images(){
 	space  	= MIR_LoadImage(ROOT"images/space.png", 1); 
   DEBUG(" background loaded ");
 	
-	IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX.png", 1); 		
-	IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_move.png", 1); 	
+	//IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX.png", 1); 		
+	IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX_2.png", 1); 		
+	IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_2.png", 1); 		
+	//IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_move.png", 1); 	
 	IMG_RED_RX_crap = MIR_LoadImage(ROOT"images/R_RX_crap.png", 1); 	
 	IMG_RED_EX	= MIR_LoadImage(ROOT"images/R_EX.png", 1); 	
 	IMG_RED_EX_move	= MIR_LoadImage(ROOT"images/R_EX_move.png", 1);
