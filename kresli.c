@@ -469,20 +469,22 @@ int Draw_configure(){
 SDL_Rect dst;
 
 	// === Draw Menu ===
-	 SDL_BlitSurface(settings_bg, NULL, screen, NULL);
 
-	 dst.x = 50;
-	 dst.y = 10;
-	// LOGO
-	SDL_BlitSurface(menu_button[0], NULL, screen, &dst);
+	for(int i=0; i < MAX_ITEMS; i++){
+    if(! item[i].alive) continue;
+ 
+  	 dst.x = item[i].x;
+	   dst.y = item[i].y;
 
-	 dst.x = 200;
-	 dst.y = 350;
-
-	for(int i=1; i < MAX_BUTTONS; i++){
-		SDL_BlitSurface(menu_button[i], NULL, screen, &dst);
-		dst.y += 70;
+    if(item[i].active) 
+		  SDL_BlitSurface(item[i].img_a, NULL, screen, &dst);
+    else
+		  SDL_BlitSurface(item[i].img_p, NULL, screen, &dst);
 	}
+
+
+  // Text labels and options 
+
 	 dst.x = 200;
 	 dst.y = 200;
 
@@ -559,6 +561,43 @@ SDL_Rect dst;
 
   return OK;
 }
+
+//==============================================================================
+int Draw_help(){
+//==============================================================================
+//SDL_Rect src;
+SDL_Rect dst;
+
+	// === Draw Menu ===
+
+	for(int i=0; i < MAX_ITEMS; i++){
+    if(! item[i].alive) continue;
+ 
+  	 dst.x = item[i].x;
+	   dst.y = item[i].y;
+
+    if(item[i].active) 
+		  SDL_BlitSurface(item[i].img_a, NULL, screen, &dst);
+    else
+		  SDL_BlitSurface(item[i].img_p, NULL, screen, &dst);
+	}
+
+    dst.x = 300;
+    dst.y = 500;
+
+		console_line = 
+      TTF_RenderText_Solid(text_font, "PRESS THE BUTTON TO SHOW ACTION" ,fg_color);
+
+		SDL_BlitSurface(console_line, NULL, screen, &dst);	
+		SDL_FreeSurface(console_line);
+		dst.y += 30;
+
+	 SDL_Flip(screen);
+
+
+  return OK;
+}
+
 
 //==============================================================================
 int FPS(){		// Frames Per Secund

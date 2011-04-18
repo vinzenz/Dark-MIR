@@ -34,6 +34,7 @@ int Kresli_strely();
 int Draw_menu();
 int Draw_configure();
 int Draw_connect();
+int Draw_help();
 
 //==============================================================================
 // GLOBAL variables
@@ -45,9 +46,11 @@ SDL_Surface *screen;            // okno
 SDL_Surface *menu_bg;           // pozadi
 SDL_Surface *settings_bg;       // pozadi
 SDL_Surface *connect_bg;        // pozadi
+SDL_Surface *help_bg;           // pozadi
 
 SDL_Surface *menu_connect_button;
 SDL_Surface *menu_settings_button;
+SDL_Surface *menu_help_button;
 SDL_Surface *menu_exit_button;	
 SDL_Surface *menu_logo;
 SDL_Surface *menu_logo_small;
@@ -59,6 +62,15 @@ SDL_Surface *blue_flag;
 
 SDL_Surface *red_flag_small;
 SDL_Surface *blue_flag_small;
+
+SDL_Surface *switch_on;
+SDL_Surface *switch_off;
+
+SDL_Surface *switch_on_img;
+SDL_Surface *switch_off_img;
+
+SDL_Surface *keyboard_img;
+
 // ===== SHIPS =====
 SDL_Surface *lod;			// hracohracova kosmicka lod
 SDL_Surface *lod_a;			// hracohracova kosmicka lod assault

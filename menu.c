@@ -32,7 +32,8 @@ int Menu(){
 
   menu_button[1] = menu_connect_button;
   menu_button[2] = menu_settings_button;
-  menu_button[3] = menu_exit_button;
+  menu_button[3] = menu_help_button;
+  menu_button[4] = menu_exit_button;
 
   Message(" > _ ");
 		// === Primy pristup ke klavesnici ===
@@ -56,6 +57,12 @@ int Menu(){
              	case SDLK_KP2:
                  	POINT(2);
                   Configure();
+                 	break;
+
+             	case SDLK_3:
+             	case SDLK_KP3:
+                 	POINT(3);
+                  Help();
                  	break;
 				
 				default:
@@ -90,12 +97,61 @@ int Configure(){
   if(Load_menu_images() == FAIL) 
 		fprintf(stderr, "ERROR: nepodarilo se nacist obrazky pro vesmir\n");
 
+  bzero(item, sizeof(menu_item)*MAX_ITEMS);
 
-  menu_button[0] = menu_logo_small;
+  item[0].img_p = settings_bg;
+  item[0].alive = 1;
+  item[0].active = 0;
+  item[0].x = 0;
+  item[0].y = 0;
 
-  menu_button[1] = menu_exit_button;
-  menu_button[2] = NULL;
-  menu_button[3] = NULL;
+  item[1].img_p = menu_logo_small;
+  item[1].alive = 1;
+  item[1].active = 0;
+  item[1].x = 50;
+  item[1].y = 20;
+
+  item[2].img_p = switch_off_img;
+  item[2].img_a = switch_on_img;
+  item[2].alive = 1;
+  item[2].active = 1;
+  item[2].x = 170;
+  item[2].y = 200;
+
+  item[3].img_p = switch_off_img;
+  item[3].img_a = switch_on_img;
+  item[3].alive = 1;
+  item[3].active = 0;
+  item[3].x = 170;
+  item[3].y = 230;
+
+  item[4].img_p = switch_off_img;
+  item[4].img_a = switch_on_img;
+  item[4].alive = 1;
+  item[4].active = 0;
+  item[4].x = 170;
+  item[4].y = 260;
+
+  item[5].img_p = switch_off_img;
+  item[5].img_a = switch_on_img;
+  item[5].alive = 1;
+  item[5].active = 0;
+  item[5].x = 170;
+  item[5].y = 290;
+
+  item[6].img_p = switch_off_img;
+  item[6].img_a = switch_on_img;
+  item[6].alive = 1;
+  item[6].active = 0;
+  item[6].x = 170;
+  item[6].y = 320;
+
+  item[7].img_p = switch_off_img;
+  item[7].img_a = switch_on_img;
+  item[7].alive = 0;
+  item[7].active = 0;
+  item[7].x = 170;
+  item[7].y = 350;
 
 
   //for(int i = 0; i < CONFIG_ITEMS_MAX; i++){
@@ -184,6 +240,7 @@ int Connect(){
   menu_button[1] = NULL;
   menu_button[2] = NULL;
   menu_button[3] = NULL;
+  menu_button[4] = menu_exit_button;
 
 
   Load_server_list();
@@ -281,6 +338,96 @@ int Connect(){
   return OK;
 }
 //==============================================================================
+int Help(){
+//==============================================================================
+
+  // Shows keybord layout
+
+
+
+  // Press the key, to view assigned action
+
+  SDL_Event event;
+  Uint8* keys;	
+
+  Uint8 quit= 0;
+
+  if(Load_menu_images() == FAIL){
+		ERROR("some images missing ... ignore");
+  }
+
+
+  bzero(item, sizeof(menu_item)*MAX_ITEMS);
+
+  item[0].img_p = help_bg;
+  item[0].alive = 1;
+  item[0].active = 0;
+  item[0].x = 0;
+  item[0].y = 0;
+
+  item[1].img_p = menu_logo_small;
+  item[1].alive = 1;
+  item[1].active = 0;
+  item[1].x = 50;
+  item[1].y = 20;
+
+
+  item[2].img_p = keyboard_img;
+  item[2].alive = 1;
+  item[2].active = 0;
+  item[2].x = 200;
+  item[2].y = 100;
+
+
+  
+
+  // ==== MENU LOOP ====
+  while(!quit){
+
+    Message(" > _ ");
+
+		// === Primy pristup ke klavesnici ===
+		while(SDL_PollEvent(&event)){
+           switch(event.type){
+
+              case SDL_KEYDOWN:       
+              switch(event.key.keysym.sym){
+             
+             	case SDLK_ESCAPE:
+                 	quit = 1;
+                 	break;
+				
+             	case SDLK_1:
+             	case SDLK_KP1:
+                 	POINT(1);
+                 	break;
+
+             	case SDLK_2:
+             	case SDLK_KP2:
+                 	POINT(2);
+                 	break;
+				
+				default:
+					break;
+				}
+			}
+		}
+
+
+	
+	SDL_PumpEvents();
+	keys = SDL_GetKeyState(NULL);
+
+
+	Draw_help();
+	//printf("X");
+ 
+  }
+  
+  return OK;
+}
+
+//==============================================================================
 int Message(const char *msg){
 
   strncpy(status_line, msg, 255);
@@ -289,6 +436,4 @@ int Message(const char *msg){
 }
 //==============================================================================
 //==============================================================================
-//==============================================================================
-
 /* end of menu.c */

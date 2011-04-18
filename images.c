@@ -14,12 +14,12 @@
 SDL_Surface *MIR_LoadImage(const char *filename, int alpha){
 //==============================================================================
 
-	SDL_Surface *tmp;// Pomocny
-	SDL_Surface *ret;// Bude vracen
+	SDL_Surface *tmp;  // Pomocny
+	SDL_Surface *ret;  // Bude vracen
 
-	if((tmp = IMG_Load(filename)) == NULL)// Prilinkovat SDL_image
+	if((tmp = IMG_Load(filename)) == NULL)    // Prilinkovat SDL_image
 	{
-		fprintf(stderr, "%s\n", SDL_GetError());
+		fprintf(stderr, "DEBUG: IMG %s\n", SDL_GetError());
 		return NULL;
 	}
 
@@ -55,8 +55,11 @@ int Load_space_images(){
   DEBUG(" background loaded ");
 	
 	//IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX.png", 1); 		
-	IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX_2.png", 1); 		
-	IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_2.png", 1); 		
+	//IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX_2.png", 1); 		
+	//IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_2_move.png", 1); 		
+	IMG_RED_RX	= MIR_LoadImage(ROOT"images/N_RX_2.png", 1); 		
+	IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/N_RX_2_mv.png", 1); 		
+
 	//IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_move.png", 1); 	
 	IMG_RED_RX_crap = MIR_LoadImage(ROOT"images/R_RX_crap.png", 1); 	
 	IMG_RED_EX	= MIR_LoadImage(ROOT"images/R_EX.png", 1); 	
@@ -158,6 +161,7 @@ int Load_menu_images(){
 	settings_bg	= MIR_LoadImage(ROOT"images/menu/configure_bg.png", 1); 
 
 	connect_bg	= MIR_LoadImage(ROOT"images/menu/connect_bg.png", 1); 
+	help_bg	= MIR_LoadImage(ROOT"images/menu/help_bg.png", 1); 
 
 	//menu_logo = MIR_LoadImage(ROOT"images/menu/logo.png", 1); 
 	menu_logo = MIR_LoadImage(ROOT"images/menu/logo_alpha.png", 1); 
@@ -165,6 +169,7 @@ int Load_menu_images(){
 
 	menu_connect_button = MIR_LoadImage(ROOT"images/menu/connect_button.png", 1); 
 	menu_settings_button = MIR_LoadImage(ROOT"images/menu/settings_button.png", 1); 
+	menu_help_button = MIR_LoadImage(ROOT"images/menu/help_button.png", 1); 
 	menu_exit_button = MIR_LoadImage(ROOT"images/menu/exit_button.png", 1); 
 	//policko  	= MIR_LoadImage(ROOT"images/policko.png", 1); 
 	//policko1  	= MIR_LoadImage(ROOT"images/policko-1.png", 1); 
@@ -177,6 +182,12 @@ int Load_menu_images(){
 
   red_flag_small = MIR_LoadImage(ROOT"images/red_flag_small.png", 1); 
   blue_flag_small= MIR_LoadImage(ROOT"images/blue_flag_small.png", 1); 
+
+  keyboard_img = MIR_LoadImage(ROOT"images/menu/keyboard_active_dark.png", 1); 
+  switch_on_img =  MIR_LoadImage(ROOT"images/menu/switch_on.png", 1); 
+  switch_off_img = MIR_LoadImage(ROOT"images/menu/switch_off.png", 1); 
+
+
 	
 	if (menu_bg != NULL && 
 		settings_bg != NULL)

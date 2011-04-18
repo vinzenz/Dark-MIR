@@ -131,10 +131,13 @@ int Game_loop(){
 					Fire(GUIDED_MISSILE);
 					break;
 
+				 case SDLK_w:
 				 case SDLK_LSHIFT:			// TURBO
 				 case SDLK_RSHIFT:			
 					if(my_ship->faction == RED)
 						Turbo(START);
+
+					Speed_up(START);
 				 	break;
 
 				 case SDLK_LALT:			// MODIFIKATOR = FIRE 1
@@ -206,10 +209,12 @@ int Game_loop(){
 				 case SDLK_d:
 					Shift_R(STOP);
 					break;
-
+        
+         case SDLK_w:
 				 case SDLK_LSHIFT:			// TURBO
 				 case SDLK_RSHIFT:			
 					Turbo(STOP);
+					Speed_up(STOP);
 				 	break;
 						
 				 default: break;
