@@ -257,6 +257,9 @@ int Nastav_rozliseni(){
 
 	rozliseni[4].W = WIDTH4;
 	rozliseni[4].H = HEIGHT4;
+
+	rozliseni[5].W = WIDTH5;
+	rozliseni[5].H = HEIGHT5;
 return OK;	
 }
 

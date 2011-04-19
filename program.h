@@ -36,7 +36,7 @@
 #define VYCHOZI_ROZLISENI   1 
 
 
-#define MAX_RES	5
+#define MAX_RES	6
 
 #define WIDTH	 rozliseni[nastavene_rozliseni].W // vychozi rozliseni
 #define HEIGHT   rozliseni[nastavene_rozliseni].H
@@ -56,6 +56,29 @@
 #define WIDTH4	1440
 #define HEIGHT4  900
 
+#define WIDTH5	1366
+#define HEIGHT5  768
+
+#define COLOR   24 	// bits
+
+
+
+#define FONT_SIZE 12
+
+
+//==============================================================================
+// Macros
+//==============================================================================
+#define D_OUT stderr
+
+#define ERROR(arg) fprintf(stderr, " ERROR: %s\n", (arg));
+#define DEBUG(arg) fprintf(D_OUT, " DEBUG: %s\n", (arg));
+
+//==============================================================================
+// Global vriables
+//==============================================================================
+
+short nastavene_rozliseni;
 #define COLOR   24 	// bits
 
 

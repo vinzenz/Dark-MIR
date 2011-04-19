@@ -497,6 +497,12 @@ SDL_Rect dst;
 		dst.y += 30;
 	}
 
+  dst.x = 400;
+  dst.y = 410;
+  console_line = TTF_RenderText_Solid(text_font, nick ,fg_color);
+  SDL_BlitSurface(console_line, NULL, screen, &dst);	
+  SDL_FreeSurface(console_line);
+
 /*
 	 dst.x = 300; dst.y = HEIGHT - 400;
 	 SDL_BlitSurface(red_flag_small, NULL, screen, &dst);

@@ -234,10 +234,10 @@ int Get_ship_states(){
   tp++;	
  										
   if(fabs(*(tp) - PACKET_NUMBER) > 100)				// PACKET_NUMBER
-	PACKET_NUMBER = *(tp);	// overflow correction
+    PACKET_NUMBER = *(tp);	// overflow correction
 
-  if(*(tp) < PACKET_NUMBER)
-	return FAIL;	  		// not right deliver order
+//  if(*(tp) < PACKET_NUMBER)
+//    return FAIL;	  		    // not right deliver order
 
   tp++;	
 
@@ -247,17 +247,25 @@ int Get_ship_states(){
 //		printf("__==");			
 
 		id = *(tp);							// ID
-		if(id == 0xFF) break;
+    fprintf(stderr, "SHIP ID: %u\n",id);
+
+		if(id == 0xFF){
+      DEBUG("WARNNING: unexepected ID of ship")
+       break;
+    }
 
 		tp++;	
 		object[id].descriptor = SHIP;
 		object[id].type = *(tp);				// TYPE
 		tp++;	
 		object[id].X = *( (Sint32 *)tp);		// X
+    fprintf(stderr, "SHIP X: %u\n",object[id].X);
+
 		//printf("ID: %3d id: %3d X: %5d\n",ID, id, object[id].X);
 		//printf("ID: %3d ship: %3d X: %5d\n",ID, id, my_ship->X);
 		tp += sizeof(Sint32);
 		object[id].Y = *( (Sint32 *)tp);		// Y
+    fprintf(stderr, "SHIP Y: %u\n",object[id].Y);
 //		printf("Y: %f\n", ship[id].Y);
 		tp += sizeof(Sint32);
 		object[id].speed = *( (float *)tp);	// SPEED
@@ -269,6 +277,13 @@ int Get_ship_states(){
 		object[id].health = *( (int *)tp);	// DAMAGE
 //		printf("health: %4d\n", object[id].health);
 		tp += sizeof(int);
+
+    if((object[id].X == 0) && (object[id].Y == 0)){
+      fprintf(stderr, "DEAD ID: %u\n", id);
+		  object[id].alive = 0;
+    }else
+		  object[id].alive = 1;
+
 
   }
  
@@ -351,6 +366,7 @@ int Get_object_states(){
 		id = *((Uint32 *)tp);							// ID
 		if(id >= MAX_OBJECTS - 1){
       ERROR("too high identification number, packet corruption possible");
+      fprintf(stderr, "object ID: %u\n", id);
       break;
     }
 
@@ -374,6 +390,7 @@ int Get_object_states(){
 		tp += sizeof(float);
 	
     if((object[id].X == 0) && (object[id].Y == 0)){
+      fprintf(stderr, "DEAD ID: %u\n", id);
 		  object[id].alive = 0;
       object[id].img = NULL;
     }else

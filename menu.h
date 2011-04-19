@@ -1,7 +1,7 @@
 #ifndef MENU_H
   #define MENU_H
 
-#define CONFIG_ITEMS_MAX 6
+#define CONFIG_ITEMS_MAX 32
 
 
 
@@ -31,7 +31,7 @@ typedef struct menu_item_struct menu_item;
 // Global variables
 //==============================================================================
   char status_line[256];
-  char configure_list[CONFIG_ITEMS_MAX][256];
+  char configure_list[CONFIG_ITEMS_MAX][81];
 
 //==============================================================================
 // Global functions

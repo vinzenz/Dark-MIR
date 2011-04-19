@@ -726,10 +726,12 @@ int Send_ship_states(){
 	  tp++;
 
 
-  for(int i=0; i < players; i++){		
+  // ------------------------------------------------------------
+  for(Uint8 i=0; i < players; i++){		
 
+    // FULL PACKET -> SEND IT
     if(tp - t->data >= BUFF_SIZE-1) {	
-      for(int x = 0; x < players; x++){
+      for(Uint8 x = 0; x < players; x++){
         if(player[x].alive){
           UDP_CHANNEL_SEND(player[x].channel);
         //fprintf(TTY, "> player: %d channel: %d\n", x, player[x].channel);
@@ -743,9 +745,9 @@ int Send_ship_states(){
 	  tp++;
 	 }
 
-	*tp = i;													// ID
+	*tp = i;                                       // ID
 	tp++;
-	*tp = SHIP;													// TYPE
+	*tp = SHIP;                                    // TYPE
 	tp++;
 
 	*((Sint32 *)tp) = player[i].ship.X;							// X
@@ -762,6 +764,8 @@ int Send_ship_states(){
 
   }
 
+  // ------------------------------------------------------------
+  // SEND REST OF DATA
   for(int x = 0; x < players; x++){
     if(player[x].alive){
       UDP_CHANNEL_SEND(player[x].channel);
@@ -787,7 +791,9 @@ int Send_object_states(){
       *tp = P_OBJECT_STATES;										// OP CODE
       tp++;
 
-  for(int a = 0; a < MAX_OBJECTS; a++){
+
+// HERE POSSIBLE PROBLEM !!!
+  for(int a = 32; a < MAX_OBJECTS; a++){
     if(! object[a].alive)	continue;  
 
     // Send information: Object was destroyed

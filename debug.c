@@ -12,7 +12,8 @@ void Examine_objects(){
   DEBUG("------------------------------------------------------------");
 
   int i;
-  for(i = 0; i < MAX_OBJECTS; i++){
+  //for(i = 0; i < MAX_OBJECTS; i++){
+  for(i = 0; i < 10; i++){
 
     if(! object[i].alive) continue;
     

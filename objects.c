@@ -57,6 +57,13 @@ if(CLIENT){
 	//ship[0] = SHIP_BLUE_RX;
 
 	object[0] = SHIP_RED_RX;
+	object[1] = SHIP_BLUE_RX;
+	object[2] = SHIP_RED_RX;
+	object[3] = SHIP_BLUE_RX;
+
+  // !!! PROBLEM HERE !!!
+
+
 	object[0].alive = 1;
 
   printf("MY ID %3d\n", ID);
