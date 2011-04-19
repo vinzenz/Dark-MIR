@@ -111,10 +111,11 @@ int Configure(){
   item[1].x = 50;
   item[1].y = 20;
 
+ // ------------------------------------------------------------
   item[2].img_p = switch_off_img;
   item[2].img_a = switch_on_img;
   item[2].alive = 1;
-  item[2].active = 1;
+  item[2].active = 0;
   item[2].x = 170;
   item[2].y = 200;
 
@@ -152,6 +153,8 @@ int Configure(){
   item[7].active = 0;
   item[7].x = 170;
   item[7].y = 350;
+  // ------------------------------------------------------------
+  item[2+nastavene_rozliseni].active = 1;
 
 
   //for(int i = 0; i < CONFIG_ITEMS_MAX; i++){
@@ -176,28 +179,59 @@ int Configure(){
                  	quit = 1;
                  	break;
 				
+             	case SDLK_0:
+             	case SDLK_KP0:
+                 	POINT(0);
+                  Zmena_rozliseni(0);
+                  item[1+1].active = 1;
+                  item[1+2].active = 0;
+                  item[1+3].active = 0;
+                  item[1+4].active = 0;
+                  item[1+5].active = 0;
+                 	break;
+
              	case SDLK_1:
              	case SDLK_KP1:
                  	POINT(1);
                   Zmena_rozliseni(1);
+                  item[1+1].active = 0;
+                  item[1+2].active = 1;
+                  item[1+3].active = 0;
+                  item[1+4].active = 0;
+                  item[1+5].active = 0;
                  	break;
 
              	case SDLK_2:
              	case SDLK_KP2:
-                  Zmena_rozliseni(2);
                  	POINT(2);
+                  Zmena_rozliseni(2);
+                  item[1+1].active = 0;
+                  item[1+2].active = 0;
+                  item[1+3].active = 1;
+                  item[1+4].active = 0;
+                  item[1+5].active = 0;
                  	break;
 
              	case SDLK_3:
              	case SDLK_KP3:
-                  Zmena_rozliseni(3);
                  	POINT(3);
+                  Zmena_rozliseni(3);
+                  item[1+1].active = 0;
+                  item[1+2].active = 0;
+                  item[1+3].active = 0;
+                  item[1+4].active = 1;
+                  item[1+5].active = 0;
                  	break;
 
              	case SDLK_4:
              	case SDLK_KP4:
-                  Zmena_rozliseni(4);
                  	POINT(4);
+                  Zmena_rozliseni(4);
+                  item[1+1].active = 0;
+                  item[1+2].active = 0;
+                  item[1+3].active = 0;
+                  item[1+4].active = 0;
+                  item[1+5].active = 1;
                  	break;
 				
 				default:
