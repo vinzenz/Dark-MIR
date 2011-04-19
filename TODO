@@ -26,6 +26,7 @@
 	-> efektivnejsi bech na viceprocesorovych systemech
 
 
-
+  [C] - actiavates cloaking, pokud bude lod vzdalena o vice nez 1000 bodu po primce
+        a zaroven nebude v pohybu, nebude videt ani okem, ani na radaru
 
 ZAJISTIT ABY SERVER ZASILAL SPRAVNE POZICE HRACU !!!

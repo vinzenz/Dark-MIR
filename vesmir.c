@@ -57,15 +57,15 @@ int Game_loop(){
 
 	// casovani reakci na klavesy
 	
-  DEBUG("before setting timers");	
-//	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 					// KEYBORD
-//	mv_timer = SDL_AddTimer(1, Timed_loop, NULL); 					// MOVE
-	draw_timer = SDL_AddTimer(30, Redraw_loop, NULL); 				// DRAW
 	
 
   DEBUG("before inicialization");	
 	Initialize_objects(1);
 
+  DEBUG("before setting timers");	
+//	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 					// KEYBORD
+//	mv_timer = SDL_AddTimer(1, Timed_loop, NULL); 					// MOVE
+	draw_timer = SDL_AddTimer(30, Redraw_loop, NULL); 				// DRAW
 
   DEBUG("before while loop");	
 	// ============================== GAME LOOP ==============================

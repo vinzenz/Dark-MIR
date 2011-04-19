@@ -26,6 +26,11 @@ int Initialize_objects(int ARG){
 int CLIENT = ARG;  // (1)
 int SERVER = !ARG; // (0)
 
+
+  // Clean array of objects
+  bzero(object, sizeof(object));
+
+
 	// Specifika lodi	
 	// ====================
 	SHIP_RED_RX.faction = RED;
@@ -34,6 +39,10 @@ int SERVER = !ARG; // (0)
 	SHIP_GREEN_ZX.faction = GREEN;
 
 if(CLIENT){
+
+  //fprintf(stderr, "SIZEOF: %d\n",sizeof(object));
+
+
 	SHIP_RED_RX.img = IMG_RED_RX;
 	SHIP_RED_RX.img_m = IMG_RED_RX_move;
 	SHIP_RED_RX.img_c = IMG_RED_RX_crap;
@@ -56,15 +65,16 @@ if(CLIENT){
 	//ship[0] = SHIP_RED_RX;
 	//ship[0] = SHIP_BLUE_RX;
 
-	object[0] = SHIP_RED_RX;
-	object[1] = SHIP_BLUE_RX;
-	object[2] = SHIP_RED_RX;
-	object[3] = SHIP_BLUE_RX;
+	//object[0] = SHIP_RED_RX;
+	//object[1] = SHIP_BLUE_RX;
+	//object[2] = SHIP_RED_RX;
+	//object[3] = SHIP_BLUE_RX;
 
   // !!! PROBLEM HERE !!!
+  // ships must be initilized as server says
 
 
-	object[0].alive = 1;
+	//object[0].alive = 1;
 
   printf("MY ID %3d\n", ID);
 	my_ship = &object[ID];	
@@ -76,6 +86,12 @@ if(CLIENT){
       *my_ship = SHIP_BLUE_RX;
     else
       *my_ship = SHIP_GREEN_ZX;
+
+
+
+
+
+
 }
 
 // ----------------------------------------------------------------------------

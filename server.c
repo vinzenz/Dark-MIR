@@ -750,16 +750,18 @@ int Send_ship_states(){
 	*tp = SHIP;                                    // TYPE
 	tp++;
 
-	*((Sint32 *)tp) = player[i].ship.X;							// X
+	*((Sint32 *)tp) = player[i].ship.X;             // X
 	//fprintf(TTY,"<< X: %4d\n", *((Sint32 *)tp));	
 	tp += sizeof(Sint32);
-	*((Sint32 *)tp) = player[i].ship.Y;							// Y
+	*((Sint32 *)tp) = player[i].ship.Y;             // Y
 	tp += sizeof(Sint32);
-	*((float *)tp) = player[i].ship.speed;						// SPEED
+	*((float *)tp) = player[i].ship.speed;          // SPEED
 	tp += sizeof(float);
-	*((float *)tp) = player[i].ship.angle;						// ANGLE
+	*((float *)tp) = player[i].ship.angle;          // ANGLE
 	tp += sizeof(float);
-	*((int *)tp) = player[i].ship.health;						// DAMAGE
+	*((int *)tp) = player[i].ship.health;           // DAMAGE
+	tp += sizeof(int);
+	*((int *)tp) = player[i].ship.faction;          // FACTION
 	tp += sizeof(int);
 
   }

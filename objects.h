@@ -20,13 +20,6 @@
 // index range start
 #define WP 128
 #define NT 512
-//==============================================================================
-// PROTOTYPES
-//==============================================================================
-int Initialize_objects( int );
-int Create_object(int faction, int type, int model, int X, int Y);
-
-void Examine_objects();
 
 //==============================================================================
 // DATA TYPES
@@ -86,6 +79,17 @@ typedef struct str_object {
   int damage;
 
 } T_object;
+
+
+//==============================================================================
+// PROTOTYPES
+//==============================================================================
+int Initialize_objects( int );
+int Create_object(int faction, int type, int model, int X, int Y);
+
+void Examine_objects();
+void Examine_object(T_object *obj);
+
 
 
 

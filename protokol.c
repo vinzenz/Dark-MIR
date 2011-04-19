@@ -242,7 +242,7 @@ int Get_ship_states(){
   tp++;	
 
 
-  while(tp - r->data < BUFF_SIZE - 6 * sizeof(float)){
+  while(tp - r->data < BUFF_SIZE - 7 * sizeof(float)){
 
 //		printf("__==");			
 
@@ -275,6 +275,9 @@ int Get_ship_states(){
 //		printf("angle: %f\n", ship[id].angle);
 		tp += sizeof(float);
 		object[id].health = *( (int *)tp);	// DAMAGE
+//		printf("health: %4d\n", object[id].health);
+		tp += sizeof(int);
+		object[id].faction = *( (int *)tp);	// FACTION
 //		printf("health: %4d\n", object[id].health);
 		tp += sizeof(int);
 

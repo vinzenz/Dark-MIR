@@ -1,11 +1,11 @@
-#include "program.h"
-#include "vesmir.h"
+
 #include "images.h"
 #include "lod.h"
 #include "zbrane.h"
 #include "client.h"
 #include "menu.h"
 #include "faction.h"
+#include "vesmir.h"
 
 #include <SDL/SDL_rotozoom.h>
 
@@ -90,11 +90,19 @@ static int clk;
   // Set new img
   if(object->img == NULL){
 
+    Examine_object(object);    
+
     if(object->faction == RED){    
   		object->img = IMG_RED_RX;
+  		object->img_m = IMG_RED_RX_move;
     }
     if(object->faction == BLUE){    
   		object->img = IMG_BLUE_RX;
+  		object->img_m = IMG_BLUE_RX_move;
+    }
+    if(object->faction == NEUTRAL){    
+  		object->img = IMG_RED_RX;
+  		object->img_m = IMG_RED_RX_move;
     }
   }
 
