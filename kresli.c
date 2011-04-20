@@ -614,6 +614,53 @@ SDL_Rect dst;
 
 
 //==============================================================================
+int Draw_player_menu(){
+//==============================================================================
+//SDL_Rect src;
+SDL_Rect dst;
+
+	// === Draw Menu ===
+
+	for(int i=0; i < MAX_ITEMS; i++){
+    if(! item[i].alive) continue;
+ 
+  	 dst.x = item[i].x;
+	   dst.y = item[i].y;
+
+    if(item[i].active) 
+		  SDL_BlitSurface(item[i].img_a, NULL, screen, &dst);
+    else
+		  SDL_BlitSurface(item[i].img_p, NULL, screen, &dst);
+	}
+
+
+  // Text labels and options 
+
+	 dst.x = 440;
+	 dst.y = 350;
+
+	for(int i=0; i < CONFIG_ITEMS_MAX; i++){
+
+		console_line = TTF_RenderText_Solid(text_font, configure_list[i] ,fg_color);
+
+		SDL_BlitSurface(console_line, NULL, screen, &dst);	
+		SDL_FreeSurface(console_line);
+		dst.y += 30;
+	}
+
+
+/*
+	 dst.x = 300; dst.y = HEIGHT - 400;
+	 SDL_BlitSurface(red_flag_small, NULL, screen, &dst);
+	 dst.x = WIDTH -600; dst.y = HEIGHT - 400;
+	 SDL_BlitSurface(blue_flag_small, NULL, screen, &dst);
+*/
+	 SDL_Flip(screen);
+
+
+  return OK;
+}
+//==============================================================================
 int FPS(){		// Frames Per Secund
 //==============================================================================
 	

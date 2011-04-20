@@ -35,6 +35,7 @@ int Draw_menu();
 int Draw_configure();
 int Draw_connect();
 int Draw_help();
+int Draw_player_menu();
 
 //==============================================================================
 // GLOBAL variables
@@ -47,6 +48,7 @@ SDL_Surface *menu_bg;           // pozadi
 SDL_Surface *settings_bg;       // pozadi
 SDL_Surface *connect_bg;        // pozadi
 SDL_Surface *help_bg;           // pozadi
+SDL_Surface *player_menu_bg;    // pozadi
 
 SDL_Surface *menu_connect_button;
 SDL_Surface *menu_settings_button;
@@ -59,9 +61,11 @@ SDL_Surface *selection_table;
 
 SDL_Surface *red_flag;
 SDL_Surface *blue_flag;
+SDL_Surface *neutral_flag;
 
 SDL_Surface *red_flag_small;
 SDL_Surface *blue_flag_small;
+SDL_Surface *neutral_flag_small;
 
 SDL_Surface *switch_on;
 SDL_Surface *switch_off;

@@ -57,17 +57,18 @@ int Load_space_images(){
 	//IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX.png", 1); 		
 	//IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX_2.png", 1); 		
 	//IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_2_move.png", 1); 		
-	IMG_RED_RX	= MIR_LoadImage(ROOT"images/N_RX_2.png", 1); 		
-	IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/N_RX_2_mv.png", 1); 		
+	IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX_3.png", 1); 		
+	IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_3_mv.png", 1); 		
 
 	//IMG_RED_RX_move	= MIR_LoadImage(ROOT"images/R_RX_move.png", 1); 	
 	IMG_RED_RX_crap = MIR_LoadImage(ROOT"images/R_RX_crap.png", 1); 	
+
 	IMG_RED_EX	= MIR_LoadImage(ROOT"images/R_EX.png", 1); 	
 	IMG_RED_EX_move	= MIR_LoadImage(ROOT"images/R_EX_move.png", 1);
-	IMG_RED_EX_crap = MIR_LoadImage(ROOT"images/R_EX_crap.png", 1); 
+	//IMG_RED_EX_crap = MIR_LoadImage(ROOT"images/R_EX_crap.png", 1); 
 
-	IMG_BLUE_RX	= MIR_LoadImage(ROOT"images/B_RX.png", 1); 
-	IMG_BLUE_RX_move= MIR_LoadImage(ROOT"images/B_RX_move.png", 1); 
+	IMG_BLUE_RX	= MIR_LoadImage(ROOT"images/B_RX_2.png", 1); 
+	IMG_BLUE_RX_move= MIR_LoadImage(ROOT"images/B_RX_2_move.png", 1); 
 	IMG_BLUE_RX_crap= MIR_LoadImage(ROOT"images/B_RX_crap.png", 1); 
 
 	IMG_GREEN_ZX = MIR_LoadImage(ROOT"images/G_ZX.png", 1); 
@@ -156,12 +157,11 @@ int Load_menu_images(){
 
 
 	menu_bg   	= MIR_LoadImage(ROOT"images/menu/menu_bg.png", 1); 
-
 	//settings_bg	= MIR_LoadImage(ROOT"images/menu/settins_bg.png", 1); 
 	settings_bg	= MIR_LoadImage(ROOT"images/menu/configure_bg.png", 1); 
-
 	connect_bg	= MIR_LoadImage(ROOT"images/menu/connect_bg.png", 1); 
 	help_bg	= MIR_LoadImage(ROOT"images/menu/help_bg.png", 1); 
+	player_menu_bg	= MIR_LoadImage(ROOT"images/menu/connected_bg.png", 1); 
 
 	//menu_logo = MIR_LoadImage(ROOT"images/menu/logo.png", 1); 
 	menu_logo = MIR_LoadImage(ROOT"images/menu/logo_alpha.png", 1); 
@@ -177,10 +177,11 @@ int Load_menu_images(){
 	
   selection_table = MIR_LoadImage(ROOT"images/menu/selection_table.png", 1); 
 
-  red_flag = MIR_LoadImage(ROOT"images/red_flag.png", 1); 
+  //red_flag = MIR_LoadImage(ROOT"images/red_flag.png", 1); 
+  red_flag = MIR_LoadImage(ROOT"images/Milita_flag.png", 1); 
   blue_flag = MIR_LoadImage(ROOT"images/blue_flag.png", 1); 
 
-  red_flag_small = MIR_LoadImage(ROOT"images/red_flag_small.png", 1); 
+  red_flag_small = MIR_LoadImage(ROOT"images/Milita_flag_small.png", 1); 
   blue_flag_small= MIR_LoadImage(ROOT"images/blue_flag_small.png", 1); 
 
   keyboard_img = MIR_LoadImage(ROOT"images/menu/keyboard_active_dark.png", 1); 
