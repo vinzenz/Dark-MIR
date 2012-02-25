@@ -23,11 +23,29 @@ solution "dark-mir"
 	project "server"
 		kind "consoleapp"
 		language "c"
-		files { "../src/console/*.c", "../src/common/*.c", "../include/*.h" }
+		files { "../src/server/*.c", "../src/common/*.c", "../include/*.h" }
 		
 		buildoptions { "--std=c99 -Wall -pedantic `sdl-config --cflags` -I../include -DSERVER" }
 		linkoptions { "`sdl-config --libs`" }
 		links { "SDL_net", "SDL_image", "SDL_ttf", "m", "SDL_gfx" }
+		
+		configuration "debug"
+			defines { "debug" }
+			flags { "symbols" }
+
+		configuration "release"
+			defines { "ndebug" }
+			flags { "optimize" }
+
+
+	project "servernew"
+		kind "consoleapp"
+		language "c"
+		files { "../src/servernew/*.cc" }
+		
+		buildoptions { "--std=c++0x -Wall -pedantic `sdl-config --cflags` -I../include -pthread" }
+		linkoptions { "`sdl-config --libs`" }
+		links { "boost_system", "boost_thread", "boost_program_options" }
 		
 		configuration "debug"
 			defines { "debug" }
