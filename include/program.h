@@ -20,7 +20,7 @@
 #define OK 0 
 #define FAIL -1 
 
-#define ROOT "./" 
+#define ROOT "../res/" 
 
 #define WIN_FLAGS SDL_HWSURFACE|SDL_ANYFORMAT|SDL_DOUBLEBUF|SDL_HWPALETTE|SDL_HWACCEL//|SDL_NOFRAME
 
