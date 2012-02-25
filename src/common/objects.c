@@ -1,4 +1,6 @@
 // OBJECTS functions
+#undef SERVER
+#undef CLIENT
 
 #include "program.h"
 #include "server.h"
