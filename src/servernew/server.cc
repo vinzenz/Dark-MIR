@@ -1,4 +1,5 @@
 #include "server.hh"
+#include "debug/buffer_printer.hh"
 #include <boost/bind.hpp>
 #include <iostream>
 
@@ -22,6 +23,8 @@ server::start(
 ) {
 	m_running = true;
 	schedule_next();
+	schedule_next();
+	schedule_next();
 }
 
 // Stop network subsystem
@@ -35,7 +38,6 @@ void
 server::schedule_next(
 ) {
 	size_t current_count = size_t(m_counter);
-	std::cout << "Schedule next: " << current_count << std::endl;
 	if( current_count < 10 || bool(m_running) ) {
 		++m_counter;
 		message_data_ptr data;
@@ -87,15 +89,8 @@ void
 server::on_handle_message(
 	message_data_ptr data		// endpoint and buffer pointer
 ) {
-	std::cout << "Packet received: " << data->bytes_used << " Bytes - Endpoint: " << data->remote_endpoint << "\n";
-	for( size_t i = 0; i < data->buffer.size() / 0x10; ++i ) {
-		std::cout << i << "\t";
-		for( size_t index = i * 0x10; index < i * 0x10 + 0x10; ++index ) {
-			std::cout << std::hex << int(data->buffer[index]) << " ";
-		}
-		std::cout << "\n";
-	}
-	std::cout << std::endl;
+//	std::cout << "Packet received: " << data->bytes_used << " Bytes - Endpoint: " << data->remote_endpoint << "\n";
+//	std::cout << mir::dbg::format_buffer( data->buffer.data(), data->buffer.data() + data->bytes_used );
 	
 	// Currently simple ECHO UDP server
 	send_reply( data );
