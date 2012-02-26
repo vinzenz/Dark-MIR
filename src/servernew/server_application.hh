@@ -1,8 +1,8 @@
 #ifndef GUARD_DARK_MIR_SERVER_APPLICATION_HH_INCLUDED
 #define GUARD_DARK_MIR_SERVER_APPLICATION_HH_INCLUDED
 
-#include "options.hh"
 #include <boost/asio.hpp>
+#include "options.hh"
 
 class server_application {
 	boost::asio::io_service m_service;
