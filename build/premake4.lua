@@ -11,12 +11,12 @@ solution "dark-mir"
 		linkoptions { "`sdl-config --libs`" }
 		links { "SDL_net", "SDL_image", "SDL_ttf", "m", "SDL_gfx" }
 		
-		configuration "debug"
-			defines { "debug" }
+		configuration "Debug"
+			defines { "DEBUG" }
 			flags { "symbols" }
 
-		configuration "release"
-			defines { "ndebug" }
+		configuration "Release"
+			defines { "NDEBUG" }
 			flags { "optimize" }
 
 
@@ -29,12 +29,12 @@ solution "dark-mir"
 		linkoptions { "`sdl-config --libs`" }
 		links { "SDL_net", "SDL_image", "SDL_ttf", "m", "SDL_gfx" }
 		
-		configuration "debug"
-			defines { "debug" }
+		configuration "Debug"
+			defines { "DEBUG" }
 			flags { "symbols" }
 
-		configuration "release"
-			defines { "ndebug" }
+		configuration "Release"
+			defines { "NDEBUG" }
 			flags { "optimize" }
 
 
@@ -47,10 +47,10 @@ solution "dark-mir"
 		linkoptions { "`sdl-config --libs`" }
 		links { "boost_system", "boost_thread", "boost_program_options" }
 		
-		configuration "debug"
-			defines { "debug" }
+		configuration "Debug"
+			defines { "DEBUG" }
 			flags { "symbols" }
 
-		configuration "release"
-			defines { "ndebug" }
+		configuration "Release"
+			defines { "NDEBUG" }
 			flags { "optimize" }

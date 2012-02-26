@@ -47,10 +47,10 @@ int Game_loop(){
 
 
 	// Inicializace
-  DEBUG("GAME LOOP");
+  MIR_LOG_DEBUG("GAME LOOP");
 	
 	if(Load_space_images() == FAIL) 
-		ERROR("failed to load all images, continuing");
+		MIR_LOG_ERROR("failed to load all images, continuing");
  
 	//SDL_EnableKeyRepeat( 50, 50);  // Dalsi signal stisknute klavesy odesle po 50ms
 	SDL_ShowCursor(SDL_DISABLE);  // vypne zobrazovani systemoveho kurzoru
@@ -59,15 +59,15 @@ int Game_loop(){
 	
 	
 
-  DEBUG("before inicialization");	
+  MIR_LOG_DEBUG("before inicialization");	
 	Initialize_objects(1);
 
-  DEBUG("before setting timers");	
+  MIR_LOG_DEBUG("before setting timers");	
 //	kb_timer = SDL_AddTimer(50, Ovladani, NULL); 					// KEYBORD
 //	mv_timer = SDL_AddTimer(1, Timed_loop, NULL); 					// MOVE
 	draw_timer = SDL_AddTimer(30, Redraw_loop, NULL); 				// DRAW
 
-  DEBUG("before while loop");	
+  MIR_LOG_DEBUG("before while loop");	
 	// ============================== GAME LOOP ==============================
 	while(!quit){
 
@@ -308,7 +308,7 @@ int Game_loop(){
 // ==== END GAME LOOP ====
 
   Logout();		// TELL "goodbye server"
-  DEBUG("---==:: DISCONNECTED ::==---");
+  MIR_LOG_DEBUG("---==:: DISCONNECTED ::==---");
 	
   // === Uklizeni ===
   Free_space_images();

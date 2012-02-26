@@ -28,13 +28,13 @@ int Draw_object(T_object *object){
 
   if(object->descriptor == NATURE){
     Draw_nature(object);
-    //DEBUG("Draw_object(): ASTEROID");
+    //MIR_LOG_DEBUG("Draw_object(): ASTEROID");
     //fprintf(D_OUT, "object X: %3d\n", object->X);
     //fprintf(D_OUT, "object Y: %3d\n", object->Y);
     return OK;
   }
 
-  DEBUG("Draw_object(): Unknown object");
+  MIR_LOG_DEBUG("Draw_object(): Unknown object");
   fprintf(D_OUT, "object type: %3d\n", object->type);
   return OK;
 }

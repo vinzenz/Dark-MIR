@@ -118,7 +118,7 @@ int Menu(){
   Uint8 quit= 0;
 
   if(Load_menu_images() == FAIL){
-		ERROR("some images missing ... ignore");
+		MIR_LOG_ERROR("some images missing ... ignore");
   }
 
 
@@ -562,7 +562,7 @@ int Help(){
   Uint8 quit= 0;
 
   if(Load_menu_images() == FAIL){
-		ERROR("some images missing ... ignore");
+		MIR_LOG_ERROR("some images missing ... ignore");
   }
 
 

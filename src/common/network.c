@@ -56,13 +56,13 @@ int	Connect2server(const char *hostname){
     count++;
     fprintf(D_OUT, "Connecting ... try [%1d]\n", count);
     if(count > 3){
-		  ERROR("SERVER IS NOT RESPONDING");
+		  MIR_LOG_ERROR("SERVER IS NOT RESPONDING");
       return FAIL;
     }
     RC = New_client();		// TELL "hello server"
   }
 
-  DEBUG("---==:: CONNECTED ::==---");
+  MIR_LOG_DEBUG("---==:: CONNECTED ::==---");
   return OK;	
 }
 
@@ -87,7 +87,7 @@ int Load_server_list(){
       buffer[strlen(buffer)-1] = '\0';
       strncpy(server_list[i], buffer, 255);
 
-      DEBUG("reading server address")
+      MIR_LOG_DEBUG("reading server address")
       i++;
   }
   strncpy(server_list[i], "127.0.0.1", 255);

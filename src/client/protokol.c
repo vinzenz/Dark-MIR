@@ -47,7 +47,7 @@ int New_client(){
       return OK;
     }
     if(r->data[0] == P_LOGOUT){
-      DEBUG("SERVER IS FULL");		
+      MIR_LOG_DEBUG("SERVER IS FULL");		
       exit(EXIT_FAILURE);
     }
   }
@@ -250,7 +250,7 @@ int Get_ship_states(){
     fprintf(stderr, "SHIP ID: %u\n",id);
 
 		if(id == 0xFF){
-      DEBUG("WARNNING: unexepected ID of ship")
+      MIR_LOG_DEBUG("WARNNING: unexepected ID of ship")
        break;
     }
 
@@ -305,7 +305,7 @@ int Get_weapon_states(){
   if(*tp != P_WEAPON_STATES)					// OP_code
     return FAIL;
 
-  DEBUG("GET WEAPONS STATES"); 
+  MIR_LOG_DEBUG("GET WEAPONS STATES"); 
   tp++;	
 
 
@@ -360,7 +360,7 @@ int Get_object_states(){
      (*tp != P_WEAPON_STATES))					// OP_code
       return FAIL;
 
-  DEBUG("OBJECT STATES");
+  MIR_LOG_DEBUG("OBJECT STATES");
   tp++;	
 
 
@@ -368,7 +368,7 @@ int Get_object_states(){
   while(tp - r->data < BUFF_SIZE - 4 * sizeof(float)){
 		id = *((Uint32 *)tp);							// ID
 		if(id >= MAX_OBJECTS - 1){
-      ERROR("too high identification number, packet corruption possible");
+      MIR_LOG_ERROR("too high identification number, packet corruption possible");
       fprintf(stderr, "object ID: %u\n", id);
       break;
     }

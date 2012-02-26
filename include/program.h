@@ -71,8 +71,8 @@
 //==============================================================================
 #define D_OUT stderr
 
-#define ERROR(arg) fprintf(stderr, " ERROR: %s\n", (arg));
-#define DEBUG(arg) fprintf(D_OUT, " DEBUG: %s\n", (arg));
+#define MIR_LOG_ERROR(arg) fprintf(stderr, " ERROR: %s\n", (arg));
+#define MIR_LOG_DEBUG(arg) fprintf(D_OUT, " DEBUG: %s\n", (arg));
 
 //==============================================================================
 // Global vriables
@@ -91,8 +91,8 @@ short nastavene_rozliseni;
 //==============================================================================
 #define D_OUT stderr
 
-#define ERROR(arg) fprintf(stderr, " ERROR: %s\n", (arg));
-#define DEBUG(arg) fprintf(D_OUT, " DEBUG: %s\n", (arg));
+#define MIR_LOG_ERROR(arg) fprintf(stderr, " ERROR: %s\n", (arg));
+#define MIR_LOG_DEBUG(arg) fprintf(D_OUT, " DEBUG: %s\n", (arg));
 
 //==============================================================================
 // Global vriables

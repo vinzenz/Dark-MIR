@@ -10,12 +10,12 @@ int Exit_game(int RC){
 //==============================================================================
 // RC = return code
 
-  DEBUG("Garbage collector starting");
+  MIR_LOG_DEBUG("Garbage collector starting");
 
   TTF_Quit();
   SDL_Quit();
 
-  DEBUG("Exiting program");
+  MIR_LOG_DEBUG("Exiting program");
   exit(RC);
 }
 //==============================================================================

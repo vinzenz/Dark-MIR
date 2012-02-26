@@ -23,11 +23,11 @@ int Read_configuration(){
   FILE *config_file;
   char *line;
   int line_counter = 1;
-  DEBUG("Configuration starting");
+  MIR_LOG_DEBUG("Configuration starting");
   
   config_file = fopen(CONFIGURATION_FILE, "r");
   if(config_file == NULL){
-    ERROR("FAILED TO OPEN CONFIGURATION FILE");
+    MIR_LOG_ERROR("FAILED TO OPEN CONFIGURATION FILE");
     return FAIL;
   }
 
@@ -35,7 +35,7 @@ int Read_configuration(){
   while(ReadLine(config_file, &line) > 0){
 
     if(Parser(line) != OK){
-      ERROR(" parsing configuration file")
+      MIR_LOG_ERROR(" parsing configuration file")
       fprintf(stderr, "  line: %d\n", line_counter); 
     }
     line_counter++;
@@ -46,7 +46,7 @@ int Read_configuration(){
   fprintf(stderr, "  lines parsed: %d\n", line_counter); 
   fclose(config_file);
 
-  DEBUG("Configuration loaded ... [ OK ]");
+  MIR_LOG_DEBUG("Configuration loaded ... [ OK ]");
   return OK;
 }
 
@@ -57,7 +57,7 @@ int Parser(char *line){
   int i = 0;
  
   if(line == NULL){ 
-    ERROR("NULL pointer used");
+    MIR_LOG_ERROR("NULL pointer used");
     return FAIL;  
   }
 
@@ -82,14 +82,14 @@ int Parser(char *line){
   if (strstr(line, "resolution") != NULL){ 
       nastavene_rozliseni = atoi(strstr(line, "=") + 1) % 5;
       RC = OK;
-      DEBUG(" -- RESOLUTION CONFIGURED");
+      MIR_LOG_DEBUG(" -- RESOLUTION CONFIGURED");
   
   }
   if (strstr(line, "nickname") != NULL){ 
       strcpy(nick, strstr(line, "=") + 1);
       nick[strlen(nick)] = '\0';
       RC = OK;
-      DEBUG(" -- NICKNAME CONFIGURED");
+      MIR_LOG_DEBUG(" -- NICKNAME CONFIGURED");
   }
 
   return RC;
@@ -105,7 +105,7 @@ int ReadLine(FILE *file, char **dst){
 
   if(fgets(buffer, RLBUFF_SIZE - 2, file) != NULL){
     *dst = buffer; 
-    //DEBUG("readed")
+    //MIR_LOG_DEBUG("readed")
     return 1;
   }
 

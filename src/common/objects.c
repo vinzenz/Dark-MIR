@@ -185,7 +185,7 @@ int Create_object( int descriptor, int type, int model, int X, int Y){
         object[i] = RX_M2;
         break;
       default:
-       DEBUG("OBJECT IS NOT IMPLEMENTED");
+       MIR_LOG_DEBUG("OBJECT IS NOT IMPLEMENTED");
     }
   }
   // ------------------------------------------------------------

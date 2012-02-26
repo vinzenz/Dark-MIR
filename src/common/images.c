@@ -44,15 +44,15 @@ SDL_Surface *MIR_LoadImage(const char *filename, int alpha){
 int Load_space_images(){
 //==============================================================================
 
-  DEBUG("Loading space images ...");
+  MIR_LOG_DEBUG("Loading space images ...");
 
 	fg_color.r=255; 
 	fg_color.g=255; 
 	fg_color.b=255;
 
-  DEBUG(" colors set ");
+  MIR_LOG_DEBUG(" colors set ");
 	space  	= MIR_LoadImage(ROOT"images/space.png", 1); 
-  DEBUG(" background loaded ");
+  MIR_LOG_DEBUG(" background loaded ");
 	
 	//IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX.png", 1); 		
 	//IMG_RED_RX	= MIR_LoadImage(ROOT"images/R_RX_2.png", 1); 		
@@ -111,7 +111,7 @@ int Load_space_images(){
 	asteroid1 = MIR_LoadImage(ROOT"images/objects/asteroid_1.png", 1); 
 	asteroid2 = MIR_LoadImage(ROOT"images/objects/asteroid_2.png", 1); 
 
-  DEBUG("Space images are loaded");
+  MIR_LOG_DEBUG("Space images are loaded");
 
 	console = MIR_LoadImage(ROOT"images/system/console.png", 1); 
 	console_bg = MIR_LoadImage(ROOT"images/system/console.png", 1); 
