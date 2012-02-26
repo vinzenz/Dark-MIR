@@ -68,7 +68,7 @@ format_buffer(
 	}
 
 	size_t empty_columns = line_max - ( counter % line_max );
-	if( empty_columns > 0 ) {
+	if( empty_columns != line_max ) { // if the line end was not reached yet
 		for( size_t i = 0; i < empty_columns; ++i ) {
 			mir::dbg::detail::format_print_char( ostr, std::uint8_t('-'), counter + i, group, false, false );
 		}
