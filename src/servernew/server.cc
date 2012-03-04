@@ -89,8 +89,8 @@ void
 server::on_handle_message(
 	message_data_ptr data		// endpoint and buffer pointer
 ) {
-//	std::cout << "Packet received: " << data->bytes_used << " Bytes - Endpoint: " << data->remote_endpoint << "\n";
-//	std::cout << mir::dbg::format_buffer( data->buffer.data(), data->buffer.data() + data->bytes_used );
+	std::cout << "Packet received: " << data->bytes_used << " Bytes - Endpoint: " << data->remote_endpoint << "\n";
+	std::cout << mir::dbg::format_buffer( data->buffer.data(), data->buffer.data() + data->bytes_used );
 	
 	// Currently simple ECHO UDP server
 	send_reply( data );
