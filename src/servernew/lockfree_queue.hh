@@ -1,7 +1,7 @@
 #ifndef GUARD_DARK_MIR_LOCKFREE_QUEUE_HH_INCLUDED
 #define GUARD_DARK_MIR_LOCKFREE_QUEUE_HH_INCLUDED
 
-#include <cstdatomic>
+#include <atomic>
 
 enum MirQueueConstants {
 	MIR_CACHE_LINE_SIZE = 64

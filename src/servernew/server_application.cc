@@ -15,8 +15,8 @@ server_application::~server_application() {
 int 
 server_application::run(
 ) {
-	server s( *this, boost::asio::ip::udp::v4(), 1234 );
-	m_service.post( boost::bind( &server::start, &s ) );
+	server<> s( *this, boost::asio::ip::udp::v4(), 1234 );
+	m_service.post( boost::bind( &server<>::start, &s ) );
 	m_service.run();
 	return 0;
 }
